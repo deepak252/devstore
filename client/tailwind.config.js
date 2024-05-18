@@ -3,6 +3,9 @@ export default {
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      // boxShadow: {
+      //   1: '0 1px 3px 0 #E0E0E0',
+      // },
       colors: {
         primary: {
           DEFAULT: '#646DDF', //// Buttons, Active State (Checkbox), Textfield border (Focus)
@@ -12,13 +15,26 @@ export default {
         },
         secondary: '#020865',
         gray: {
-          DEFAULT: '#AFAFAF',
-          100: '#F6F6F6',
-          200: '#E1E1E1',
-          400: '#C2C2C2',
-          500: '#AFAFAF',
-          700: '#787878',
-          900: '#555555',
+          DEFAULT: '#9E9E9E',
+          // 100: '#F6F6F6',
+          // 200: '#E1E1E1',
+          // 400: '#C2C2C2',
+          // 500: '#AFAFAF',
+          // 700: '#787878',
+          // 900: '#555555',
+          100: '#F5F5F5',
+          200: '#EEEEEE',
+          300: '#E0E0E0',
+          400: '#BDBDBD',
+          500: '#9E9E9E',
+          600: '#757575',
+          700: '#616161',
+          800: '#424242',
+          900: '#212121',
+          1100: '#C9C9C946',
+          1200: '#ABABAB46',
+          1300: '#80808046',
+          1400: '#4F4F4F46',
         },
         green: {
           DEFAULT: '#49B638',
@@ -33,6 +49,7 @@ export default {
       },
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
+        josefin: ['Josefin Sans', 'sans-serif'],
       },
       fontSize: {
         13: '13px',
