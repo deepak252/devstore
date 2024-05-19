@@ -3,9 +3,9 @@ export default {
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
-      // boxShadow: {
-      //   1: '0 1px 3px 0 #E0E0E0',
-      // },
+      boxShadow: {
+        '3xl': '1px 1px 8px 2px #BDBDBD',
+      },
       colors: {
         primary: {
           DEFAULT: '#646DDF', //// Buttons, Active State (Checkbox), Textfield border (Focus)

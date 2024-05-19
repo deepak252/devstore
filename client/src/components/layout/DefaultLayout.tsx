@@ -6,7 +6,7 @@ const DefaultLayout = () => {
   return (
     <div>
       <Navbar />
-      <div className="mt-[70px] max-md:mt-[117px]">
+      <div className="mt-[70px] min-h-[calc(100vh-300px)] max-w-[1200px] mx-auto max-md:mt-[117px]">
         <Outlet />
       </div>
       <Footer />
