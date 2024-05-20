@@ -5,6 +5,7 @@ import DropdownItem from './DropdownItem'
 export type DropdownOption = {
   label: string
   value: string
+  icon?: React.ReactNode
 } & Record<string, any>
 
 type DropdownProps = {
@@ -65,6 +66,7 @@ const Dropdown = ({
         <DropdownItem
           key={option.value}
           label={option.label}
+          icon={option.icon}
           isSelected={isSelected(option)}
           onClick={() => handleItemClick(option)}
           className={itemClass}
