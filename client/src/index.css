@@ -14,7 +14,7 @@
 
 @layer components {
   .base-button {
-    @apply text-15 rounded-xl p-3;
+    @apply text-sm rounded-xl py-3 px-6;
   }
   .icon-button {
     @apply flex-center p-1 box-border rounded-full hover:bg-gray-1100 active:bg-gray-1200;
@@ -23,7 +23,7 @@
     @apply base-button bg-primary text-white border border-primary active:bg-[#565dc3];
   }
   .btn-outlined {
-    @apply base-button bg-transparent text-primary border border-primary active:bg-[#E0E0FFAA];
+    @apply base-button bg-transparent text-primary border-[1.5px] border-primary active:bg-[#E0E0FFAA];
   }
 
   .dropdown {
@@ -44,6 +44,10 @@
   }
   .textfield input {
     @apply border-none outline-none min-w-0 ps-3 pe-2;
+  }
+
+  .form-input{
+    @apply w-full border-gray-400 py-3 px-4 rounded-xl outline-none border-[1.5px] focus:border-primary;
   }
 }
 
@@ -69,8 +73,21 @@
   }
 }
 
+h1, h2, h3, h4, h5, h6{
+  @apply font-medium leading-normal;
+}
+
 h1 {
-  @apply font-medium text-5xl leading-normal;
+  @apply text-5xl;
+}
+h2 {
+  @apply text-4xl;
+}
+h3 {
+  @apply text-3xl;
+}
+h4 {
+  @apply text-2xl;
 }
 
 input {

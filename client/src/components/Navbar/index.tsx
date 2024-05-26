@@ -9,15 +9,24 @@ import BookmarksIcon from '@/assets/icons/Bookmarks.svg?react'
 import useWindowDimensions from '@/hooks/useWindowDimensions'
 import NavOptions from './NavOptions'
 import SearchField from './SearchField'
+import useNavigateWithState from '@/hooks/useNavigateWithState'
 
 const Navbar = () => {
   const { width } = useWindowDimensions()
+  const navigateWithState = useNavigateWithState()
   // const user = useSelector((state) => stat)
-  const user = true
+  const user = false
   const isMdScreen = width < 768 // 992px
 
   const handleOptionSelect = (options: DropdownOption[]) => {
-    console.log(options)
+    switch (options[0].value) {
+      case 'signIn': {
+        navigateWithState('/login')
+        break
+      }
+      default:
+        break
+    }
   }
 
   const options = user

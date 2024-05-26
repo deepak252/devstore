@@ -1,8 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
-import classNames from 'classnames'
-// import IconButton from '../../Buttons/IconButton'
-// import TextInput from '../../TextInput'
 import SearchIcon from '@/assets/icons/Search.svg?react'
 import CloseIcon from '@/assets/icons/Close.svg?react'
 
@@ -37,6 +34,7 @@ const SearchField = () => {
   const handleToggleSearch = () => {
     setQuery('')
     setIsSearch(!isSearch)
+
     if (searchQuery?.trim()?.length) {
       // Disable search
       searchParams.delete('q')
@@ -49,7 +47,7 @@ const SearchField = () => {
     setQuery('')
   }
 
-  const handleKeyPress = (event: KeyboardEvent) => {
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       if (!query?.trim()?.length) {
         return
@@ -75,59 +73,37 @@ const SearchField = () => {
 
   return (
     <div>
-      {
-        Object.values(PATHNAMES).includes(pathname) &&
-          (!isSearch ? (
-            <button
-              className="icon-button size-11"
-              onClick={handleToggleSearch}
-            >
-              <SearchIcon className="size-6" />
-            </button>
-          ) : (
-            <div className="textfield rounded-full p-[6px]">
-              {/* <SearchIcon className="size-5" /> */}
-              <input type="text" placeholder={getPlaceholder()} />
-              <SearchIcon className="size-5" />
-            </div>
-          ))
-        //     (
-        //   <IconButton
-        //     icon={<SearchIcon className="size-24" />}
-        //     onClick={handleToggleSearch}
-        //     className={styles.container__iconButton}
-        //   />
-        // ) : (
-        //   <TextInput
-        //     ref={inputRef}
-        //     value={query}
-        //     onChange={(e) => setQuery(e.target.value)}
-        //     placeholder={getPlaceholder()}
-        //     textfieldClass={styles.container__searchInput}
-        //     trailing={
-        //       query?.length ? (
-        //         <CloseIcon
-        //           onClick={handleClearSearch}
-        //           className={classNames(
-        //             'size-12 c-pointer',
-        //             styles.container__searchInput__iconClose
-        //           )}
-        //         />
-        //       ) : (
-        //         <SearchIcon
-        //           onClick={handleToggleSearch}
-        //           className={classNames(
-        //             'size-20 c-pointer',
-        //             styles.container__searchInput__iconSearch
-        //           )}
-        //         />
-        //       )
-        //     }
-        //     onKeypress={handleKeyPress}
-        //     autoFocus={true}
-        //   />
-        // )
-      }
+      {Object.values(PATHNAMES).includes(pathname) &&
+        (!isSearch ? (
+          <button className="icon-button size-11" onClick={handleToggleSearch}>
+            <SearchIcon className="size-6" />
+          </button>
+        ) : (
+          <div className="textfield rounded-full p-[6px]">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={getPlaceholder()}
+              onKeyDown={handleKeyPress}
+              ref={inputRef}
+              autoFocus
+            />
+            {query.length ? (
+              <CloseIcon
+                role="button"
+                className="size-5"
+                onClick={handleClearSearch}
+              />
+            ) : (
+              <SearchIcon
+                role="button"
+                className="size-5"
+                onClick={handleToggleSearch}
+              />
+            )}
+          </div>
+        ))}
     </div>
   )
 }

@@ -12,7 +12,7 @@ const Introduction = () => {
           <h1 className="text-gray-900 m-2 max-lg:text-4xl max-lg:leading-normal">
             Centralized Hub for App, Website, and Game Distribution
           </h1>
-          <p className="text-2xl text-gray-700 font-light leading-normal m-1 max-lg:text-xl">
+          <p className="text-2xl text-gray-700 font-light leading-normal m-1 max-lg:text-lg">
             Dev Store brings your creations to the world, all in one place. Join
             and revolutionize the way you share and distribute your digital
             innovations.
