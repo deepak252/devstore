@@ -1,9 +1,9 @@
-import BGAuth from '@/assets/images/BG_Auth.svg?react'
-import AppLogo from '@/components/AppLogo'
-import GoogleIcon from '@/assets/icons/Google.svg?react'
-import GithubIcon from '@/assets/icons/Github.svg?react'
 import { NavLink } from 'react-router-dom'
 import FormInputWrapper from '@/components/FormInputWrapper'
+import AppLogo from '@/components/AppLogo'
+import BGAuth from '@/assets/images/BG_Auth.svg?react'
+import GoogleIcon from '@/assets/icons/Google.svg?react'
+import GithubIcon from '@/assets/icons/Github.svg?react'
 
 function Login() {
   return (
@@ -19,7 +19,7 @@ function Login() {
         </div>
       </div>
       <BGAuth className="absolute h-[calc(100vh-100px)] max-h-[800px] left-[30%] top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-90 transition-all duration-1000 max-lg:opacity-70 max-lg:left-1/2 " />
-      <div className="absolute left-[70%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] max-w-[500px] max-h-[90vh] overflow-y-auto p-9 rounded-3xl bg-white shadow-2xl shadow-secondary transition-[left] duration-1000 max-lg:left-1/2">
+      <div className="absolute left-[70%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] max-w-[500px] max-h-[90vh] overflow-y-auto p-9 rounded-3xl bg-white shadow-2xl shadow-secondary transition-[left] duration-1000 custom-scrollbar max-lg:left-1/2">
         <h4 className="text-gray-750">Welcome...</h4>
         <button className="btn-outlined flex-center w-full my-5 border-gray">
           <GoogleIcon className="size-6 mx-3" />
