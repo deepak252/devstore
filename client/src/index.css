@@ -73,21 +73,17 @@
   }
 }
 
-h1, h2, h3, h4, h5, h6{
-  @apply font-medium leading-normal;
-}
-
 h1 {
-  @apply text-5xl;
+  @apply text-5xl font-medium leading-normal;
 }
 h2 {
-  @apply text-4xl;
+  @apply text-4xl font-medium leading-normal;
 }
 h3 {
-  @apply text-3xl;
+  @apply text-3xl font-medium leading-normal;
 }
 h4 {
-  @apply text-2xl;
+  @apply text-2xl font-medium leading-normal;
 }
 
 input {
