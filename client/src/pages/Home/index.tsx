@@ -1,6 +1,6 @@
 import Introduction from './Introduction'
 
-function HomePage() {
+function Home() {
   return (
     <div className="p-6">
       <Introduction />
@@ -8,4 +8,4 @@ function HomePage() {
   )
 }
 
-export default HomePage
+export default Home

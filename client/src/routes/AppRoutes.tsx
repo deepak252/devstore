@@ -5,6 +5,7 @@ import Home from '@/pages/Home'
 import SignIn from '@/pages/auth/SignIn'
 import SignUp from '@/pages/auth/SignUp'
 import ForgotPassword from '@/pages/auth/ForgotPassword'
+import Apps from '@/pages/Apps'
 
 function AppRoutes() {
   return (
@@ -12,6 +13,7 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<DefaultLayout />}>
           <Route index element={<Home />} />
+          <Route path="apps" element={<Apps />} />
         </Route>
         <Route path="/auth" element={<AuthLayout />}>
           <Route path="login" element={<SignIn />} />

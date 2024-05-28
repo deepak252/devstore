@@ -21,7 +21,7 @@ const Navbar = () => {
   const handleOptionSelect = (options: DropdownOption[]) => {
     switch (options[0].value) {
       case 'signIn': {
-        navigateWithState('/login')
+        navigateWithState('/auth/login')
         break
       }
       default:
