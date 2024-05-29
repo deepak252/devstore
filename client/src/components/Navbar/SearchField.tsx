@@ -88,6 +88,7 @@ const SearchField = () => {
               onKeyDown={handleKeyPress}
               ref={inputRef}
               autoFocus
+              className="max-w-52"
             />
             {query.length ? (
               <CloseIcon

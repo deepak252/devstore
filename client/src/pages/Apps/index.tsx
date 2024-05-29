@@ -22,9 +22,8 @@ function Apps() {
   return (
     <div className="">
       <Carousel items={carouselItems}></Carousel>
-      <div className="inline-flex items-center px-4 py-[6px] border border-primary text-primary bg-primary-100 rounded-full font-medium">
-        Apps
-      </div>
+      <div className="chip active me-3">All</div>
+      <div className="chip">Apps</div>
     </div>
   )
 }

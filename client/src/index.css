@@ -49,6 +49,13 @@
   .form-input{
     @apply w-full border-gray-400 py-3 px-4 rounded-xl outline-none border-[1.5px] focus:border-primary;
   }
+
+  .chip{
+    @apply inline-flex items-center px-4 py-[6px] border border-gray-500 text-gray-700 rounded-full text-sm disable-select cursor-pointer;
+  }
+  .chip.active{
+    @apply border-primary text-primary bg-primary-100 font-semibold;
+  }
 }
 
 @layer utilities {
