@@ -118,3 +118,7 @@ input::placeholder {
 .custom-scrollbar::-webkit-scrollbar:horizontal {
   height: 8px;
 }
+
+.scrollbar-thin{
+  scrollbar-width: thin;
+}

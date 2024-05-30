@@ -36,7 +36,7 @@ export const CarouselWrapper = ({
   return (
     <div
       className={classNames(
-        'py-3 px-2 grid grid-flow-col overflow-x-auto',
+        'py-3 px-2 grid grid-flow-col overflow-x-auto scrollbar-thin',
         className
       )}
     >
@@ -53,8 +53,8 @@ type CarouselProps = {
 const Carousel = ({ className, items }: CarouselProps) => {
   return (
     <CarouselWrapper className={className}>
-      {items.map(({ url }) => (
-        <CarouselItem key={url} imgUrl={url} />
+      {items.map(({ url, redirect }) => (
+        <CarouselItem key={redirect} imgUrl={url} />
       ))}
     </CarouselWrapper>
   )

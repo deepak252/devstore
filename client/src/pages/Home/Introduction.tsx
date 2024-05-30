@@ -43,7 +43,7 @@ const Introduction = () => {
         <button className="btn-outlined m-2 px-7 py-4">Explore</button>
       </div>
       <div ref={endRef}></div>
-      <hr className="my-20" />
+      <hr className="my-16" />
     </div>
   )
 }

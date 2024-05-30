@@ -93,6 +93,18 @@ function Home() {
           />
         ))}
       </GridView>
+      <GridView heading="Featured Apps" horizontalScroll>
+        {appsList.map((item) => (
+          <FeaturedTile
+            key={item._id}
+            name={item.name}
+            iconUrl={item.icon?.url}
+            featuredImageUrl={item.images?.[0].url}
+            owner={item.owner}
+            redirectUrl={`apps/${item._id}`}
+          />
+        ))}
+      </GridView>
     </div>
   )
 }
