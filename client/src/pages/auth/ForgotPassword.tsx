@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import FormInputWrapper from '@/components/FormInputWrapper'
 
 function ForgotPassword() {
@@ -11,9 +11,9 @@ function ForgotPassword() {
       <button className="btn-filled w-full mt-6 mb-5">Continue</button>
       <p className="text-sm text-center">
         Back to{' '}
-        <NavLink to="/auth/login" className="text-primary">
+        <Link to="/auth/login" className="text-primary">
           Login
-        </NavLink>
+        </Link>
       </p>
     </>
   )

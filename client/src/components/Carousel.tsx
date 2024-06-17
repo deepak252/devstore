@@ -1,4 +1,5 @@
 import classNames from 'classnames'
+import Shimmer from './Shimmer'
 
 type CarouselItemProps = {
   imgUrl: string
@@ -55,6 +56,28 @@ const Carousel = ({ className, items }: CarouselProps) => {
     <CarouselWrapper className={className}>
       {items.map(({ url, redirect }) => (
         <CarouselItem key={redirect} imgUrl={url} />
+      ))}
+    </CarouselWrapper>
+  )
+}
+
+export const CarouselShimmer = ({
+  count = 6,
+  className,
+}: {
+  count: number
+  className?: string
+}) => {
+  return (
+    <CarouselWrapper>
+      {[...Array(count).keys()].map((id) => (
+        <Shimmer
+          key={id}
+          className={classNames(
+            'h-[87%] w-96 max-w-[70vw] min-w-60 m-3 aspect-video !rounded-2xl overflow-hidden max-md:w-80',
+            className
+          )}
+        />
       ))}
     </CarouselWrapper>
   )

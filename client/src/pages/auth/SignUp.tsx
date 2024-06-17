@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useFormik } from 'formik'
 import { Spinner } from '@/components/Loader'
 import FormInputWrapper from '@/components/FormInputWrapper'
@@ -146,9 +146,9 @@ function SignUp() {
       </form>
       <p className="text-sm text-center">
         Don't have an account?{' '}
-        <NavLink to="/auth/login" className="text-primary">
+        <Link to="/auth/login" className="text-primary">
           Login
-        </NavLink>
+        </Link>
       </p>
     </>
   )

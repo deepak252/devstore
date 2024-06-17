@@ -1,6 +1,9 @@
-import Carousel from '@/components/Carousel'
+import Carousel, { CarouselShimmer } from '@/components/Carousel'
 import GridView from '@/components/GridView'
-import { IconTileMemo } from '@/components/tiles/AppIconTile'
+import {
+  AppIconTileMemo,
+  AppIconTileShimmer,
+} from '@/components/tiles/AppIconTile'
 
 function Apps() {
   const carouselItems = [
@@ -51,14 +54,14 @@ function Apps() {
   return (
     <div className="">
       <Carousel items={carouselItems}></Carousel>
-      <div className="mx-6 mt-6 mb-4 pt-4">
+      <CarouselShimmer count={3} />
+      <div className="mx-6 mb-4 pt-6">
         <div className="chip active me-3">All</div>
         <div className="chip">Apps</div>
       </div>
-      <GridView
-        heading="Top Apps"
-        children={appItems?.map((app) => (
-          <IconTileMemo
+      <GridView heading="Top Apps" wrapperClass="my-8 mx-4">
+        {appItems?.map((app) => (
+          <AppIconTileMemo
             key={app._id}
             id={app._id}
             name={app.name}
@@ -66,8 +69,12 @@ function Apps() {
             imgUrl={app.icon}
           />
         ))}
-        wrapperClass="my-8 mx-4"
-      />
+      </GridView>
+      <GridView heading="Top Apps" wrapperClass="my-8 mx-4">
+        {[...Array(6).keys()].map((id) => (
+          <AppIconTileShimmer key={id} />
+        ))}
+      </GridView>
     </div>
   )
 }

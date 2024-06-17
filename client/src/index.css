@@ -132,3 +132,17 @@ svg{
 .scrollbar-thin {
   scrollbar-width: thin;
 }
+
+.animate-shimmer{
+  background: linear-gradient(to right, transparent 0%, #BDBDBD 50%, transparent 100%);
+  animation: shimmer-animation 1.5s infinite;
+}
+@keyframes shimmer-animation {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}

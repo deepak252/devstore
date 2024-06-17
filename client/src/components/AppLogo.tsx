@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import LogoImg from '@/assets/images/logo.png'
 import classNames from 'classnames'
 
@@ -17,7 +17,7 @@ const AppLogo = ({
 }: AppLogoProps) => {
   return (
     <div className={classNames('inline-block', className)}>
-      <NavLink
+      <Link
         to="/"
         onClick={(e) => pointerDisabled && e.preventDefault()}
         style={{ pointerEvents: pointerDisabled ? 'none' : 'auto' }}
@@ -38,7 +38,7 @@ const AppLogo = ({
             Dev Store
           </span>
         )}
-      </NavLink>
+      </Link>
     </div>
   )
 }

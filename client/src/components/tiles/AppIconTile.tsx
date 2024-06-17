@@ -1,5 +1,6 @@
 import { memo } from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import Shimmer from '../Shimmer'
 
 type AppIconTilePropTypes = {
   id: string
@@ -10,7 +11,7 @@ type AppIconTilePropTypes = {
 
 const AppIconTile = ({ id, name, imgUrl, username }: AppIconTilePropTypes) => {
   return (
-    <NavLink
+    <Link
       to={`/apps/${id}`}
       className="flex flex-col overflow-hidden rounded-3xl hover:bg-gray-1100"
     >
@@ -23,11 +24,15 @@ const AppIconTile = ({ id, name, imgUrl, username }: AppIconTilePropTypes) => {
         <p className="text-15 font-semibold text-gray-900">{name}</p>
         <p className="text-13 text-gray-700">{username}</p>
       </div>
-    </NavLink>
+    </Link>
   )
 }
 
-const IconTileMemo = memo(AppIconTile)
-export { IconTileMemo }
+const AppIconTileMemo = memo(AppIconTile)
+export { AppIconTileMemo }
+
+export const AppIconTileShimmer = () => {
+  return <Shimmer className="!rounded-3xl w-full h-40" />
+}
 
 export default AppIconTile

@@ -1,5 +1,6 @@
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import StarIcon from '@/assets/icons/star.svg?react'
+import Shimmer from '../Shimmer'
 
 type FeaturedTileProps = {
   redirectUrl: string
@@ -19,7 +20,7 @@ const FeaturedTile = ({
   owner,
 }: FeaturedTileProps) => {
   return (
-    <NavLink
+    <Link
       to={redirectUrl}
       className="flex flex-col overflow-hidden rounded-xl m-1 w-[350px] max-lg:w-[315px] max-md:w-[280px] hover:bg-gray-1100"
     >
@@ -48,7 +49,13 @@ const FeaturedTile = ({
           )}
         </div>
       </div>
-    </NavLink>
+    </Link>
+  )
+}
+
+export const FeaturedTileShimmer = () => {
+  return (
+    <Shimmer className="rounded-xl w-[350px] max-lg:w-[315px] max-md:w-[280px]" />
   )
 }
 

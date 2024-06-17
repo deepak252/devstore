@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useFormik } from 'formik'
 import FormInputWrapper from '@/components/FormInputWrapper'
 import GoogleIcon from '@/assets/icons/google.svg?react'
@@ -93,9 +93,9 @@ function SignIn() {
           </div>
         </FormInputWrapper>
         <p className="text-end py-1">
-          <NavLink to="/auth/forgot-password" className="text-primary text-sm ">
+          <Link to="/auth/forgot-password" className="text-primary text-sm ">
             Forgot Password?
-          </NavLink>
+          </Link>
         </p>
         <button type="submit" className="btn-filled w-full my-5">
           Log In
@@ -103,9 +103,9 @@ function SignIn() {
       </form>
       <p className="text-sm text-center">
         Don't have an account?{' '}
-        <NavLink to="/auth/register" className="text-primary">
+        <Link to="/auth/register" className="text-primary">
           Create Account
-        </NavLink>
+        </Link>
       </p>
     </>
   )
