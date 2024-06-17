@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import CheckIcon from '@/assets/icons/Check.svg?react'
+import CheckIcon from '@/assets/icons/check.svg?react'
 
 type DropdownItemProps = {
   label: string

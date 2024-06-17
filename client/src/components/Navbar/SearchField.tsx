@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
-import SearchIcon from '@/assets/icons/Search.svg?react'
-import CloseIcon from '@/assets/icons/Close.svg?react'
+import SearchIcon from '@/assets/icons/search.svg?react'
+import CloseIcon from '@/assets/icons/close.svg?react'
 
 const PATHNAMES = {
   HOME: '/',
@@ -88,7 +88,7 @@ const SearchField = () => {
               onKeyDown={handleKeyPress}
               ref={inputRef}
               autoFocus
-              className="max-w-52"
+              className="max-w-52 px-3"
             />
             {query.length ? (
               <CloseIcon

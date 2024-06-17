@@ -54,7 +54,7 @@ function* signUpHandler(action: any): Generator<any, any, any> {
 
 function* checkUsernameAvailableHandler(action: any): Generator<any, any, any> {
   try {
-    const username = action.payload
+    const username = action.payload?.username
     if (!username) {
       throw new Error('Username is required')
     }
@@ -76,6 +76,6 @@ export default function* authSaga() {
   yield all([
     takeLatest(signIn.type, signInHandler),
     takeLatest(signUp.type, signUpHandler),
-    takeLatest(checkUsernameAvailable, checkUsernameAvailableHandler),
+    takeLatest(checkUsernameAvailable.type, checkUsernameAvailableHandler),
   ])
 }

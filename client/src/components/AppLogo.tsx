@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import LogoImg from '@/assets/images/Logo.png'
+import LogoImg from '@/assets/images/logo.png'
 import classNames from 'classnames'
 
 type AppLogoProps = {
@@ -25,7 +25,7 @@ const AppLogo = ({
       >
         <img
           src={LogoImg}
-          className="bg-primary-200 size-12 rounded-xl"
+          className="bg-primary-100 size-12 rounded-xl"
           alt="app_logo"
         />
         {showText && (

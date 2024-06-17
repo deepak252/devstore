@@ -30,7 +30,7 @@
     @apply absolute end-0 z-40  min-w-52 bg-white p-2 mt-0 border border-gray-400 shadow-3xl rounded-2xl custom-scrollbar;
   }
   .dropdown-item {
-    @apply flex items-center text-sm text-gray-700 font-normal rounded-lg p-2 overflow-hidden bg-white cursor-pointer disable-select hover:bg-primary-200 border border-white;
+    @apply flex items-center text-sm text-gray-700 font-normal rounded-lg p-2 overflow-hidden bg-white cursor-pointer disable-select hover:bg-primary-100 border border-white;
   }
   .dropdown-item.selected {
     @apply text-primary;
@@ -40,20 +40,20 @@
   }
 
   .textfield {
-    @apply flex items-center border border-gray-400 p-[10px] rounded-xl focus-within:border-primary;
+    @apply flex items-center border-[1.5px] border-gray-400 py-2 px-4  rounded-xl focus-within:border-primary;
   }
   .textfield input {
-    @apply border-none outline-none min-w-0 ps-3 pe-2;
+    @apply flex-grow border-none outline-none min-w-0 py-1;
   }
 
-  .form-input{
+  .form-input {
     @apply w-full border-gray-400 py-3 px-4 rounded-xl outline-none border-[1.5px] focus:border-primary;
   }
 
-  .chip{
+  .chip {
     @apply inline-flex items-center px-4 py-[6px] border border-gray-500 text-gray-700 rounded-full text-sm disable-select cursor-pointer;
   }
-  .chip.active{
+  .chip.active {
     @apply border-primary text-primary bg-primary-100 font-semibold;
   }
 }
@@ -99,6 +99,16 @@ input {
 input::placeholder {
   @apply text-gray-600 font-normal;
 }
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
+svg{
+  @apply disable-select;
+}
 
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;
@@ -119,6 +129,6 @@ input::placeholder {
   height: 8px;
 }
 
-.scrollbar-thin{
+.scrollbar-thin {
   scrollbar-width: thin;
 }

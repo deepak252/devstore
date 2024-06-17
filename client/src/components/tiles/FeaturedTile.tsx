@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import StarIcon from '@/assets/icons/Star.svg?react'
+import StarIcon from '@/assets/icons/star.svg?react'
 
 type FeaturedTileProps = {
   redirectUrl: string
@@ -26,7 +26,7 @@ const FeaturedTile = ({
       <div className="bg-[#4a4a4adc]">
         <img
           src={featuredImageUrl}
-          className="aspect-video hover:opacity-80"
+          className="aspect-video size-full hover:opacity-80"
           alt="feat_image"
         />
       </div>

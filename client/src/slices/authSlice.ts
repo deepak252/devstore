@@ -4,21 +4,25 @@ import { createSlice } from '@reduxjs/toolkit'
 
 type AuthState = {
   isLoading: boolean
-  isAuthenticated: boolean
+  isSignedIn: boolean
   error: null | string
-  isLoadingUsername: boolean
-  isUsernameAvailable: boolean
-  usernameError: null | string
+  username: {
+    isLoading: boolean
+    isAvailable: boolean
+    error: null | string
+  }
   toastData: ToastData
 }
 
 const initialState: AuthState = {
   isLoading: false,
-  isAuthenticated: false,
+  isSignedIn: false,
   error: null,
-  isLoadingUsername: false,
-  isUsernameAvailable: false,
-  usernameError: null,
+  username: {
+    isLoading: false,
+    isAvailable: false,
+    error: null,
+  },
   toastData: { type: null, message: null },
 }
 
@@ -26,68 +30,80 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    signIn: (state) => {
+    signIn: (state, _) => {
       state.isLoading = true
     },
     signInSuccess: (state, _) => {
-      state.isAuthenticated = true
+      state.isSignedIn = true
       state.error = null
       state.isLoading = false
-      state.isLoadingUsername = false
-      state.isUsernameAvailable = false
-      state.usernameError = null
     },
     signInFailure: (state, action) => {
-      state.isAuthenticated = false
+      state.isSignedIn = false
       state.error = action.payload
       state.isLoading = false
       state.toastData = {
-        type: 'error',
+        type: 'failure',
         message: action.payload,
       }
     },
-    signUp: (state) => {
+    signUp: (state, _) => {
       state.isLoading = true
     },
     signUpSuccess: (state) => {
-      state.isAuthenticated = true
+      state.isSignedIn = true
       state.error = null
       state.isLoading = false
-      state.isLoadingUsername = false
-      state.isUsernameAvailable = false
-      state.usernameError = null
+      state.username = {
+        isLoading: false,
+        isAvailable: false,
+        error: null,
+      }
     },
     signUpFailure: (state, action) => {
-      state.isAuthenticated = false
+      state.isSignedIn = false
       state.error = action.payload
       state.isLoading = false
       state.toastData = {
-        type: 'error',
+        type: 'failure',
         message: action.payload,
       }
     },
-    checkUsernameAvailable: (state) => {
-      state.usernameError = null
-      state.isLoadingUsername = true
+    checkUsernameAvailable: (state, _) => {
+      state.username = {
+        isLoading: true,
+        isAvailable: false,
+        error: null,
+      }
     },
     usernameAvailableSuccess: (state) => {
-      state.isLoadingUsername = false
-      state.isUsernameAvailable = true
-      state.usernameError = null
+      state.username = {
+        isLoading: false,
+        isAvailable: true,
+        error: null,
+      }
     },
     usernameAvailableFailure: (state, action) => {
-      state.isLoadingUsername = false
-      state.isUsernameAvailable = false
-      state.usernameError = action.payload
+      state.username = {
+        isLoading: false,
+        isAvailable: false,
+        error: action.payload,
+      }
     },
     setUsernameAvailable: (state, action) => {
-      state.isUsernameAvailable = action.payload
+      state.username.isAvailable = action.payload
     },
     signOut: (state) => {
-      state.isAuthenticated = false
+      state.isSignedIn = false
     },
-    setToast: (state, action) => {
+    setAuthToastData: (state, action) => {
       state.toastData = action.payload
+    },
+    resetAuthState: (state) => {
+      return {
+        ...initialState,
+        toastData: state.toastData,
+      }
     },
   },
 })
@@ -104,7 +120,8 @@ export const {
   usernameAvailableFailure,
   setUsernameAvailable,
   signOut,
-  setToast,
+  setAuthToastData,
+  resetAuthState,
 } = authSlice.actions
 
 export default authSlice.reducer

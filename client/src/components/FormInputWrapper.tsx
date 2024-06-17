@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 type FormInputWrapperProps = {
   title?: string
   children: React.ReactNode
+  trailing?: React.ReactNode
   error?: string
   className?: string
 }
@@ -11,6 +12,7 @@ type FormInputWrapperProps = {
 const FormInputWrapper = ({
   title,
   children,
+  trailing,
   error,
   className,
 }: FormInputWrapperProps) => {
@@ -18,6 +20,7 @@ const FormInputWrapper = ({
     <div className={classNames('mt-3', className)}>
       <p className="text-sm font-medium text-gray-750 mb-2">{title}</p>
       {children}
+      {trailing}
       <p className="my-2 text-13 text-red">{error}</p>
     </div>
   )

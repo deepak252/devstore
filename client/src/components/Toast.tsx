@@ -1,21 +1,28 @@
 import { useEffect, useState } from 'react'
 import classNames from 'classnames'
+import CloseIcon from '@/assets/icons/close.svg?react'
 
-export type ToastType = 'success' | 'error' | 'default'
 export type ToastData = {
-  type: ToastType | null
-  message: string | null
+  type?: 'success' | 'failure' | null
+  message?: string | null
+}
+
+export const TOAST_INITIAL_DATA: ToastData = {
+  type: null,
+  message: null,
 }
 
 type ToastProps = {
-  title?: string
-  message?: string
-  type?: ToastType
   onClose?: () => void
   durationMS?: number
-}
+} & ToastData
 
-const Toast = ({ title, message, type, onClose, durationMS }: ToastProps) => {
+const Toast = ({
+  message,
+  type = 'success',
+  onClose,
+  durationMS = 3000,
+}: ToastProps) => {
   const [isOpen, setIsOpen] = useState(true)
 
   useEffect(() => {
@@ -34,11 +41,10 @@ const Toast = ({ title, message, type, onClose, durationMS }: ToastProps) => {
   }
 
   const containerClassNames = classNames(
-    'flex flex-col items-start text-start fixed right-[43px] bottom-[48px] px-[19px] py-[14px] rounded-2xl w-[340px] min-h-[158px] max-h-[300px]',
+    'flex items-center fixed top-12 left-1/2 -translate-x-1/2 px-4 py-3 rounded-xl min-w-80 max-w-5xl min-h-14',
     {
-      'bg-red-200 text-red': type === 'error',
-      'bg-green-200 text-green': type === 'success',
-      'bg-primary-200': type === 'default',
+      'bg-red ': type === 'failure',
+      'bg-green': type === 'success',
     }
   )
 
@@ -46,35 +52,20 @@ const Toast = ({ title, message, type, onClose, durationMS }: ToastProps) => {
     <>
       {isOpen && (
         <div className={containerClassNames}>
-          <div className="flex justify-end w-full">
-            <span
-              className={classNames('text-13 underline cursor-pointer', {
-                'text-green': type !== 'error',
-              })}
+          <p className="flex-grow text-white text-17 me-8 px-2 max-md:text-15">
+            {message}
+          </p>
+          <div>
+            <CloseIcon
+              role="button"
+              className="fill-white"
               onClick={handleCloseToast}
-            >
-              Close
-            </span>
+            />
           </div>
-          <div className="overflow-y-auto">
-            <p className="text-17 font-medium">{title}</p>
-            <p
-              className={classNames('text-15 mt-[13px]', {
-                'text-gray-900': type === 'default',
-              })}
-            >
-              {message}
-            </p>
-          </div>{' '}
         </div>
       )}
     </>
   )
-}
-
-Toast.defaultProps = {
-  type: 'info',
-  durationMS: 3000,
 }
 
 export default Toast

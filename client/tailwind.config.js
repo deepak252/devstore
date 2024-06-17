@@ -10,8 +10,9 @@ export default {
         primary: {
           DEFAULT: '#646DDF', //// Buttons, Active State (Checkbox), Textfield border (Focus)
           100: '#E1E0F9', // Chip
-          200: '#E0E0FF', // Floating Button
-          300: '#B3B5D9',
+          200: '#C7CAF7', // Floating Button
+          300: '#AFB4F3',
+          400: '8D94EE',
         },
         secondary: '#020865',
         gray: {
