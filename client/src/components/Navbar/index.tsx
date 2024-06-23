@@ -10,12 +10,13 @@ import useWindowDimensions from '@/hooks/useWindowDimensions'
 import NavOptions from './NavOptions'
 import SearchField from './SearchField'
 import useNavigateWithState from '@/hooks/useNavigateWithState'
+import { useAppSelector } from '@/hooks'
+import { removeUserFromStorage } from '@/utils/storage'
 
 const Navbar = () => {
   const { width } = useWindowDimensions()
   const navigateWithState = useNavigateWithState()
-  // const user = useSelector((state) => stat)
-  const user = false
+  const userProfile = useAppSelector((state) => state.user.profile)
   const isMdScreen = width < 768 // 992px
 
   const handleOptionSelect = (options: DropdownOption[]) => {
@@ -24,12 +25,21 @@ const Navbar = () => {
         navigateWithState('/auth/login')
         break
       }
+      case 'signOut': {
+        // dispatch(signOut())
+        // dispatch(deleteUser())
+        // clearUserCache()
+        removeUserFromStorage()
+        navigateWithState(0)
+        // navigateWithState(0) // reload current route
+        break
+      }
       default:
         break
     }
   }
 
-  const options = user
+  const options = userProfile.data
     ? [
         {
           label: 'Profile',

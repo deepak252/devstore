@@ -50,7 +50,7 @@ const authSlice = createSlice({
     signUp: (state, _) => {
       state.isLoading = true
     },
-    signUpSuccess: (state) => {
+    signUpSuccess: (state, _) => {
       state.isSignedIn = true
       state.error = null
       state.isLoading = false

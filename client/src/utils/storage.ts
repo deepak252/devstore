@@ -1,4 +1,4 @@
-const ACCESS_TOKEN_KEY = 'authToken'
+const ACCESS_TOKEN_KEY = 'access_token'
 const USER_KEY = 'user'
 const METADATA_KEY = 'metadata'
 
@@ -42,7 +42,7 @@ export const getMetadataFromStorage = () => {
   }
 }
 
-export const clearUserCache = () => {
+export const removeUserFromStorage = () => {
   localStorage.removeItem(USER_KEY)
   localStorage.removeItem(ACCESS_TOKEN_KEY)
 }

@@ -16,8 +16,8 @@ function* getMetadataHandler(): Generator<any, any, any> {
     }
     const response = yield call(getRequest, METADATA_API)
     if (response && response.status >= 200 && response.status <= 299) {
-      yield put(getMetadataSuccess(response.data))
       saveMetadataToStorage(response.data?.data)
+      yield put(getMetadataSuccess(response.data))
     } else {
       throw response?.data || response
     }

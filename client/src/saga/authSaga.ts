@@ -21,7 +21,7 @@ function* signInHandler(action: any): Generator<any, any, any> {
       data: { usernameOrEmail, password },
     })
     if (response && response.status >= 200 && response.status <= 299) {
-      saveAccessTokenToStorage(response.data?.data?.token)
+      saveAccessTokenToStorage(response.data?.data?.accessToken)
       saveUserToStorage(response.data?.data?.user)
       yield put(signInSuccess(response.data))
     } else {
