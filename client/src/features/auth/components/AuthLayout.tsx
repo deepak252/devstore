@@ -1,11 +1,11 @@
+import { useEffect } from 'react'
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import AppLogo from '@/components/AppLogo'
+import Loader from '../../../components/Loader'
+import Toast from '../../../components/Toast'
 import BGAuth from '@/assets/images/bg-auth.svg?react'
+import { resetAuthState, setAuthToastData } from '@/features/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { useEffect } from 'react'
-import { resetAuthState, setAuthToastData } from '@/slices/authSlice'
-import Loader from '../Loader'
-import Toast from '../Toast'
 
 function AuthLayout() {
   const navigate = useNavigate()

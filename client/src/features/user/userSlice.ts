@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { TOAST_INITIAL_DATA, ToastData } from '@/components/Toast'
 import { createSlice } from '@reduxjs/toolkit'
-import { signInSuccess, signUpSuccess } from './authSlice'
+import { signInSuccess, signUpSuccess } from '../auth/authSlice'
 
 type UserState = {
   profile: {

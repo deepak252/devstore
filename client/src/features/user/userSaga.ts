@@ -3,7 +3,7 @@ import {
   getUserProfile,
   getUserProfileFailure,
   getUserProfileSuccess,
-} from '@/slices/userSlice'
+} from './userSlice'
 import { getRequest } from '@/services/api'
 import { USER_API } from '@/constants'
 import { getUserFromStorage, saveUserToStorage } from '@/utils/storage'

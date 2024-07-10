@@ -5,7 +5,7 @@ import {
   AppIconTileShimmer,
 } from '@/components/tiles/AppIconTile'
 
-function Apps() {
+function AppsPage() {
   const carouselItems = [
     {
       url: 'https://images.unsplash.com/photo-1579353977828-2a4eab540b9a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2FtcGxlfGVufDB8fDB8fHww',
@@ -79,4 +79,4 @@ function Apps() {
   )
 }
 
-export default Apps
+export default AppsPage

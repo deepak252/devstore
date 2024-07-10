@@ -14,9 +14,9 @@ import {
   checkUsernameAvailable,
   signOut,
   signOutSuccess,
-} from '@/slices/authSlice'
+} from './authSlice'
 import { PayloadAction } from '@reduxjs/toolkit'
-import { SignInPayload, SignUpPayload } from '@/types/auth.types'
+import { SignInPayload, SignUpPayload } from './auth.types'
 
 function* signInHandler(
   action: PayloadAction<SignInPayload>

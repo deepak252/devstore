@@ -66,6 +66,29 @@ export default {
         toast: 990,
         loader: 1000,
       },
+      animation: {
+        fadeIn: 'fadeIn 0.2s ease-in-out',
+        fadeOut: 'fadeOut 0.2s ease-in-out',
+        shimmer: 'shimmer 1.5s infinite',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        fadeOut: {
+          '0%': { opacity: '1' },
+          '100%': { opacity: '0' },
+        },
+        shimmer: {
+          '0%': {
+            transform: 'translateX(-100%)',
+          },
+          '100%': {
+            transform: 'translateX(100%)',
+          },
+        },
+      },
     },
   },
   plugins: [],

@@ -8,16 +8,12 @@ import GithubIcon from '@/assets/icons/github.svg?react'
 import CheckCicleIcon from '@/assets/icons/check-circle.svg?react'
 import VisibilityOnIcon from '@/assets/icons/visibility-on.svg?react'
 import VisibilityOffIcon from '@/assets/icons/visibility-off.svg?react'
-import {
-  checkUsernameAvailable,
-  resetAuthState,
-  signUp,
-} from '@/slices/authSlice'
+import { checkUsernameAvailable, resetAuthState, signUp } from '../authSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { validateSignUpForm } from './util'
+import { validateSignUpForm } from '../util'
 import { validateUsername } from '@/utils/validators'
 import { debounceHandler } from '@/utils'
-import { SignUpFormError, SignUpFormValues } from '@/types/auth.types'
+import { SignUpFormError, SignUpFormValues } from '../auth.types'
 
 const debounce = debounceHandler()
 

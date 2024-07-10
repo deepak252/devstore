@@ -5,10 +5,10 @@ import {
   Banner,
   CreateAppFormData,
   CreateProjectFormData,
+  Platform,
   ProjectDetails,
   ProjectList,
-} from '@/types/project.types'
-import { Platform } from '@/types/shared.types'
+} from '@/shared.types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type AppsState = {

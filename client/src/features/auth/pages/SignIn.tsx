@@ -6,10 +6,10 @@ import GoogleIcon from '@/assets/icons/google.svg?react'
 import GithubIcon from '@/assets/icons/github.svg?react'
 import VisibilityOnIcon from '@/assets/icons/visibility-on.svg?react'
 import VisibilityOffIcon from '@/assets/icons/visibility-off.svg?react'
-import { signIn } from '@/slices/authSlice'
+import { signIn } from '../authSlice'
 import { useAppDispatch } from '@/hooks'
-import { validateSignInForm } from './util'
-import { SignInFormError, SignInFormValues } from '@/types/auth.types'
+import { validateSignInForm } from '../util'
+import { SignInFormError, SignInFormValues } from '../auth.types'
 
 function SignIn() {
   const dispatch = useAppDispatch()

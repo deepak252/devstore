@@ -1,5 +1,6 @@
 import { getAccessTokenFromStorage } from '@/utils/storage'
 import axios, { AxiosRequestConfig } from 'axios'
+import { call } from 'redux-saga/effects'
 
 const api = axios.create({
   baseURL: 'http://localhost:5000/api',
@@ -29,65 +30,42 @@ export const setupInterceptor = (navigate: any) => {
   )
 }
 
-const getQueryString = (obj?: Record<string, any>) => {
-  let queryString =
-    obj &&
-    Object.entries(obj)
-      .filter(([, value]) => value !== undefined && value !== null)
-      .map(
-        ([key, value]) =>
-          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
-      )
-      .join('&')
-  queryString = queryString && `?${queryString}`
-  return queryString ?? ''
-}
-
-type GetRequestOptions = {
-  queryParams?: Record<string, any>
-} & AxiosRequestConfig
-
 export const getRequest = async (
   endpoint: string = '',
-  { queryParams, headers = {} }: GetRequestOptions = {}
+  { headers = {}, ...args }: AxiosRequestConfig = {}
 ) => {
-  const queryString = getQueryString(queryParams)
   const accessToken = getAccessTokenFromStorage()
   if (accessToken) {
     headers = {
-      Authorization: `${accessToken}`,
+      Authorization: `Bearer ${accessToken}`,
       ...headers,
     }
   }
   return api
-    .get(endpoint + queryString, {
+    .get(endpoint, {
       headers: {
         'Content-Type': 'application/json',
         ...headers,
       },
+      ...args,
     })
     .then((response) => response)
     .catch((error) => error.response)
 }
 
-type PostRequestOptions = {
-  queryParams?: Record<string, any>
-} & AxiosRequestConfig
-
 export const postRequest = async (
   endpoint = '',
-  { queryParams, data, headers = {}, ...args }: PostRequestOptions = {}
+  { data, headers = {}, ...args }: AxiosRequestConfig = {}
 ) => {
-  const queryString = getQueryString(queryParams)
   const accessToken = getAccessTokenFromStorage()
   if (accessToken) {
     headers = {
-      Authorization: `${accessToken}`,
+      Authorization: `Bearer ${accessToken}`,
       ...headers,
     }
   }
   return api
-    .post(endpoint + queryString, data, {
+    .post(endpoint, data, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -97,4 +75,51 @@ export const postRequest = async (
     })
     .then((response) => response)
     .catch((error) => error.response)
+}
+
+export const putRequest = async (
+  endpoint = '',
+  { data, headers = {}, ...args }: AxiosRequestConfig = {}
+) => {
+  const accessToken = getAccessTokenFromStorage()
+  if (accessToken) {
+    headers = {
+      Authorization: `Bearer ${accessToken}`,
+      ...headers,
+    }
+  }
+  return api
+    .post(endpoint, data, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        ...headers,
+      },
+      ...args,
+    })
+    .then((response) => response)
+    .catch((error) => error.response)
+}
+
+export function* uploadTask(
+  endpoint = '',
+  { signal, ...args }: AxiosRequestConfig = {},
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  cb = function* (_: any, __: any): Generator<any, any, any> {} //  (success: any, error: any) {}
+): Generator<any, any, any> {
+  try {
+    const response = yield call(postRequest, endpoint, {
+      signal,
+      ...args,
+    })
+    if (response && response.status >= 200 && response.status <= 299) {
+      yield cb(response, null)
+    } else if (!signal?.aborted) {
+      // if upload not cancelled
+      throw response?.data || response
+    }
+  } catch (e) {
+    console.error('uploadTask error', e)
+    yield cb(null, e)
+  }
 }

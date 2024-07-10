@@ -1,4 +1,5 @@
-import { Platform } from './shared.types'
+export type Platform = 'all' | 'android' | 'ios'
+
 export type RemoteFile = {
   url: string
   path: string

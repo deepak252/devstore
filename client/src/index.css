@@ -135,6 +135,13 @@ svg {
 .scrollbar-thin {
   scrollbar-width: thin;
 }
+.scrollbar-hidden {
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+}
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* for Chrome, Safari, and Opera */
+}
 
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
@@ -151,14 +158,5 @@ input[type='number']::-webkit-outer-spin-button {
     #bdbdbd 50%,
     transparent 100%
   );
-  animation: shimmer-animation 1.5s infinite;
 }
-@keyframes shimmer-animation {
-  0% {
-    transform: translateX(-100%);
-  }
 
-  100% {
-    transform: translateX(100%);
-  }
-}

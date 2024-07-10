@@ -6,7 +6,7 @@ import {
   getMetadata,
   getMetadataFailure,
   getMetadataSuccess,
-} from '@/slices/metadataSlice'
+} from './metadataSlice'
 
 function* getMetadataHandler(): Generator<any, any, any> {
   try {

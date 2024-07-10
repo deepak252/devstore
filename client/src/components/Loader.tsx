@@ -10,7 +10,7 @@ const Spinner = ({ className, center }: SpinnerProps) => {
     return (
       <div
         className={classNames(
-          'size-12 border-[6px] inline-block animate-spin rounded-full border-solid border-current border-e-primary align-[-0.125em] text-primary-200 motion-reduce:animate-[spin_1.5s_linear_infinite]',
+          'size-12 inline-block animate-spin rounded-full border-[6px]  border-solid border-current border-e-primary text-primary-200',
           className
         )}
         role="status"

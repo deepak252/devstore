@@ -11,7 +11,7 @@ import NavOptions from './NavOptions'
 import SearchField from './SearchField'
 import useNavigateWithState from '@/hooks/useNavigateWithState'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { signOut } from '@/slices/authSlice'
+import { signOut } from '@/features/auth/authSlice'
 
 const Navbar = () => {
   const { width } = useWindowDimensions()
