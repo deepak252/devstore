@@ -14,9 +14,10 @@ import {
   signUp,
 } from '@/slices/authSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { SignUpFormError, SignUpFormValues, validateSignUpForm } from './util'
+import { validateSignUpForm } from './util'
 import { validateUsername } from '@/utils/validators'
 import { debounceHandler } from '@/utils'
+import { SignUpFormError, SignUpFormValues } from '@/types/auth.types'
 
 const debounce = debounceHandler()
 
@@ -28,6 +29,8 @@ function SignUp() {
     initialValues: { email: '', username: '', password: '' },
     validate: validateSignUpForm,
     onSubmit: (values) => {
+      console.log(values)
+
       if (errors.username || !usernameState.isAvailable) return
       dispatch(signUp(values))
     },
@@ -140,7 +143,11 @@ function SignUp() {
             )}
           </div>
         </FormInputWrapper>
-        <button type="submit" className="btn-filled w-full mt-6 mb-5">
+        <button
+          type="submit"
+          className="btn-filled w-full mt-6 mb-5"
+          disabled={usernameState.isLoading}
+        >
           Register
         </button>
       </form>

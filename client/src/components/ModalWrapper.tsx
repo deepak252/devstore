@@ -69,7 +69,7 @@ const ModalWrapper = ({
       {isOpen && (
         <div
           className={classNames(
-            'fixed top-0 left-0 right-0 bottom-0 h-screen w-screen bg-[#00000077] z-40',
+            'flex-center fixed top-0 left-0 right-0 bottom-0 z-modal h-screen w-screen bg-[#00000077]',
             className
           )}
         >

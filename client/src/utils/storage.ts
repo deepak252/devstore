@@ -9,9 +9,8 @@ export const saveAccessTokenToStorage = (token: string) => {
 export const getAccessTokenFromStorage = () => {
   return localStorage.getItem(ACCESS_TOKEN_KEY)?.trim()
 }
-export const isSignedIn = () => {
-  const token = getAccessTokenFromStorage()
-  return token && token.length !== 0
+export const userSignedIn = () => {
+  return !!getAccessTokenFromStorage()
 }
 
 export const saveUserToStorage = (user: Record<string, any>) => {

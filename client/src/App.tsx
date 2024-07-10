@@ -2,23 +2,33 @@
 import { useEffect } from 'react'
 import AppRoutes from './routes/AppRoutes'
 import { setupInterceptor } from './services/api'
-import { useAppDispatch } from './hooks'
+import { useAppDispatch, useAppSelector } from './hooks'
 import { getUserProfile } from './slices/userSlice'
-import { isSignedIn } from './utils/storage'
-// import { useAppDispatch } from './hooks'
+import { userSignedIn } from './utils/storage'
+import useNavigateWithState from './hooks/useNavigateWithState'
 // import { getMetadata } from './slices/metadataSlice'
 
 function App() {
+  const navigate = useNavigateWithState()
   const dispatch = useAppDispatch()
-  const signedIn = isSignedIn()
+  const isSignedOut = useAppSelector((state) => state.auth.isSignedOut)
+  const isSignedIn = userSignedIn()
+
   useEffect(() => {
-    setupInterceptor()
+    setupInterceptor(navigate)
     // dispatch(getMetadata())
-    if (signedIn) {
+    if (isSignedIn) {
       dispatch(getUserProfile())
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (isSignedOut) {
+      location.reload()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSignedOut])
 
   return (
     <>

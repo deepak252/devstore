@@ -1,19 +1,17 @@
 import {
+  SignInFormError,
+  SignInFormValues,
+  SignUpFormError,
+  SignUpFormValues,
+} from '@/types/auth.types'
+
+import {
   validateEmail,
   validatePasswordSignUp,
   validateUsername,
   validateUsernameOrEmail,
 } from '@/utils/validators'
 
-export type SignInFormValues = {
-  usernameOrEmail: string
-  password: string
-  isPasswordVisible?: boolean
-}
-export type SignInFormError = {
-  usernameOrEmail?: string
-  password?: string
-}
 export const validateSignInForm = (values: SignInFormValues) => {
   const errors: SignInFormError = {}
   const ueError = validateUsernameOrEmail(values.usernameOrEmail)
@@ -26,17 +24,6 @@ export const validateSignInForm = (values: SignInFormValues) => {
   return errors
 }
 
-export type SignUpFormValues = {
-  email: string
-  username: string
-  password: string
-  isPasswordVisible?: boolean
-}
-export type SignUpFormError = {
-  email?: string
-  username?: string
-  password?: string
-}
 export const validateSignUpForm = (values: SignUpFormValues) => {
   const errors: SignUpFormError = {}
   const emailErr = validateEmail(values.email)

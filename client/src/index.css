@@ -16,6 +16,9 @@
   .base-button {
     @apply text-sm rounded-xl py-3 px-6;
   }
+  .base-button:disabled {
+    @apply opacity-60;
+  }
   .icon-button {
     @apply flex-center p-1 box-border rounded-full hover:bg-gray-1100 active:bg-gray-1200;
   }
@@ -106,7 +109,7 @@ input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
 
-svg{
+svg {
   @apply disable-select;
 }
 
@@ -133,8 +136,21 @@ svg{
   scrollbar-width: thin;
 }
 
-.animate-shimmer{
-  background: linear-gradient(to right, transparent 0%, #BDBDBD 50%, transparent 100%);
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    #bdbdbd 50%,
+    transparent 100%
+  );
   animation: shimmer-animation 1.5s infinite;
 }
 @keyframes shimmer-animation {

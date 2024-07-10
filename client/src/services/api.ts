@@ -1,5 +1,5 @@
 import { getAccessTokenFromStorage } from '@/utils/storage'
-import axios, { AxiosProgressEvent } from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 
 const api = axios.create({
   baseURL: 'http://localhost:5000/api',
@@ -8,7 +8,7 @@ const api = axios.create({
 // baseURL: import.meta.env.VITE_BASE_URL,
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const setupInterceptor = () => {
+export const setupInterceptor = (navigate: any) => {
   api.interceptors.request.use(
     (config) => config,
     (error) => Promise.reject(error)
@@ -20,9 +20,9 @@ export const setupInterceptor = () => {
       // console.log(error.config.url);
       const statusCode = error.response?.status
       if (statusCode === 401) {
-        // clearUserCache()
+        localStorage.clear()
         // dispatch && dispatch(signOut());
-        // navigate && navigate('/auth');
+        navigate && navigate('/auth')
       }
       return Promise.reject(error)
     }
@@ -45,8 +45,7 @@ const getQueryString = (obj?: Record<string, any>) => {
 
 type GetRequestOptions = {
   queryParams?: Record<string, any>
-  headers?: Record<string, string>
-}
+} & AxiosRequestConfig
 
 export const getRequest = async (
   endpoint: string = '',
@@ -73,22 +72,11 @@ export const getRequest = async (
 
 type PostRequestOptions = {
   queryParams?: Record<string, any>
-  data?: any
-  headers?: Record<string, string>
-  onUploadProgress?: (progressEvent: AxiosProgressEvent) => void
-  onDownloadProgress?: (progressEvent: AxiosProgressEvent) => void
-}
+} & AxiosRequestConfig
 
 export const postRequest = async (
   endpoint = '',
-  {
-    queryParams,
-    data,
-    headers = {},
-    onUploadProgress,
-    onDownloadProgress,
-    ...args
-  }: PostRequestOptions = {}
+  { queryParams, data, headers = {}, ...args }: PostRequestOptions = {}
 ) => {
   const queryString = getQueryString(queryParams)
   const accessToken = getAccessTokenFromStorage()
@@ -105,8 +93,6 @@ export const postRequest = async (
         'Content-Type': 'application/json',
         ...headers,
       },
-      onUploadProgress,
-      onDownloadProgress,
       ...args,
     })
     .then((response) => response)

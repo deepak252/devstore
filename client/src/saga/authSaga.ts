@@ -12,9 +12,15 @@ import {
   usernameAvailableSuccess,
   usernameAvailableFailure,
   checkUsernameAvailable,
+  signOut,
+  signOutSuccess,
 } from '@/slices/authSlice'
+import { PayloadAction } from '@reduxjs/toolkit'
+import { SignInPayload, SignUpPayload } from '@/types/auth.types'
 
-function* signInHandler(action: any): Generator<any, any, any> {
+function* signInHandler(
+  action: PayloadAction<SignInPayload>
+): Generator<any, any, any> {
   try {
     const { usernameOrEmail, password } = action.payload
     const response = yield call(postRequest, SIGN_IN_API, {
@@ -33,14 +39,16 @@ function* signInHandler(action: any): Generator<any, any, any> {
   }
 }
 
-function* signUpHandler(action: any): Generator<any, any, any> {
+function* signUpHandler(
+  action: PayloadAction<SignUpPayload>
+): Generator<any, any, any> {
   try {
     const { username, email, password } = action.payload
     const response = yield call(postRequest, SIGN_UP_API, {
       data: { email, password, username },
     })
     if (response && response.status >= 200 && response.status <= 299) {
-      saveAccessTokenToStorage(response.data?.data?.token)
+      saveAccessTokenToStorage(response.data?.data?.accessToken)
       saveUserToStorage(response.data?.data?.user)
       yield put(signUpSuccess(response.data))
     } else {
@@ -52,7 +60,9 @@ function* signUpHandler(action: any): Generator<any, any, any> {
   }
 }
 
-function* checkUsernameAvailableHandler(action: any): Generator<any, any, any> {
+function* checkUsernameAvailableHandler(
+  action: PayloadAction<{ username: string }>
+): Generator<any, any, any> {
   try {
     const username = action.payload?.username
     if (!username) {
@@ -72,10 +82,16 @@ function* checkUsernameAvailableHandler(action: any): Generator<any, any, any> {
   }
 }
 
+function* signOutHandler(): Generator<any, any, any> {
+  localStorage.clear()
+  yield put(signOutSuccess())
+}
+
 export default function* authSaga() {
   yield all([
     takeLatest(signIn.type, signInHandler),
     takeLatest(signUp.type, signUpHandler),
+    takeLatest(signOut.type, signOutHandler),
     takeLatest(checkUsernameAvailable.type, checkUsernameAvailableHandler),
   ])
 }

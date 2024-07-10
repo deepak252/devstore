@@ -22,12 +22,12 @@ const FeaturedTile = ({
   return (
     <Link
       to={redirectUrl}
-      className="flex flex-col overflow-hidden rounded-xl m-1 w-[350px] max-lg:w-[315px] max-md:w-[280px] hover:bg-gray-1100"
+      className="flex flex-col overflow-hidden rounded-xl m-1 w-[350px] max-lg:w-[315px] max-md:w-[280px] hover:bg-gray-1100 hover:opacity-80"
     >
       <div className="bg-[#4a4a4adc]">
         <img
           src={featuredImageUrl}
-          className="aspect-video size-full hover:opacity-80"
+          className="aspect-video size-full "
           alt="feat_image"
         />
       </div>

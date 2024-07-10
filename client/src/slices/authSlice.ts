@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ToastData } from '@/components/Toast'
-import { createSlice } from '@reduxjs/toolkit'
+import { SignInPayload, SignUpPayload } from '@/types/auth.types'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type AuthState = {
   isLoading: boolean
   isSignedIn: boolean
+  isSignedOut: boolean
   error: null | string
   username: {
     isLoading: boolean
@@ -17,6 +19,7 @@ type AuthState = {
 const initialState: AuthState = {
   isLoading: false,
   isSignedIn: false,
+  isSignedOut: false,
   error: null,
   username: {
     isLoading: false,
@@ -30,7 +33,8 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    signIn: (state, _) => {
+    // Sign In
+    signIn: (state, _: PayloadAction<SignInPayload>) => {
       state.isLoading = true
     },
     signInSuccess: (state, _) => {
@@ -47,7 +51,8 @@ const authSlice = createSlice({
         message: action.payload,
       }
     },
-    signUp: (state, _) => {
+    // Sign Up
+    signUp: (state, _: PayloadAction<SignUpPayload>) => {
       state.isLoading = true
     },
     signUpSuccess: (state, _) => {
@@ -69,7 +74,8 @@ const authSlice = createSlice({
         message: action.payload,
       }
     },
-    checkUsernameAvailable: (state, _) => {
+    // Check Username Available
+    checkUsernameAvailable: (state, _: PayloadAction<{ username: string }>) => {
       state.username = {
         isLoading: true,
         isAvailable: false,
@@ -93,9 +99,14 @@ const authSlice = createSlice({
     setUsernameAvailable: (state, action) => {
       state.username.isAvailable = action.payload
     },
+    // Sign Out
     signOut: (state) => {
       state.isSignedIn = false
     },
+    signOutSuccess: (state) => {
+      state.isSignedOut = true
+    },
+
     setAuthToastData: (state, action) => {
       state.toastData = action.payload
     },
@@ -120,6 +131,7 @@ export const {
   usernameAvailableFailure,
   setUsernameAvailable,
   signOut,
+  signOutSuccess,
   setAuthToastData,
   resetAuthState,
 } = authSlice.actions

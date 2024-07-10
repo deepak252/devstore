@@ -8,7 +8,8 @@ import VisibilityOnIcon from '@/assets/icons/visibility-on.svg?react'
 import VisibilityOffIcon from '@/assets/icons/visibility-off.svg?react'
 import { signIn } from '@/slices/authSlice'
 import { useAppDispatch } from '@/hooks'
-import { SignInFormError, SignInFormValues, validateSignInForm } from './util'
+import { validateSignInForm } from './util'
+import { SignInFormError, SignInFormValues } from '@/types/auth.types'
 
 function SignIn() {
   const dispatch = useAppDispatch()
