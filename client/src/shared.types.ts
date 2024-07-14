@@ -50,14 +50,9 @@ export type CreateProjectFormData = {
   isSourceCodePublic?: boolean
   isPrivate: boolean
   attachmentIcon: File | null
-  attachmentImages: File[]
+  attachmentImages: File[] | null
   attachmentVideo?: File | null
   attachmentGraphic?: File | null
-}
-
-export type CreateAppFormData = CreateProjectFormData & {
-  platform: Platform
-  attachmentPackage: File | null
 }
 
 export type ProjectDetails = {

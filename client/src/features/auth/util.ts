@@ -3,7 +3,7 @@ import {
   SignInFormValues,
   SignUpFormError,
   SignUpFormValues,
-} from '@/types/auth.types'
+} from './auth.types'
 
 import {
   validateEmail,

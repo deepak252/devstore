@@ -17,11 +17,11 @@ const FormInputWrapper = ({
   className,
 }: FormInputWrapperProps) => {
   return (
-    <div className={classNames('mt-3', className)}>
-      <p className="text-sm font-medium text-gray-750 mb-2">{title}</p>
+    <div className={classNames('form-input-wrapper mt-3', className)}>
+      <p className="text-15 font-medium text-gray-750 mb-2">{title}</p>
       {children}
       {trailing}
-      <p className="my-2 text-13 text-red">{error}</p>
+      {error && <p className="my-2 text-13 text-red">{error}</p>}
     </div>
   )
 }

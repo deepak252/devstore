@@ -3,13 +3,13 @@ import { TOAST_INITIAL_DATA, ToastData } from '@/components/Toast'
 import {
   AppListItem,
   Banner,
-  CreateAppFormData,
   CreateProjectFormData,
   Platform,
   ProjectDetails,
   ProjectList,
 } from '@/shared.types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { CreateAppFormData } from './apps.types'
 
 type AppsState = {
   data: ProjectList<AppListItem>
@@ -22,18 +22,18 @@ type AppsState = {
     isLoading: boolean
     error: string | null
   }
-  createAppForm: {
-    formData: CreateProjectFormData
+  appForm: {
+    data: CreateProjectFormData
     isOpen: boolean
     isMinimize: boolean
     isLoading: boolean
     error: string | null
-  }
-  appPackage: {
-    info: null
-    isLoading: boolean
-    progress: number | null
-    error: string | null
+    package: {
+      info: null
+      isLoading: boolean
+      progress: number | null
+      error: string | null
+    }
   }
   banner: {
     list: Banner[]
@@ -76,18 +76,18 @@ const initialState: AppsState = {
     isLoading: false,
     error: null,
   },
-  createAppForm: {
-    formData: formDataInitialState,
+  appForm: {
+    data: formDataInitialState,
     isOpen: false,
     isMinimize: false,
     isLoading: false,
     error: null,
-  },
-  appPackage: {
-    info: null,
-    isLoading: false,
-    progress: null,
-    error: null,
+    package: {
+      info: null,
+      isLoading: false,
+      progress: null,
+      error: null,
+    },
   },
   banner: {
     list: [],
@@ -137,58 +137,58 @@ const appsSlice = createSlice({
     },
     // Create App Form
     toggleCreateAppFormOpen: (state) => {
-      state.createAppForm.isOpen = !state.createAppForm?.isOpen
-      if (!state.createAppForm.isOpen) {
+      state.appForm.isOpen = !state.appForm?.isOpen
+      if (!state.appForm.isOpen) {
         // Form Closed
-        state.createAppForm.isMinimize = false
-        state.createAppForm.formData = formDataInitialState
+        state.appForm.isMinimize = false
+        state.appForm.data = formDataInitialState
       }
     },
     toggleCreateAppFormMinimize: (state) => {
-      state.createAppForm.isMinimize = !state.createAppForm?.isMinimize
+      state.appForm.isMinimize = !state.appForm?.isMinimize
     },
     setCreateAppFormData: (state, action: PayloadAction<CreateAppFormData>) => {
-      state.createAppForm.formData = action.payload
+      state.appForm.data = action.payload
     },
     createApp: (state, _: PayloadAction<FormData>) => {
-      state.createAppForm.isLoading = true
-      state.createAppForm.error = null
+      state.appForm.isLoading = true
+      state.appForm.error = null
     },
     createAppSuccess: (state) => {
-      state.createAppForm = initialState.createAppForm
+      state.appForm = initialState.appForm
       state.toastData = {
         type: 'success',
         message: 'App added successfully!',
       }
     },
     createAppFailure: (state, action) => {
-      state.createAppForm.isLoading = false
-      state.createAppForm.error = action.payload
+      state.appForm.isLoading = false
+      state.appForm.error = action.payload
       state.toastData = {
         type: 'failure',
         message: action.payload || 'Something went wrong',
       }
     },
     createAppCancelled: (state, _) => {
-      state.createAppForm.isLoading = false
-      state.createAppForm.error = null
+      state.appForm.isLoading = false
+      state.appForm.error = null
       console.log('createAppCancelled')
     },
     uploadAppPackage: (state, _) => {
-      state.appPackage.isLoading = true
-      state.appPackage.error = null
-      state.appPackage.info = null
+      state.appForm.package.isLoading = true
+      state.appForm.package.error = null
+      state.appForm.package.info = null
     },
     uploadAppPackageProgress: (state, action) => {
-      state.appPackage.progress = action.payload
+      state.appForm.package.progress = action.payload
     },
     uploadAppPackageSuccess: (state, action) => {
-      state.appPackage.error = null
-      state.appPackage.isLoading = false
-      state.appPackage.info = action.payload?.data
+      state.appForm.package.error = null
+      state.appForm.package.isLoading = false
+      state.appForm.package.info = action.payload?.data
     },
     uploadAppPackageCancelled: (state, _) => {
-      state.appPackage = {
+      state.appForm.package = {
         info: null,
         isLoading: false,
         progress: null,
@@ -197,7 +197,7 @@ const appsSlice = createSlice({
       console.log('uploadAppCancelled')
     },
     uploadAppPackageFailure: (state, action) => {
-      state.appPackage = {
+      state.appForm.package = {
         info: null,
         isLoading: false,
         progress: null,

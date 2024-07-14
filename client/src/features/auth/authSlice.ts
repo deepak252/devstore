@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ToastData } from '@/components/Toast'
-import { SignInPayload, SignUpPayload } from '@/types/auth.types'
+import { SignInPayload, SignUpPayload } from './auth.types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type AuthState = {

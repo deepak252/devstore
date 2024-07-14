@@ -1,11 +1,17 @@
 import Carousel, { CarouselShimmer } from '@/components/Carousel'
+import CreateAppForm from '../components/CreateAppForm'
 import GridView from '@/components/GridView'
 import {
   AppIconTileMemo,
   AppIconTileShimmer,
 } from '@/components/tiles/AppIconTile'
+import AddIcon from '@/assets/icons/add.svg?react'
+import { useAppDispatch, useAppSelector } from '@/hooks'
+import { toggleCreateAppFormOpen } from '../appsSlice'
 
 function AppsPage() {
+  const dispatch = useAppDispatch()
+  const isFormOpen = useAppSelector((state) => state.apps.appForm.isOpen)
   const carouselItems = [
     {
       url: 'https://images.unsplash.com/photo-1579353977828-2a4eab540b9a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2FtcGxlfGVufDB8fDB8fHww',
@@ -51,6 +57,9 @@ function AppsPage() {
       platform: 'android',
     },
   ]
+  const handleToggleAppFormOpen = () => {
+    dispatch(toggleCreateAppFormOpen())
+  }
   return (
     <div className="">
       <Carousel items={carouselItems}></Carousel>
@@ -75,6 +84,14 @@ function AppsPage() {
           <AppIconTileShimmer key={id} />
         ))}
       </GridView>
+      <button
+        className="btn-fab fixed bottom-8 right-8"
+        onClick={handleToggleAppFormOpen}
+      >
+        <AddIcon className="fill-primary size-8" />
+        Create App
+      </button>
+      {isFormOpen && <CreateAppForm onClose={handleToggleAppFormOpen} />}
     </div>
   )
 }
