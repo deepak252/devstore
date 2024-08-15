@@ -1,13 +1,14 @@
+import { useFormik } from 'formik'
 import ModalWrapper from '@/components/ModalWrapper'
 import CloseIcon from '@/assets/icons/close.svg?react'
 import MinimizeIcon from '@/assets/icons/minimize.svg?react'
 import FormInputWrapper from '@/components/FormInputWrapper'
-import { useFormik } from 'formik'
-import { useMemo } from 'react'
-import { CreateAppFormData, CreateAppFormError } from '../apps.types'
+import useFormikErrors from '@/hooks/useFormikErrors'
+import { validateAppForm } from '../util'
+import { AppFormValues, AppFormError } from '../apps.types'
 
-const CreateAppForm = ({ onClose }: { onClose: () => void }) => {
-  const formik = useFormik<CreateAppFormData>({
+const AppForm = ({ onClose }: { onClose: () => void }) => {
+  const formik = useFormik<AppFormValues>({
     initialValues: {
       name: '',
       description: '',
@@ -21,35 +22,19 @@ const CreateAppForm = ({ onClose }: { onClose: () => void }) => {
       attachmentGraphic: null,
       attachmentPackage: null,
     },
-    // validate: validateSignInForm,
+    validate: validateAppForm,
     onSubmit: (values) => {
       console.log(values)
 
       // dispatch(signIn(values))
     },
   })
-
-  const errors = useMemo(() => {
-    const e: CreateAppFormError = {}
-    if (formik.touched.name && formik.errors.name) {
-      e.name = formik.errors.name
-    }
-    if (formik.touched.attachmentPackage && formik.errors.attachmentPackage) {
-      e.attachmentPackage = formik.errors.attachmentPackage
-    }
-    if (formik.touched.attachmentIcon && formik.errors.attachmentIcon) {
-      e.attachmentIcon = formik.errors.attachmentIcon
-    }
-    if (formik.touched.attachmentImages && formik.errors.attachmentImages) {
-      e.attachmentImages = formik.errors.attachmentImages
-    }
-    return e
-  }, [formik.touched, formik.errors])
+  const errors = useFormikErrors<AppFormValues, AppFormError>(formik)
 
   return (
     <ModalWrapper onClose={onClose} isOpen closeOnEsc>
-      <div className="flex flex-col bg-white p-3 rounded-2xl max-w-3xl w-[80vw] max-h-[80vh] min-h-[50vh]">
-        <div className="flex items-start justify-between p-3">
+      <div className="flex flex-col bg-white rounded-2xl max-w-3xl w-[80vw] max-h-[80vh] min-h-[50vh]">
+        <div className="flex items-start justify-between p-6">
           <h5>Create App</h5>
           <div className="flex-center">
             <button className="mx-2">
@@ -60,8 +45,9 @@ const CreateAppForm = ({ onClose }: { onClose: () => void }) => {
             </button>
           </div>
         </div>
-        <div className="flex-grow overflow-auto p-3 custom-scrollbar">
+        <div className="flex-grow overflow-auto px-8 pb-6 custom-scrollbar">
           <form onSubmit={formik.handleSubmit}>
+            <input type="checkbox" />
             <FormInputWrapper title="App Name*" error={errors.name}>
               <input
                 name="name"
@@ -79,16 +65,31 @@ const CreateAppForm = ({ onClose }: { onClose: () => void }) => {
                 onBlur={formik.handleBlur}
               />
             </FormInputWrapper>
+            <FormInputWrapper title="Source Code URL" error={errors.sourceCode}>
+              <input
+                name="sourceCode"
+                type="text"
+                placeholder="Enter source code url (Github/Gitlab)"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+            </FormInputWrapper>
           </form>
         </div>
         <hr />
-        <div className="flex justify-end pt-3">
+        <div className="flex justify-end p-4">
           <button className="btn-outlined mx-3">Cancel</button>
-          <button className="btn-filled">Create</button>
+          <button
+            type="submit"
+            className="btn-filled"
+            onClick={() => formik.handleSubmit()}
+          >
+            Create
+          </button>
         </div>
       </div>
     </ModalWrapper>
   )
 }
 
-export default CreateAppForm
+export default AppForm

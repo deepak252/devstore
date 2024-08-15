@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import AuthLayout from '@/features/auth/components/AuthLayout'
 import DefaultLayout from '@/components/layout/DefaultLayout'
 import Home from '@/pages/Home'
@@ -18,6 +18,7 @@ function AppRoutes() {
           <Route path="*" element={<PageNotFound />} />
         </Route>
         <Route path="/auth" element={<AuthLayout />}>
+          <Route index element={<Navigate to="/auth/login" replace />} />
           <Route path="login" element={<SignIn />} />
           <Route path="register" element={<SignUp />} />
           <Route path="forgot-password" element={<ForgotPassword />} />

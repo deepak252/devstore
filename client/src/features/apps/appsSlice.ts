@@ -3,13 +3,13 @@ import { TOAST_INITIAL_DATA, ToastData } from '@/components/Toast'
 import {
   AppListItem,
   Banner,
-  CreateProjectFormData,
+  ProjectFormValues,
   Platform,
   ProjectDetails,
   ProjectList,
 } from '@/shared.types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { CreateAppFormData } from './apps.types'
+import { AppFormValues } from './apps.types'
 
 type AppsState = {
   data: ProjectList<AppListItem>
@@ -23,7 +23,7 @@ type AppsState = {
     error: string | null
   }
   appForm: {
-    data: CreateProjectFormData
+    data: ProjectFormValues
     isOpen: boolean
     isMinimize: boolean
     isLoading: boolean
@@ -43,14 +43,14 @@ type AppsState = {
   toastData: ToastData
 }
 
-const formDataInitialState: CreateAppFormData = {
+const formDataInitialState: AppFormValues = {
   name: '',
   description: '',
   categories: [],
   sourceCode: '',
   isSourceCodePublic: true,
   isPrivate: false,
-  platform: 'android',
+  // platform: 'android',
   attachmentPackage: null, // File Instance
   attachmentIcon: null,
   attachmentImages: [],
@@ -147,7 +147,7 @@ const appsSlice = createSlice({
     toggleCreateAppFormMinimize: (state) => {
       state.appForm.isMinimize = !state.appForm?.isMinimize
     },
-    setCreateAppFormData: (state, action: PayloadAction<CreateAppFormData>) => {
+    setCreateAppFormData: (state, action: PayloadAction<AppFormValues>) => {
       state.appForm.data = action.payload
     },
     createApp: (state, _: PayloadAction<FormData>) => {

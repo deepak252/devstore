@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { TOAST_INITIAL_DATA, ToastData } from '@/components/Toast'
 import { createSlice } from '@reduxjs/toolkit'
-import { signInSuccess, signUpSuccess } from '../auth/authSlice'
+import { signInSuccess, signOutSuccess, signUpSuccess } from '../auth/authSlice'
+import { User } from './user.types'
 
 type UserState = {
   profile: {
-    data: Record<string, any> | null
+    data: User | null
     isLoading: boolean
     error: string | null
   }
@@ -63,6 +64,7 @@ const userSlice = createSlice({
       .addCase(signUpSuccess, (state, action) => {
         state.profile.data = action.payload?.data
       })
+      .addCase(signOutSuccess, () => initialState)
   },
 })
 

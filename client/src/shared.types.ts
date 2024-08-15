@@ -42,7 +42,7 @@ export type Banner = {
   updatedAt: string
 }
 
-export type CreateProjectFormData = {
+export type ProjectFormValues = {
   name: string
   description?: string
   categories?: []
@@ -53,6 +53,19 @@ export type CreateProjectFormData = {
   attachmentImages: File[] | null
   attachmentVideo?: File | null
   attachmentGraphic?: File | null
+}
+
+export type ProjectFormError = {
+  name?: string
+  description?: string
+  categories?: string
+  sourceCode?: string
+  isSourceCodePublic?: string
+  isPrivate?: string
+  attachmentIcon?: string
+  attachmentImages?: string
+  attachmentVideo?: string
+  attachmentGraphic?: string
 }
 
 export type ProjectDetails = {

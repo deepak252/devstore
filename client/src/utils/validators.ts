@@ -66,3 +66,12 @@ export const validateConfirmPassword = (
     return 'Password not match'
   }
 }
+
+export const validateUrl = (value?: string, required?: boolean) => {
+  if (required && !value?.trim()) {
+    return "URL can't be empty"
+  }
+  if (value?.trim() && !REGEX.URL.test(value)) {
+    return 'Invalid URL'
+  }
+}

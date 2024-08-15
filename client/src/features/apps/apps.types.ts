@@ -1,12 +1,9 @@
-import { CreateProjectFormData } from '@/shared.types'
+import { ProjectFormError, ProjectFormValues } from '@/shared.types'
 
-export type CreateAppFormData = CreateProjectFormData & {
+export type AppFormValues = ProjectFormValues & {
   attachmentPackage: File | null
 }
 
-export type CreateAppFormError = {
-  name?: string
+export type AppFormError = ProjectFormError & {
   attachmentPackage?: string
-  attachmentIcon?: string
-  attachmentImages?: string
 }

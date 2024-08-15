@@ -53,7 +53,7 @@
   }
 
   .form-input-wrapper input, .form-input-wrapper textarea {
-    @apply w-full border-gray-400 py-3 px-4 rounded-xl outline-none border-[1.5px] focus:border-primary;
+    @apply w-full border-gray-400 py-3 px-4 rounded-xl outline-none border-[1px] focus:border-primary;
   }
 
   /* .form-input {

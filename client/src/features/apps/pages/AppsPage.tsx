@@ -1,5 +1,5 @@
 import Carousel, { CarouselShimmer } from '@/components/Carousel'
-import CreateAppForm from '../components/CreateAppForm'
+import AppForm from '../components/AppForm'
 import GridView from '@/components/GridView'
 import {
   AppIconTileMemo,
@@ -91,7 +91,7 @@ function AppsPage() {
         <AddIcon className="fill-primary size-8" />
         Create App
       </button>
-      {isFormOpen && <CreateAppForm onClose={handleToggleAppFormOpen} />}
+      {isFormOpen && <AppForm onClose={handleToggleAppFormOpen} />}
     </div>
   )
 }
