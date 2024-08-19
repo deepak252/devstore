@@ -4,6 +4,7 @@ import UploadIcon from '@/assets/icons/file-upload.svg?react'
 
 type FileInputProps = {
   hintText?: string
+  hintDescription?: string
   hintIcon?: React.ReactNode
   onSelectFiles: (files: File[]) => void
   enableDragAndDrop?: boolean
@@ -14,14 +15,15 @@ type FileInputProps = {
   allowedFileTypes?: string[]
   maxFileSizeKB?: number
   children?: React.ReactNode
-  isMultiple?: boolean
+  multiple?: boolean
   disabled?: boolean
   className?: string
   targetClassName?: string
 }
 
 function FileInput({
-  hintText = 'Upload',
+  hintText = 'Drag & drop files here or click to select files',
+  hintDescription,
   hintIcon,
   onSelectFiles,
   enableDragAndDrop = true,
@@ -31,7 +33,7 @@ function FileInput({
   allowedFileTypes = [],
   maxFileSizeKB,
   children,
-  isMultiple,
+  multiple,
   disabled,
   className,
   targetClassName,
@@ -123,7 +125,7 @@ function FileInput({
         onError &&
         onError(new Error('File size exceeds the limit'))
     }
-    if (!isMultiple && selectedFiles.length > 1) {
+    if (!multiple && selectedFiles.length > 1) {
       selectedFiles = selectedFiles.slice(0, 1)
     }
     onSelectFiles && selectedFiles?.length && onSelectFiles(selectedFiles)
@@ -133,7 +135,7 @@ function FileInput({
     <>
       <div
         className={classNames('cursor-pointer disable-select', className, {
-          'opacity-80': dragging,
+          'opacity-50 cursor-not-allowed': disabled,
         })}
         onDragEnter={enableDragAndDrop ? handleDragEnter : undefined}
         onDragOver={enableDragAndDrop ? handleDragOver : undefined}
@@ -145,19 +147,23 @@ function FileInput({
           type="file"
           ref={fileInputRef}
           onChange={handleFileChange}
-          multiple={isMultiple}
+          multiple={multiple}
           accept={allowedFileTypes?.join(',')}
         />
         <div onClick={handleTargetClick} className="size-full">
           {children || (
             <div
               className={classNames(
-                'flex-center flex-col size-full p-5 bg-gray-800',
-                targetClassName
+                'flex-center flex-col size-full p-5 border border-dashed border-gray-500 rounded-xl hover:border-primary',
+                targetClassName,
+                {
+                  'bg-gray-200': dragging,
+                }
               )}
             >
-              <p className="text-xl font-bold text-gray-350">{hintText}</p>
               {hintIcon || <UploadIcon className="size-10" />}
+              <p className="text-sm text-gray-600 my-2">{hintText}</p>
+              <p className="text-xs text-gray-500">{hintDescription}</p>
             </div>
           )}
         </div>
@@ -165,15 +171,5 @@ function FileInput({
     </>
   )
 }
-
-// FileInput.defaultProps = {
-//   hintText: 'Drag & drop files here or click to select files',
-//   errorMessageMaxFileSize: 'File size exceeds the maximum limit',
-//   errorMessageInvalidFileType: 'Invalid file type',
-//   enableDragAndDrop: true,
-//   isMultiple: true,
-//   disabled: false,
-//   allowedFileTypes: [],
-// }
 
 export default FileInput

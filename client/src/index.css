@@ -28,7 +28,7 @@
   .btn-outlined {
     @apply base-button bg-transparent text-primary border-[1.5px] border-primary active:bg-[#E0E0FFAA];
   }
-  .btn-fab{
+  .btn-fab {
     @apply flex-center rounded-2xl px-6 py-5 bg-primary-200 text-lg text-primary border border-primary active:bg-[#d1d3fa];
   }
 
@@ -44,27 +44,29 @@
   .dropdown-item.selected svg {
     @apply fill-primary;
   }
+  .dropdown-item.disabled {
+    @apply hover:bg-transparent cursor-not-allowed opacity-60;
+  }
 
   .textfield {
-    @apply flex items-center border-[1.5px] border-gray-400 py-2 px-4  rounded-xl focus-within:border-primary;
+    @apply flex items-center w-full outline-none border-[1px] border-gray-400 py-3 px-4 rounded-xl focus-within:border-primary;
   }
   .textfield input {
-    @apply flex-grow border-none outline-none min-w-0 py-1;
+    @apply flex-grow border-none outline-none min-w-0 rounded-xl;
   }
 
-  .form-input-wrapper input, .form-input-wrapper textarea {
-    @apply w-full border-gray-400 py-3 px-4 rounded-xl outline-none border-[1px] focus:border-primary;
+  .form-input-error {
+    @apply text-13 text-red-600;
   }
-
-  /* .form-input {
-    @apply w-full border-gray-400 py-3 px-4 rounded-xl outline-none border-[1.5px] focus:border-primary;
-  } */
 
   .chip {
     @apply inline-flex items-center px-4 py-[6px] border border-gray-500 text-gray-700 rounded-full text-sm disable-select cursor-pointer;
   }
   .chip.active {
     @apply border-primary text-primary bg-primary-100 font-medium;
+  }
+  .chip.active svg {
+    @apply fill-primary;
   }
 }
 
@@ -106,10 +108,15 @@ h5 {
   @apply text-xl font-medium leading-normal;
 }
 
-input, textarea {
+input,
+textarea {
   @apply text-sm resize-none;
 }
-input::placeholder, textarea::placeholder {
+input[type='checkbox'] {
+  @apply size-5 accent-primary;
+}
+input::placeholder,
+textarea::placeholder {
   @apply text-gray-600 font-normal;
 }
 input:-webkit-autofill,
@@ -169,4 +176,3 @@ input[type='number']::-webkit-outer-spin-button {
     transparent 100%
   );
 }
-

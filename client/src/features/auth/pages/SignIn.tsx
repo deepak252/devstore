@@ -64,10 +64,10 @@ function SignIn() {
           <input
             name="usernameOrEmail"
             type="text"
-            className="form-input"
             placeholder="Enter username or email"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
+            className="textfield"
           />
         </FormInputWrapper>
         <FormInputWrapper
@@ -75,22 +75,28 @@ function SignIn() {
           className="mt-4"
           error={errors.password}
         >
-          <div className="textfield">
+          <div className="textfield p-0">
             <input
               name="password"
               type={isPasswordVisible ? 'text' : 'password'}
               placeholder="Enter password"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              className="px-4 py-3"
             />
-            {isPasswordVisible ? (
-              <VisibilityOffIcon
-                role="button"
-                onClick={togllePasswordVisible}
-              />
-            ) : (
-              <VisibilityOnIcon role="button" onClick={togllePasswordVisible} />
-            )}
+            <div className="me-2">
+              {isPasswordVisible ? (
+                <VisibilityOffIcon
+                  role="button"
+                  onClick={togllePasswordVisible}
+                />
+              ) : (
+                <VisibilityOnIcon
+                  role="button"
+                  onClick={togllePasswordVisible}
+                />
+              )}
+            </div>
           </div>
         </FormInputWrapper>
         <p className="text-end py-1">

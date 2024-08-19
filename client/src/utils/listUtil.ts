@@ -3,11 +3,11 @@ import { DropdownOption } from '@/components/Dropdown'
 declare global {
   interface Array<T> {
     removeDuplicateObjects(key: keyof T): Array<T>
-    toDropdownOptions(labelKey: keyof T, valueKey: keyof T): DropdownOption[]
+    toDropdownOptions(labelKey?: keyof T, valueKey?: keyof T): DropdownOption[]
+    // toDropdownOptions(): DropdownOption[]
     /**
      *  List of values to Dropdown Options
      */
-    mapToDropdownOptions(options: DropdownOption[]): DropdownOption[]
     flatDropdownOptions(field: 'label' | 'value'): string[]
     findDropdownOption(value: string): DropdownOption | null
   }
@@ -20,16 +20,14 @@ Array.prototype.removeDuplicateObjects = function (key) {
 }
 
 Array.prototype.toDropdownOptions = function (labelKey, valueKey) {
-  return this.map((e) => ({ label: e[labelKey], value: e[valueKey] }))
+  if (labelKey && valueKey) {
+    return this.map((e) => ({ label: e[labelKey], value: e[valueKey] }))
+  }
+  return this.map((e) => ({ label: e, value: e }))
 }
 
-Array.prototype.mapToDropdownOptions = function (options) {
-  const mappedOptions: DropdownOption[] = []
-  this.forEach((id) => {
-    const countryOption = options.findDropdownOption(id)
-    if (countryOption) mappedOptions.push(countryOption)
-  })
-  return mappedOptions
+Array.prototype.toDropdownOptions = function () {
+  return this.map((e) => ({ label: e, value: e }))
 }
 
 Array.prototype.findDropdownOption = function (value) {

@@ -89,7 +89,7 @@ function SignUp() {
           <input
             type="text"
             name="email"
-            className="form-input"
+            className="textfield"
             placeholder="Enter email"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
@@ -100,43 +100,62 @@ function SignUp() {
           className="mt-4"
           error={errors.password}
         >
-          <div className="textfield">
+          <div className="textfield p-0">
             <input
               name="password"
               type={isPasswordVisible ? 'text' : 'password'}
               placeholder="Enter password"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              className="px-4 py-3"
             />
-            {isPasswordVisible ? (
-              <VisibilityOffIcon
-                role="button"
-                onClick={togllePasswordVisible}
-              />
-            ) : (
-              <VisibilityOnIcon role="button" onClick={togllePasswordVisible} />
-            )}
+            <div className="me-2">
+              {isPasswordVisible ? (
+                <VisibilityOffIcon
+                  role="button"
+                  onClick={togllePasswordVisible}
+                />
+              ) : (
+                <VisibilityOnIcon
+                  role="button"
+                  onClick={togllePasswordVisible}
+                />
+              )}
+            </div>
           </div>
         </FormInputWrapper>
         <FormInputWrapper
           title="Username"
           className="mt-4"
           error={errors.username}
+          // trailing={
+          // usernameState.isLoading ? (
+          //   <Spinner className="size-5 !border-[4px]" />
+          // ) : (
+          //   !errors?.username &&
+          //   usernameState.isAvailable && <CheckCicleIcon className="size-5" />
+          // )
+          // }
         >
-          <div className="textfield">
+          <div className="textfield p-0">
             <input
               name="username"
               type="text"
               placeholder="Enter username"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              className="px-4 py-3"
             />
-            {usernameState.isLoading ? (
-              <Spinner className="size-5 !border-[4px]" />
-            ) : (
-              !errors?.username &&
-              usernameState.isAvailable && <CheckCicleIcon className="size-5" />
-            )}
+            <div className="me-2 flex-center">
+              {usernameState.isLoading ? (
+                <Spinner className="size-5 !border-[4px]" />
+              ) : (
+                !errors?.username &&
+                usernameState.isAvailable && (
+                  <CheckCicleIcon className="size-5" />
+                )
+              )}
+            </div>
           </div>
         </FormInputWrapper>
         <button
