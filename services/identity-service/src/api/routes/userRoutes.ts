@@ -6,12 +6,12 @@ import {
   getUserByUsername,
   updateProfile
 } from '../controllers/userController.js'
-import { requiredAuth } from '../middlewares/auth.js'
+import { requireAuth } from '../middlewares/auth.js'
 const router = Router()
 
-router.get('/profile', requiredAuth, getProfile)
-router.put('/profile', requiredAuth, updateProfile)
-router.delete('/profile', requiredAuth, deleteProfile)
+router.get('/profile', requireAuth, getProfile)
+router.put('/profile', requireAuth, updateProfile)
+router.delete('/profile', requireAuth, deleteProfile)
 router.post('/check-username', checkUsername)
 router.post('/:username', getUserByUsername)
 

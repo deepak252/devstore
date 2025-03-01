@@ -74,12 +74,7 @@ const passwordSchema = Joi.string().min(6).max(30)
 const headlineSchema = Joi.string().min(5).max(100).optional()
 const bioSchema = Joi.string().min(5).max(4000).optional()
 
-export const validateRegistration = ({
-  username,
-  fullname,
-  email,
-  password
-}: {
+export const validateRegistration = (values: {
   username: string
   fullname: string
   email: string
@@ -91,13 +86,10 @@ export const validateRegistration = ({
     email: emailSchema.required(),
     password: passwordSchema.required()
   })
-  return schema.validate({ username, email, password, fullname })
+  return schema.validate(values, { stripUnknown: true })
 }
 
-export const validateLogin = ({
-  usernameOrEmail,
-  password
-}: {
+export const validateLogin = (values: {
   usernameOrEmail: string
   password: string
 }) => {
@@ -105,7 +97,7 @@ export const validateLogin = ({
     usernameOrEmail: Joi.string().min(3).max(50).required(),
     password: passwordSchema.required()
   })
-  return schema.validate({ usernameOrEmail, password })
+  return schema.validate(values)
 }
 
 export const validateUpdateProfile = ({
