@@ -1,4 +1,5 @@
 import { DropdownOption } from '@/components/Dropdown'
+import _ from 'lodash'
 
 declare global {
   interface Array<T> {
@@ -10,6 +11,7 @@ declare global {
      */
     flatDropdownOptions(field: 'label' | 'value'): string[]
     findDropdownOption(value: string): DropdownOption | null
+    includesDeep(value: T): boolean
   }
 }
 
@@ -36,6 +38,10 @@ Array.prototype.findDropdownOption = function (value) {
 
 Array.prototype.flatDropdownOptions = function (field) {
   return this?.map((option) => option[field])
+}
+
+Array.prototype.includesDeep = function <T>(value: T): boolean {
+  return this.some((item) => _.isEqual(item, value))
 }
 
 export function findAddedAndRemovedOptions(

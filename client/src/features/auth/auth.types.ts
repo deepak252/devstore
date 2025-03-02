@@ -1,29 +1,23 @@
-export type SignInPayload = {
-  usernameOrEmail: string
-  password: string
-}
-
-export type SignUpPayload = {
-  email: string
+export type SignUpFormValues = {
   username: string
+  email: string
   password: string
-}
-
-// Sign In Form
-export type SignInFormValues = SignInPayload & {
   isPasswordVisible?: boolean
 }
-export type SignInFormError = {
-  usernameOrEmail?: string
+
+export type SignUpFormError = {
+  username?: string
+  email?: string
   password?: string
 }
 
-// Sign Up Form
-export type SignUpFormValues = SignUpPayload & {
+export type SignInFormValues = {
+  usernameOrEmail: string
+  password: string
   isPasswordVisible?: boolean
 }
-export type SignUpFormError = {
-  email?: string
-  username?: string
+
+export type SignInFormError = {
+  usernameOrEmail?: string
   password?: string
 }

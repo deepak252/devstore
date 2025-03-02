@@ -1,3 +1,8 @@
+export type ToastData = {
+  type?: 'success' | 'failure' | 'message' | null
+  message?: string | null
+}
+
 export type Platform = 'all' | 'android' | 'ios'
 
 export type RemoteFile = {

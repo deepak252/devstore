@@ -8,18 +8,23 @@ import GithubIcon from '@/assets/icons/github.svg?react'
 import CheckCicleIcon from '@/assets/icons/check-circle.svg?react'
 import VisibilityOnIcon from '@/assets/icons/visibility-on.svg?react'
 import VisibilityOffIcon from '@/assets/icons/visibility-off.svg?react'
-import { checkUsernameAvailable, resetAuthState, signUp } from '../authSlice'
+import { checkUsername, resetAuthState, signUp } from '../authSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { validateSignUpForm } from '../util'
-import { validateUsername } from '@/utils/validators'
-import { debounceHandler } from '@/utils'
+import { validateSignUpForm } from '../authUtil'
 import { SignUpFormError, SignUpFormValues } from '../auth.types'
+import _ from 'lodash'
 
-const debounce = debounceHandler()
-
-function SignUp() {
+function SignUpPage() {
   const dispatch = useAppDispatch()
+  const isLoading = useAppSelector((state) => state.auth.signUp.isLoading)
   const usernameState = useAppSelector((state) => state.auth.username)
+  const debouncedCheckUsername = useMemo(
+    () =>
+      _.debounce((username: string) => {
+        dispatch(checkUsername({ username }))
+      }, 400),
+    [dispatch] // Only recreate the function if `dispatch` changes
+  )
 
   const formik = useFormik<SignUpFormValues>({
     initialValues: { email: '', username: '', password: '' },
@@ -57,10 +62,10 @@ function SignUp() {
 
   useEffect(() => {
     const username = formik.values.username
-    if (!validateUsername(username)) {
-      debounce(() => dispatch(checkUsernameAvailable({ username })), 400)
+    if (username.trim()) {
+      debouncedCheckUsername(formik.values.username)
     }
-  }, [formik.values.username, dispatch])
+  }, [formik.values.username, debouncedCheckUsername])
 
   const togllePasswordVisible = () => {
     formik.setFieldValue('isPasswordVisible', !isPasswordVisible)
@@ -85,6 +90,47 @@ function SignUp() {
         <span className="absolute-center text-gray px-3 bg-white">OR</span>
       </div>
       <form onSubmit={formik.handleSubmit}>
+        <FormInputWrapper
+          title="Username"
+          className="mt-4"
+          error={errors.username || usernameState.error}
+          // trailing={
+          //   usernameState.isLoading ? (
+          //     <Spinner className="size-6 mx-4" />
+          //   ) : (
+          //     <></>
+          //   )
+          // }
+          // trailing={
+          // usernameState.isLoading ? (
+          //   <Spinner className="size-5 !border-[4px]" />
+          // ) : (
+          //   !errors?.username &&
+          //   usernameState.isAvailable && <CheckCicleIcon className="size-5" />
+          // )
+          // }
+        >
+          <div className="textfield p-0">
+            <input
+              name="username"
+              type="text"
+              placeholder="Enter username"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className="px-4 py-3"
+            />
+            <div className="me-2 flex-center">
+              {usernameState.isLoading ? (
+                <Spinner className="size-5 !border-[4px]" />
+              ) : (
+                !errors?.username &&
+                usernameState.isAvailable && (
+                  <CheckCicleIcon className="size-5" />
+                )
+              )}
+            </div>
+          </div>
+        </FormInputWrapper>
         <FormInputWrapper title="Email" error={errors.email}>
           <input
             type="text"
@@ -124,56 +170,23 @@ function SignUp() {
             </div>
           </div>
         </FormInputWrapper>
-        <FormInputWrapper
-          title="Username"
-          className="mt-4"
-          error={errors.username}
-          // trailing={
-          // usernameState.isLoading ? (
-          //   <Spinner className="size-5 !border-[4px]" />
-          // ) : (
-          //   !errors?.username &&
-          //   usernameState.isAvailable && <CheckCicleIcon className="size-5" />
-          // )
-          // }
-        >
-          <div className="textfield p-0">
-            <input
-              name="username"
-              type="text"
-              placeholder="Enter username"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className="px-4 py-3"
-            />
-            <div className="me-2 flex-center">
-              {usernameState.isLoading ? (
-                <Spinner className="size-5 !border-[4px]" />
-              ) : (
-                !errors?.username &&
-                usernameState.isAvailable && (
-                  <CheckCicleIcon className="size-5" />
-                )
-              )}
-            </div>
-          </div>
-        </FormInputWrapper>
+
         <button
           type="submit"
           className="btn-filled w-full mt-6 mb-5"
-          disabled={usernameState.isLoading}
+          disabled={isLoading}
         >
-          Register
+          Sign Up
         </button>
       </form>
       <p className="text-sm text-center">
-        Don't have an account?{' '}
-        <Link to="/auth/login" className="text-primary">
-          Login
+        Already have an accoount?{' '}
+        <Link to="/auth/sign-in" className="text-primary">
+          Sign In
         </Link>
       </p>
     </>
   )
 }
 
-export default SignUp
+export default SignUpPage

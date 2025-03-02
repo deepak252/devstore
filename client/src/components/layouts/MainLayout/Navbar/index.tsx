@@ -1,5 +1,5 @@
-import AppLogo from '../AppLogo'
-import Dropdown, { DropdownOption } from '../Dropdown'
+import AppLogo from '../../../AppLogo'
+import Dropdown, { DropdownOption } from '../../../Dropdown'
 import AccountIcon from '@/assets/icons/account.svg?react'
 import SignInIcon from '@/assets/icons/sign-in.svg?react'
 import SignOutIcon from '@/assets/icons/sign-out.svg?react'
@@ -23,7 +23,7 @@ const Navbar = () => {
   const handleOptionSelect = (options: DropdownOption[]) => {
     switch (options[0].value) {
       case 'signIn': {
-        navigate('/auth/login')
+        navigate('/auth/sign-in')
         break
       }
       case 'signOut': {

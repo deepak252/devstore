@@ -1,51 +1,25 @@
-import { all, call, put, takeLatest } from 'redux-saga/effects'
-import {
-  getUserProfile,
-  getUserProfileFailure,
-  getUserProfileSuccess,
-} from './userSlice'
-import { getRequest } from '@/services/api'
-import { USER_API } from '@/constants'
+import { all, put, takeLatest } from 'redux-saga/effects'
+import { apiWorker } from '@/services/api'
 import { getUserFromStorage, saveUserToStorage } from '@/utils/storage'
+import UserService from './userService'
+import { getProfile, getProfileFailure, getProfileSuccess } from './userSlice'
 
-// Fetch Logged In user using authToken
-function* getUserProfileHandler(): Generator<any, any, any> {
-  try {
-    const cachedUser = getUserFromStorage()
-    if (cachedUser) {
-      yield put(getUserProfileSuccess({ data: cachedUser }))
-    }
-    const response = yield call(getRequest, USER_API)
-    if (response && response.status >= 200 && response.status <= 299) {
-      saveUserToStorage(response.data?.data)
-      yield put(getUserProfileSuccess(response.data))
-    } else {
-      throw response?.data || response
-    }
-  } catch (e: any) {
-    console.error('getUserHandler', e)
-    yield put(getUserProfileFailure(e?.message || 'Something went wrong'))
+function* getProfileWorker(): Generator {
+  const user = getUserFromStorage()
+  if (user) {
+    yield put(getProfileSuccess(user))
   }
+  yield* apiWorker(UserService.getUserProfile, undefined, {
+    onSuccess: function* (response) {
+      saveUserToStorage(response.data?.data)
+      yield put(getProfileSuccess(response.data?.data))
+    },
+    onFailure: function* (error) {
+      yield put(getProfileFailure(error?.message || 'Something went wrong'))
+    },
+  })
 }
 
-// function* getUserProfileHandler(action: any): Generator<any, any, any> {
-//   try {
-//     const { username } = action.payload
-//     const response = yield call(getRequest, USER_API + `/${username}`)
-//     if (response && response.status >= 200 && response.status <= 299) {
-//       yield put(getUserProfileSuccess(response.data))
-//     } else {
-//       throw response?.data || response
-//     }
-//   } catch (e: any) {
-//     console.error('getUserProfileHandler', e)
-//     yield put(getUserProfileFailure(e?.message || 'Something went wrong'))
-//   }
-// }
-
-export default function* userSaga() {
-  yield all([
-    // takeLatest(getUser.type, getUserHandler),
-    takeLatest(getUserProfile.type, getUserProfileHandler),
-  ])
+export default function* () {
+  yield all([takeLatest(getProfile.type, getProfileWorker)])
 }

@@ -1,29 +1,26 @@
 import { useEffect } from 'react'
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
+// import Loader from '@/components/Loader'
 import AppLogo from '@/components/AppLogo'
-import Loader from '../../../components/Loader'
-import Toast from '../../../components/Toast'
 import BGAuth from '@/assets/images/bg-auth.svg?react'
-import { resetAuthState, setAuthToastData } from '@/features/auth/authSlice'
-import { useAppDispatch, useAppSelector } from '@/hooks'
+import { resetAuthState } from '@/features/auth/authSlice'
+import { useAppDispatch, useAuth } from '@/hooks'
 
 function AuthLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useAppDispatch()
-  const isLoading = useAppSelector((state) => state.auth.isLoading)
-  const toastData = useAppSelector((state) => state.auth.toastData)
-  const isSignedIn = useAppSelector((state) => state.auth.isSignedIn)
+  const isSignedIn = useAuth()
+
   const from = (location.state?.pathname as string) || '/'
 
   useEffect(() => {
     if (isSignedIn) {
       navigate(from, { replace: true })
-      // dispatch(getUserProfile())
       dispatch(resetAuthState())
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigate, from, isSignedIn])
+  }, [from, isSignedIn])
 
   return (
     <>
@@ -33,13 +30,13 @@ function AuthLayout() {
           <AppLogo className="ms-2" textClassName="text-white" />
           <div className="flex items-center justify-end w-full">
             <NavLink
-              to="/auth/login"
+              to="/auth/sign-in"
               className="btn-outlined mx-2 text-white active:bg-[#E0E0FF22]"
             >
-              Login
+              Sign In
             </NavLink>
-            <NavLink to="/auth/register" className="btn-filled mx-2">
-              Register
+            <NavLink to="/auth/sign-up" className="btn-filled mx-2">
+              Sign Up
             </NavLink>
           </div>
         </div>
@@ -48,16 +45,7 @@ function AuthLayout() {
           <Outlet />
         </div>
       </div>
-      {toastData.message && (
-        <Toast
-          type={toastData.type}
-          message={toastData.message}
-          onClose={() => {
-            dispatch(setAuthToastData({}))
-          }}
-        />
-      )}
-      <Loader isLoading={isLoading} />
+      {/* <Loader isLoading={isLoading} /> */}
     </>
   )
 }

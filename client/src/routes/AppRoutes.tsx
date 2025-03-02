@@ -1,31 +1,59 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
-import AuthLayout from '@/features/auth/components/AuthLayout'
-import DefaultLayout from '@/components/layout/DefaultLayout'
-import Home from '@/pages/Home'
-import SignIn from '@/features/auth/pages/SignIn'
-import SignUp from '@/features/auth/pages/SignUp'
-import AppsPage from '@/features/apps/pages/AppsPage'
-import ForgotPassword from '@/features/auth/pages/ForgotPassword'
-import PageNotFound from '@/pages/PageNotFound'
+import { lazy, Suspense } from 'react'
+import { RouteObject, useRoutes } from 'react-router-dom'
+import { Spinner } from '@/components/Loader'
+import authRoutes from './authRoutes'
+const RootLayout = lazy(() => import('@/components/layouts/RootLayout'))
+const MainLayout = lazy(() => import('@/components/layouts/MainLayout'))
+const AppsPage = lazy(() => import('@/features/apps/pages/AppsPage'))
+const HomePage = lazy(() => import('@/pages/HomePage'))
+const PageNotFound = lazy(() => import('@/pages/PageNotFound'))
+
+const routes = [
+  {
+    path: '/',
+    element: <RootLayout />,
+    children: [
+      {
+        path: '',
+        element: <MainLayout />,
+        children: [
+          {
+            path: '',
+            element: <HomePage />,
+          },
+          {
+            path: 'apps',
+            element: <AppsPage />,
+          },
+        ],
+      },
+      authRoutes,
+    ],
+  },
+  {
+    path: '*',
+    element: <PageNotFound />,
+  },
+]
+
+const SuspenseWrapper = (route: RouteObject): RouteObject => {
+  if (route.element) {
+    route.element = (
+      <Suspense fallback={<Spinner center />}>{route.element}</Suspense>
+    )
+  }
+
+  if (route.children) {
+    // Recursive Wrapping for Nested Routes
+    route.children = route.children.map(SuspenseWrapper)
+  }
+
+  return route
+}
 
 function AppRoutes() {
-  return (
-    <>
-      <Routes>
-        <Route path="/" element={<DefaultLayout />}>
-          <Route index element={<Home />} />
-          <Route path="apps" element={<AppsPage />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Route>
-        <Route path="/auth" element={<AuthLayout />}>
-          <Route index element={<Navigate to="/auth/login" replace />} />
-          <Route path="login" element={<SignIn />} />
-          <Route path="register" element={<SignUp />} />
-          <Route path="forgot-password" element={<ForgotPassword />} />
-        </Route>
-      </Routes>
-    </>
-  )
+  const wrappedRoutes = routes.map(SuspenseWrapper)
+  return useRoutes(wrappedRoutes)
 }
 
 export default AppRoutes

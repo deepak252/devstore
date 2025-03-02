@@ -1,35 +1,45 @@
+import { User } from '@/features/user/user.types'
+
 const ACCESS_TOKEN_KEY = 'access_token'
 const USER_KEY = 'user'
 const METADATA_KEY = 'metadata'
 
-export const saveAccessTokenToStorage = (token: string) => {
+export const saveAccessToken = (token?: string) => {
+  if (!token) return
   localStorage.setItem(ACCESS_TOKEN_KEY, token)
 }
 
-export const getAccessTokenFromStorage = () => {
-  return localStorage.getItem(ACCESS_TOKEN_KEY)?.trim()
-}
-export const userSignedIn = () => {
-  return !!getAccessTokenFromStorage()
+export const getAccessToken = () => {
+  return localStorage.getItem(ACCESS_TOKEN_KEY)
 }
 
-export const saveUserToStorage = (user: Record<string, any>) => {
-  if (!user) return
-  localStorage.setItem(USER_KEY, JSON.stringify(user))
-}
-
-export const getUserFromStorage = () => {
+export const saveUserToStorage = (data: Record<string, any>) => {
+  if (!data) return
   try {
-    const userStr = localStorage.getItem(USER_KEY)
-    return userStr ? JSON.parse(userStr) : null
+    localStorage.setItem(USER_KEY, JSON.stringify(data))
   } catch (e) {
-    return null
+    console.error('saveUserToStorage', e)
+  }
+}
+
+export const getUserFromStorage = (): User | undefined => {
+  const data = localStorage.getItem(USER_KEY)
+  try {
+    if (data) {
+      return JSON.parse(data)
+    }
+  } catch (e) {
+    console.error('getUserFromStorage', e)
   }
 }
 
 export const saveMetadataToStorage = (metadata: Record<string, any>) => {
   if (!metadata) return
-  localStorage.setItem(METADATA_KEY, JSON.stringify(metadata))
+  try {
+    localStorage.setItem(METADATA_KEY, JSON.stringify(metadata))
+  } catch (e) {
+    console.error('saveMetadataToStorage', e)
+  }
 }
 
 export const getMetadataFromStorage = () => {
@@ -39,6 +49,10 @@ export const getMetadataFromStorage = () => {
   } catch (e) {
     return null
   }
+}
+
+export const userSignedIn = () => {
+  return !!getAccessToken()
 }
 
 export const removeUserFromStorage = () => {

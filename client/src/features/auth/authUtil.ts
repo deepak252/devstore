@@ -9,17 +9,15 @@ import {
   validateEmail,
   validatePasswordSignUp,
   validateUsername,
-  validateUsernameOrEmail,
 } from '@/utils/validators'
 
 export const validateSignInForm = (values: SignInFormValues) => {
   const errors: SignInFormError = {}
-  const ueError = validateUsernameOrEmail(values.usernameOrEmail)
-  if (ueError) {
-    errors.usernameOrEmail = ueError
+  if (!values.usernameOrEmail.trim()) {
+    errors.usernameOrEmail = 'Enter username or email'
   }
-  if (!values.password) {
-    errors.password = 'Password is required'
+  if (!values.password.trim()) {
+    errors.password = "Password can't be empty"
   }
   return errors
 }

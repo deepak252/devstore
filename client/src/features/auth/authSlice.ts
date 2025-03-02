@@ -1,32 +1,44 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ToastData } from '@/components/Toast'
-import { SignInPayload, SignUpPayload } from './auth.types'
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { ToastData } from '@/shared.types'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { SignInFormValues, SignUpFormValues } from './auth.types'
 
 type AuthState = {
-  isLoading: boolean
-  isSignedIn: boolean
-  isSignedOut: boolean
-  error: null | string
-  username: {
+  isAuthenticated?: boolean
+  signIn: {
     isLoading: boolean
-    isAvailable: boolean
-    error: null | string
   }
-  toastData: ToastData
+  signUp: {
+    isLoading: boolean
+  }
+  signOut: {
+    isLoading: boolean
+  }
+
+  username: {
+    value?: string
+    isAvailable?: boolean
+    isLoading: boolean
+    error?: string
+  }
+  toastData?: ToastData | null
 }
 
 const initialState: AuthState = {
-  isLoading: false,
-  isSignedIn: false,
-  isSignedOut: false,
-  error: null,
-  username: {
+  signIn: {
     isLoading: false,
-    isAvailable: false,
-    error: null,
   },
-  toastData: { type: null, message: null },
+  signUp: {
+    isLoading: false,
+  },
+  signOut: {
+    isLoading: false,
+  },
+  username: {
+    value: '',
+    isAvailable: false,
+    isLoading: false,
+  },
 }
 
 const authSlice = createSlice({
@@ -34,80 +46,76 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     // Sign In
-    signIn: (state, _: PayloadAction<SignInPayload>) => {
-      state.isLoading = true
+    signIn: (state, _: PayloadAction<SignInFormValues>) => {
+      state.signIn.isLoading = true
     },
-    signInSuccess: (state, _) => {
-      state.isSignedIn = true
-      state.error = null
-      state.isLoading = false
+    signInSuccess: (state) => {
+      state.signIn.isLoading = false
+      state.isAuthenticated = true
     },
     signInFailure: (state, action) => {
-      state.isSignedIn = false
-      state.error = action.payload
-      state.isLoading = false
+      state.signIn.isLoading = false
       state.toastData = {
         type: 'failure',
         message: action.payload,
       }
-    },
-    // Sign Up
-    signUp: (state, _: PayloadAction<SignUpPayload>) => {
-      state.isLoading = true
-    },
-    signUpSuccess: (state, _) => {
-      state.isSignedIn = true
-      state.error = null
-      state.isLoading = false
-      state.username = {
-        isLoading: false,
-        isAvailable: false,
-        error: null,
-      }
-    },
-    signUpFailure: (state, action) => {
-      state.isSignedIn = false
-      state.error = action.payload
-      state.isLoading = false
-      state.toastData = {
-        type: 'failure',
-        message: action.payload,
-      }
-    },
-    // Check Username Available
-    checkUsernameAvailable: (state, _: PayloadAction<{ username: string }>) => {
-      state.username = {
-        isLoading: true,
-        isAvailable: false,
-        error: null,
-      }
-    },
-    usernameAvailableSuccess: (state) => {
-      state.username = {
-        isLoading: false,
-        isAvailable: true,
-        error: null,
-      }
-    },
-    usernameAvailableFailure: (state, action) => {
-      state.username = {
-        isLoading: false,
-        isAvailable: false,
-        error: action.payload,
-      }
-    },
-    setUsernameAvailable: (state, action) => {
-      state.username.isAvailable = action.payload
-    },
-    // Sign Out
-    signOut: (state) => {
-      state.isSignedIn = false
-    },
-    signOutSuccess: (state) => {
-      state.isSignedOut = true
     },
 
-    setAuthToastData: (state, action) => {
+    // Sign Up
+    signUp: (state, _: PayloadAction<SignUpFormValues>) => {
+      state.signUp.isLoading = true
+    },
+    signUpSuccess: (state) => {
+      state.signUp.isLoading = false
+      state.isAuthenticated = true
+    },
+    signUpFailure: (state, action) => {
+      state.signUp.isLoading = false
+      state.toastData = {
+        type: 'failure',
+        message: action.payload,
+      }
+    },
+
+    // Sign Out
+    signOut: (state) => {
+      state.signOut.isLoading = true
+    },
+    signOutSuccess: (state) => {
+      state.signOut.isLoading = false
+      state.isAuthenticated = false
+    },
+    signOutFailure: (state) => {
+      state.signOut.isLoading = false
+    },
+
+    // Check username available
+    checkUsername: (state, action: PayloadAction<{ username: string }>) => {
+      state.username = {
+        value: action.payload.username,
+        isAvailable: false,
+        isLoading: true,
+      }
+    },
+    checkUsernameSuccess: (state) => {
+      state.username.isLoading = false
+      state.username.isAvailable = true
+    },
+    checkUsernameFailure: (state, action) => {
+      state.username.isLoading = false
+      state.username.isAvailable = false
+      state.username.error = action.payload
+      state.toastData = {
+        type: 'failure',
+        message: action.payload,
+      }
+    },
+
+    setAuthenticated: (state, action: PayloadAction<boolean>) => {
+      state.isAuthenticated = action.payload
+    },
+
+    setAuthToast: (state, action: PayloadAction<ToastData | null>) => {
       state.toastData = action.payload
     },
     resetAuthState: (state) => {
@@ -123,16 +131,20 @@ export const {
   signIn,
   signInSuccess,
   signInFailure,
+
   signUp,
   signUpSuccess,
   signUpFailure,
-  checkUsernameAvailable,
-  usernameAvailableSuccess,
-  usernameAvailableFailure,
-  setUsernameAvailable,
+
   signOut,
   signOutSuccess,
-  setAuthToastData,
+  signOutFailure,
+
+  checkUsername,
+  checkUsernameSuccess,
+  checkUsernameFailure,
+
+  setAuthToast,
   resetAuthState,
 } = authSlice.actions
 

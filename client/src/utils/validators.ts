@@ -37,18 +37,6 @@ export const validateEmail = (value: string) => {
   }
 }
 
-export const validateUsernameOrEmail = (value: string) => {
-  if (!value) {
-    return "Username/email can't be empty"
-  }
-}
-
-export const validatePasswordSignIn = (value: string) => {
-  if (!value) {
-    return "Password can't be empty"
-  }
-}
-
 export const validatePasswordSignUp = (value: string) => {
   if (!value) {
     return "Password can't be empty"

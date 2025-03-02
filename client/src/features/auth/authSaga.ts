@@ -1,97 +1,96 @@
-import { all, call, put, takeLatest } from 'redux-saga/effects'
-import { postRequest } from '@/services/api'
-import { saveAccessTokenToStorage, saveUserToStorage } from '@/utils/storage'
-import { SIGN_IN_API, SIGN_UP_API, USER_API } from '@/constants'
+import { all, put, takeLatest } from 'redux-saga/effects'
 import {
+  checkUsername,
+  checkUsernameFailure,
+  checkUsernameSuccess,
   signIn,
-  signInSuccess,
   signInFailure,
-  signUp,
-  signUpSuccess,
-  signUpFailure,
-  usernameAvailableSuccess,
-  usernameAvailableFailure,
-  checkUsernameAvailable,
+  signInSuccess,
   signOut,
+  signOutFailure,
   signOutSuccess,
+  signUp,
+  signUpFailure,
+  signUpSuccess,
 } from './authSlice'
+import AuthService from './authService'
 import { PayloadAction } from '@reduxjs/toolkit'
-import { SignInPayload, SignUpPayload } from './auth.types'
+import { SignInFormValues, SignUpFormValues } from './auth.types'
+import { apiWorker } from '@/services/api'
+import { removeUserFromStorage, saveAccessToken } from '@/utils/storage'
 
-function* signInHandler(
-  action: PayloadAction<SignInPayload>
-): Generator<any, any, any> {
-  try {
-    const { usernameOrEmail, password } = action.payload
-    const response = yield call(postRequest, SIGN_IN_API, {
-      data: { usernameOrEmail, password },
-    })
-    if (response && response.status >= 200 && response.status <= 299) {
-      saveAccessTokenToStorage(response.data?.data?.accessToken)
-      saveUserToStorage(response.data?.data?.user)
-      yield put(signInSuccess(response.data))
-    } else {
-      throw response?.data || response
+function* signInWorker(action: PayloadAction<SignInFormValues>): Generator {
+  const { usernameOrEmail, password } = action.payload
+  yield* apiWorker(
+    AuthService.signIn,
+    { usernameOrEmail, password },
+    {
+      onSuccess: function* (response) {
+        saveAccessToken(response.data?.data?.accessToken)
+        yield put(signInSuccess(response.data))
+      },
+      onFailure: function* (error) {
+        yield put(signInFailure(error?.message || 'Something went wrong'))
+      },
     }
-  } catch (e: any) {
-    console.error('signInHandler', e)
-    yield put(signInFailure(e?.message || 'Something went wrong'))
-  }
+  )
 }
 
-function* signUpHandler(
-  action: PayloadAction<SignUpPayload>
-): Generator<any, any, any> {
-  try {
-    const { username, email, password } = action.payload
-    const response = yield call(postRequest, SIGN_UP_API, {
-      data: { email, password, username },
-    })
-    if (response && response.status >= 200 && response.status <= 299) {
-      saveAccessTokenToStorage(response.data?.data?.accessToken)
-      saveUserToStorage(response.data?.data?.user)
-      yield put(signUpSuccess(response.data))
-    } else {
-      throw response?.data || response
+function* signUpWorker(action: PayloadAction<SignUpFormValues>): Generator {
+  const { username, email, password } = action.payload
+  yield* apiWorker(
+    AuthService.signUp,
+    { username, email, password },
+    {
+      onSuccess: function* (response) {
+        saveAccessToken(response.data?.data?.accessToken)
+        yield put(signUpSuccess(response.data))
+      },
+      onFailure: function* (error) {
+        yield put(signUpFailure(error?.message || 'Something went wrong'))
+      },
     }
-  } catch (e: any) {
-    console.error('signUpHandler', e)
-    yield put(signUpFailure(e?.message || 'Something went wrong'))
-  }
+  )
 }
 
-function* checkUsernameAvailableHandler(
+function* sigOutWorker(): Generator {
+  yield* apiWorker(AuthService.signOut, undefined, {
+    onSuccess: function* (response) {
+      removeUserFromStorage()
+      yield put(signOutSuccess(response.data))
+    },
+    onFailure: function* (error) {
+      removeUserFromStorage()
+      yield put(signOutFailure(error?.message || 'Something went wrong'))
+    },
+  })
+}
+
+function* checkUsernameWorker(
   action: PayloadAction<{ username: string }>
-): Generator<any, any, any> {
-  try {
-    const username = action.payload?.username
-    if (!username) {
-      throw new Error('Username is required')
+): Generator {
+  const { username } = action.payload
+  yield* apiWorker(
+    AuthService.checkUsername,
+    { username },
+    {
+      onSuccess: function* (response) {
+        yield put(checkUsernameSuccess(response.data))
+      },
+      onFailure: function* (error) {
+        yield put(
+          checkUsernameFailure(error?.message || 'Something went wrong')
+        )
+      },
     }
-    const response = yield call(postRequest, USER_API + '/usernameAvailable', {
-      data: { username },
-    })
-    if (response && response.status >= 200 && response.status <= 299) {
-      yield put(usernameAvailableSuccess(response.data))
-    } else {
-      throw response?.data || response
-    }
-  } catch (e: any) {
-    console.error('checkUsernameAvailableHandler', e)
-    yield put(usernameAvailableFailure(e?.message || 'Something went wrong'))
-  }
+  )
 }
 
-function* signOutHandler(): Generator<any, any, any> {
-  localStorage.clear()
-  yield put(signOutSuccess())
-}
-
-export default function* authSaga() {
+export default function* () {
   yield all([
-    takeLatest(signIn.type, signInHandler),
-    takeLatest(signUp.type, signUpHandler),
-    takeLatest(signOut.type, signOutHandler),
-    takeLatest(checkUsernameAvailable.type, checkUsernameAvailableHandler),
+    takeLatest(signIn.type, signInWorker),
+    takeLatest(signUp.type, signUpWorker),
+    takeLatest(signOut.type, sigOutWorker),
+    takeLatest(checkUsername.type, checkUsernameWorker),
   ])
 }

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TOAST_INITIAL_DATA, ToastData } from '@/components/Toast'
 import {
   AppListItem,
   Banner,
@@ -7,6 +6,7 @@ import {
   Platform,
   ProjectDetails,
   ProjectList,
+  ToastData,
 } from '@/shared.types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppFormValues } from './apps.types'
@@ -40,7 +40,7 @@ type AppsState = {
     isLoading: boolean
     error: string | null
   }
-  toastData: ToastData
+  toastData?: ToastData | null
 }
 
 const formDataInitialState: AppFormValues = {
@@ -94,7 +94,6 @@ const initialState: AppsState = {
     isLoading: false,
     error: null,
   },
-  toastData: TOAST_INITIAL_DATA,
 }
 
 const appsSlice = createSlice({

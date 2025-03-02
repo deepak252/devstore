@@ -22,3 +22,6 @@ B. Absolute Imports
             // "@components/*": ["src/components/*"]
          },
       }
+C. Tailwind CSS
+   > npm i -D tailwindcss postcss autoprefixer
+   > npx tailwindcss init -p

@@ -1,5 +1,5 @@
+import AppLogo from '@/components/AppLogo'
 import { NavLink } from 'react-router-dom'
-import AppLogo from './AppLogo'
 
 const Footer = () => {
   return (

@@ -12,6 +12,71 @@
   font-family: 'Poppins', sans-serif;
 }
 
+@layer base {
+  /* h1 {
+    @apply text-5xl font-medium leading-normal;
+  }
+  h2 {
+    @apply text-4xl font-medium leading-normal;
+  }
+  h3 {
+    @apply text-3xl font-medium leading-normal;
+  }
+  h4 {
+    @apply text-2xl font-medium leading-normal;
+  }
+  h5 {
+    @apply text-xl font-medium leading-normal;
+  } */
+  h1 {
+    @apply text-5xl font-medium;
+  }
+  h2 {
+    @apply text-4xl font-medium;
+  }
+  h3 {
+    @apply text-3xl font-medium;
+  }
+  h4 {
+    @apply text-2xl font-medium;
+  }
+  h5 {
+    @apply text-xl font-medium;
+  }
+  h6 {
+    @apply text-lg font-medium;
+  }
+
+  input,
+  textarea {
+    @apply text-sm resize-none;
+  }
+  input[type='checkbox'] {
+    @apply size-5 accent-primary;
+  }
+  input::placeholder,
+  textarea::placeholder {
+    @apply text-gray-600 font-normal;
+  }
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+  }
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
+
+  svg {
+    @apply disable-select;
+  }
+}
+
 @layer components {
   .base-button {
     @apply text-sm rounded-xl py-3 px-6;
@@ -68,6 +133,15 @@
   .chip.active svg {
     @apply fill-primary;
   }
+
+  .modal-wrapper {
+    /* flex-center fixed top-0 left-0 right-0 bottom-0 z-modal h-screen w-screen bg-[#00000077] */
+    @apply flex-center fixed top-0 left-0 right-0 bottom-0 h-screen w-screen bg-[#00000077] backdrop-blur-lg z-modal animate-fadeIn;
+  }
+  .modal-container {
+    /* @apply flex flex-col bg-white p-3 rounded-xl h-[80vh] max-w-6xl w-[90vw] max-h-[900px] min-h-96; */
+    @apply flex flex-col p-5 bg-primary shadow-3xl shadow-secondary-500 border-2 border-secondary-500 rounded-3xl max-w-[90vw] min-h-40 min-w-80;
+  }
 }
 
 @layer utilities {
@@ -90,44 +164,6 @@
   .overflow-ellipsis {
     @apply whitespace-nowrap overflow-hidden text-ellipsis;
   }
-}
-
-h1 {
-  @apply text-5xl font-medium leading-normal;
-}
-h2 {
-  @apply text-4xl font-medium leading-normal;
-}
-h3 {
-  @apply text-3xl font-medium leading-normal;
-}
-h4 {
-  @apply text-2xl font-medium leading-normal;
-}
-h5 {
-  @apply text-xl font-medium leading-normal;
-}
-
-input,
-textarea {
-  @apply text-sm resize-none;
-}
-input[type='checkbox'] {
-  @apply size-5 accent-primary;
-}
-input::placeholder,
-textarea::placeholder {
-  @apply text-gray-600 font-normal;
-}
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px white inset !important;
-}
-
-svg {
-  @apply disable-select;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -158,14 +194,6 @@ svg {
 }
 .scrollbar-hidden::-webkit-scrollbar {
   display: none; /* for Chrome, Safari, and Opera */
-}
-
-input[type='number']::-webkit-inner-spin-button,
-input[type='number']::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  margin: 0;
 }
 
 .animate-shimmer {

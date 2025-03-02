@@ -3,6 +3,11 @@ export default {
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      backgroundImage: {
+        // 'radial-gradient': 'radial-gradient(#ffcd0382, #00235C)',
+        'radial-gradient': 'radial-gradient(#B3B5D980, #083071)',
+        // 'radial-gradient': 'radial-gradient(#B3B5D980, #710057)',
+      },
       boxShadow: {
         '3xl': '1px 1px 8px 2px #BDBDBD',
       },
@@ -59,14 +64,6 @@ export default {
         15: '15px',
         17: '17px',
       },
-      zIndex: {
-        dropdown: 50,
-        navbar: 200,
-        drawerMobile: 900,
-        modal: 500,
-        toast: 990,
-        loader: 1000,
-      },
       animation: {
         fadeIn: 'fadeIn 0.2s ease-in-out',
         fadeOut: 'fadeOut 0.2s ease-in-out',
@@ -90,7 +87,24 @@ export default {
           },
         },
       },
+      spacing: {
+        'min-screen': 'min(100vw, 100vh)',
+      },
+      zIndex: {
+        dropdown: 50,
+        navbar: 200,
+        drawerMobile: 900,
+        modal: 500,
+        toast: 990,
+        loader: 1000,
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addVariant }) {
+      addVariant('not-first-child', '&:not(:first-child)')
+      addVariant('not-last-child', '&:not(:last-child)')
+      addVariant('first-child', '& > *:first-child')
+    },
+  ],
 }

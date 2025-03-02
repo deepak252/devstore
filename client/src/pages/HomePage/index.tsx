@@ -2,7 +2,7 @@ import FeaturedTile from '@/components/tiles/FeaturedTile'
 import Introduction from './Introduction'
 import GridView from '@/components/GridView'
 
-function Home() {
+function HomePage() {
   const appsList = [
     {
       _id: '1',
@@ -109,4 +109,4 @@ function Home() {
   )
 }
 
-export default Home
+export default HomePage

@@ -1,74 +1,71 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TOAST_INITIAL_DATA, ToastData } from '@/components/Toast'
-import { createSlice } from '@reduxjs/toolkit'
-import { signInSuccess, signOutSuccess, signUpSuccess } from '../auth/authSlice'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { signOutSuccess } from '../auth/authSlice'
 import { User } from './user.types'
+import { ToastData } from '@/shared.types'
 
 type UserState = {
   profile: {
-    data: User | null
-    isLoading: boolean
-    error: string | null
+    data?: User
+    isLoading?: boolean
   }
-  toastData: ToastData
+  toastData?: ToastData | null
 }
 
 const initialState: UserState = {
   profile: {
-    data: null,
     isLoading: false,
-    error: null,
   },
-  toastData: TOAST_INITIAL_DATA,
 }
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    getUserProfile: (state) => {
+    getProfile: (state) => {
       state.profile.isLoading = true
     },
-    getUserProfileSuccess: (state, action) => {
-      state.profile = {
-        data: action.payload?.data,
-        isLoading: false,
-        error: null,
+    getProfileSuccess: (state, action: PayloadAction<User>) => {
+      state.profile.isLoading = false
+      state.profile.data = action.payload
+    },
+    getProfileFailure: (state, action) => {
+      state.profile.isLoading = false
+      state.toastData = {
+        type: 'failure',
+        message: action.payload,
       }
     },
-    getUserProfileFailure: (state, action) => {
-      state.profile.error = action.payload
-      state.profile.isLoading = false
+
+    setUserToast: (state, action: PayloadAction<ToastData | null>) => {
+      state.toastData = action.payload
     },
-    // deleteUser: (state) => {
-    //   state.user = null
-    // },
-    // getUserProfile: (state, _: PayloadAction<{ username: string }>) => {
-    //   state.isLoadingUserProfile = true
-    // },
-    // getUserProfileSuccess: (state, action) => {
-    //   state.userProfileError = null
-    //   state.isLoadingUserProfile = false
-    //   state.userProfile = action.payload?.data
-    // },
-    // getUserProfileFailure: (state, action) => {
-    //   state.userProfileError = action.payload
-    //   state.isLoadingUserProfile = false
-    // },
+    resetUserState: (state) => {
+      return {
+        ...initialState,
+        toastData: state.toastData,
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(signInSuccess, (state, action) => {
-        state.profile.data = action.payload?.data
-      })
-      .addCase(signUpSuccess, (state, action) => {
-        state.profile.data = action.payload?.data
-      })
+      // .addCase(signInSuccess, (state, action) => {
+      //   state.profile.data = action.payload?.data
+      // })
+      // .addCase(signUpSuccess, (state, action) => {
+      //   state.profile.data = action.payload?.data
+      // })
       .addCase(signOutSuccess, () => initialState)
   },
 })
 
-export const { getUserProfile, getUserProfileSuccess, getUserProfileFailure } =
-  userSlice.actions
+export const {
+  getProfile,
+  getProfileSuccess,
+  getProfileFailure,
+
+  setUserToast,
+  resetUserState,
+} = userSlice.actions
 
 export default userSlice.reducer
