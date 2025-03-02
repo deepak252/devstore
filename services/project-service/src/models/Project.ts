@@ -1,6 +1,6 @@
 import { Schema, model, Model } from 'mongoose'
 import { IProject, IProjectMethods } from '../types/project.types'
-import { ProjectType } from '../constants/enums'
+import { Platform } from '../constants/enums'
 
 interface ProjectModel extends Model<IProject, object, IProjectMethods> {
   test: () => void
@@ -8,9 +8,9 @@ interface ProjectModel extends Model<IProject, object, IProjectMethods> {
 
 const projectSchema = new Schema<IProject, ProjectModel, IProjectMethods>(
   {
-    type: {
+    platform: {
       type: String,
-      enum: Object.values(ProjectType)
+      enum: Object.values(Platform)
     },
     name: {
       type: String,

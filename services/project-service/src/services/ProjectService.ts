@@ -1,16 +1,17 @@
 import { redisClient } from '../config/redis'
+import { Platform } from '../constants/enums'
 import Project from '../models/Project'
-import { IProject, ProjectType } from '../types/project.types'
+import { IProject } from '../types/project.types'
 
 export default class ProjectService {
   static invalidateProjectCache = async (
-    projectType: ProjectType,
+    platform: Platform,
     postId?: string
   ) => {
     if (postId) {
-      await redisClient.del(`${projectType}:${postId}`)
+      await redisClient.del(`${platform}:${postId}`)
     }
-    const keys = await redisClient.keys(`${projectType}s:*`)
+    const keys = await redisClient.keys(`${platform}s:*`)
     if (keys.length) {
       await redisClient.del(keys)
     }
@@ -42,7 +43,7 @@ export default class ProjectService {
   }
 
   static getProjects = async (
-    projectType: ProjectType,
+    platform: Platform,
     page: number,
     limit: number
   ) => {
@@ -52,7 +53,7 @@ export default class ProjectService {
     // if (cachedPosts) {
     //   return JSON.parse(cachedPosts)
     // }
-    const projects = await Project.find({ type: projectType })
+    const projects = await Project.find({ platform })
       .sort({ createdAt: -1 })
       .skip(startIndex)
       .limit(limit)

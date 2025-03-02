@@ -7,6 +7,7 @@ import {
 import asyncHandler from '../utils/asyncHandler'
 import ProjectService from '../../services/ProjectService'
 import Project from '../../models/Project'
+import { Platform } from '../../constants/enums'
 
 export const createProject = asyncHandler(async (req, _) => {
   const { error } = validateCreateProject(req.body)
@@ -24,13 +25,13 @@ export const createProject = asyncHandler(async (req, _) => {
 })
 
 export const getProjects = asyncHandler(async (req, _) => {
-  const { page = 1, limit = 10 } = req.query
-  const projectType = req.projectType || 'app'
+  const { page, limit } = req.query
+  const platform = req.platform || Platform.android
 
   const result = await ProjectService.getProjects(
-    projectType,
-    Number(page),
-    Number(limit)
+    platform,
+    Number(page) || 1,
+    Number(limit) || 10
   )
 
   return new ResponseSuccess('Projects fetched successfully', result)

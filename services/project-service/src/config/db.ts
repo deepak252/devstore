@@ -7,7 +7,7 @@ export const connectDB = async () => {
     if (!MONGO_URI) {
       throw new Error('Mongo URL empty')
     }
-    logger.info('Connecting to db...')
+    logger.info('Connecting to the database...')
     await mongoose.connect(MONGO_URI)
 
     logger.info('✅ Successfully connected to the database')

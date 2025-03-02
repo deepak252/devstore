@@ -1,5 +1,5 @@
 import 'express'
-import { ProjectType } from './project.types'
+import { Platform } from '../constants/enums'
 
 declare global {
   namespace Express {
@@ -7,7 +7,7 @@ declare global {
       user: {
         userId: string
       }
-      projectType?: ProjectType
+      platform?: Platform
     }
   }
 }

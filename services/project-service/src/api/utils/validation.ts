@@ -1,8 +1,8 @@
 import Joi from 'joi'
 import { IProject } from '../../types/project.types'
-import { ProjectType } from '../../constants/enums'
+import { Platform } from '../../constants/enums'
 
-const projectTypeSchema = Joi.string().valid(...Object.values(ProjectType))
+const platformSchema = Joi.string().valid(...Object.values(Platform))
 const projectNameSchema = Joi.string().min(4).max(80)
 const isPrivateSchema = Joi.boolean()
 const descriptionSchema = Joi.string().allow('').max(2000)
@@ -15,7 +15,7 @@ const sourceCodeUrlSchema = Joi.string().uri().allow('')
 
 export const validateCreateProject = (values: Partial<IProject>) => {
   const schema = Joi.object({
-    type: projectTypeSchema.required(),
+    platform: platformSchema.required(),
     name: projectNameSchema.required(),
     isPrivate: isPrivateSchema.required(),
     description: descriptionSchema.optional(),
@@ -31,7 +31,7 @@ export const validateCreateProject = (values: Partial<IProject>) => {
 
 export const validateUpdateProject = (values: Partial<IProject>) => {
   const schema = Joi.object({
-    type: projectTypeSchema.optional(),
+    platform: platformSchema.optional(),
     name: projectNameSchema.optional(),
     isPrivate: isPrivateSchema.optional(),
     description: descriptionSchema.optional(),

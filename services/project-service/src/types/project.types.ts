@@ -1,10 +1,11 @@
 import { Schema } from 'mongoose'
+import { Platform } from '../constants/enums'
 
-export type ProjectType = 'app' | 'website' | 'game'
-export type Platform = 'android' | 'ios'
+// export type ProjectType = 'app' | 'website' | 'game'
+// export type Platform = 'android' | 'ios'
 
 export interface IProject {
-  type: ProjectType
+  platform: Platform
   name: string
   owner: Schema.Types.ObjectId
   isPrivate: boolean
