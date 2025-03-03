@@ -1,0 +1,6 @@
+> docker build -t devstore-identity-service .
+> docker run --rm --env-file .env -p 3001:3001 devstore-identity-service
+
+OR
+
+> docker compose up --build --force-recreate
