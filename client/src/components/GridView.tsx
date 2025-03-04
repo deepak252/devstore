@@ -17,11 +17,7 @@ const GridView = ({
 }: FormInputWrapperProps) => {
   return (
     <div className={wrapperClass}>
-      {heading && (
-        <h3 className="text-xl font-semibold mx-2 my-4 text-gray-900">
-          {heading}
-        </h3>
-      )}
+      {heading && <h5 className="mx-2 my-4 text-gray-900">{heading}</h5>}
       <div
         className={classNames('grid ', itemsClass, {
           'grid-flow-col gap-2 justify-start p-2 overflow-x-auto scrollbar-thin':
