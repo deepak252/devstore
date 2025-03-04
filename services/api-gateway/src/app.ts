@@ -64,7 +64,26 @@ app.use(
   })
 )
 
-// Setting up proxy for post service
+app.use(
+  '/v1/user',
+  validateAccessToken,
+  proxy(IDENTITY_SERVICE_URL, {
+    ...proxyOptions,
+    proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+      proxyReqOpts.headers!['content-type'] = 'application/json'
+      proxyReqOpts.headers!['x-user-id'] = srcReq.user.userId
+      return proxyReqOpts
+    },
+    userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
+      logger.info(
+        `Response received from identiy-service: ${proxyRes.statusCode}`
+      )
+      return proxyResData
+    }
+  })
+)
+
+// Setting up proxy for project service
 app.use(
   '/v1/project',
   validateAccessToken,
@@ -76,13 +95,15 @@ app.use(
       return proxyReqOpts
     },
     userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
-      logger.info(`Response received from post-service: ${proxyRes.statusCode}`)
+      logger.info(
+        `Response received from project-service: ${proxyRes.statusCode}`
+      )
       return proxyResData
     }
   })
 )
 
-// Setting up proxy for media service
+// Setting up proxy for upload service
 app.use(
   '/v1/upload',
   validateAccessToken,
@@ -98,7 +119,7 @@ app.use(
     },
     userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
       logger.info(
-        `Response received from media-service: ${proxyRes.statusCode}`
+        `Response received from upload-service: ${proxyRes.statusCode}`
       )
       return proxyResData
     }

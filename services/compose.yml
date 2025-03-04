@@ -1,0 +1,72 @@
+services:
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - 3000:3000
+    env_file:
+      - ./api-gateway/.env  
+    environment:
+      - REDIS_HOST=redis
+      - IDENTITY_SERVICE_URL=http://identity-service:3001
+      - PROJECT_SERVICE_URL=http://project-service:3002
+      - UPLOAD_SERVICE_URL=http://upload-service:3003
+    depends_on:
+      - redis
+  
+
+  identity-service:
+    build: ./identity-service
+    ports:
+      - 3001:3001
+    env_file:
+      - ./identity-service/.env
+    environment:
+      - REDIS_HOST=redis
+    depends_on:
+      - redis
+
+  project-service:
+    build: ./project-service
+    ports:
+      - 3002:3002
+    env_file:
+      - ./project-service/.env
+    environment:
+      - REDIS_HOST=redis
+      - RABBITMQ_URL=amqp://rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_started
+  
+  upload-service:
+    build: ./upload-service
+    ports:
+      - 3003:3003
+    env_file:
+      - ./upload-service/.env
+    environment:
+      - REDIS_HOST=redis
+      - RABBITMQ_URL=amqp://rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  redis:
+    image: redis:7.4.0
+    ports:
+      - 6379:6379
+
+  rabbitmq: 
+    image: rabbitmq:management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
+      interval: 6s
+      timeout: 3s
+      retries: 5
