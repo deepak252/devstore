@@ -4,7 +4,7 @@ import { ResponseSuccess } from '../utils/ApiResponse'
 import asyncHandler from '../utils/asyncHandler'
 import { validateLogin, validateRegistration } from '../utils/validation'
 
-export const registerUser = asyncHandler(async (req, _) => {
+export const signUpUser = asyncHandler(async (req, _) => {
   const { username, fullname, email, password } = req.body
 
   const { error } = validateRegistration({
@@ -40,7 +40,7 @@ export const registerUser = asyncHandler(async (req, _) => {
   )
 })
 
-export const loginUser = asyncHandler(async (req, _) => {
+export const signInUser = asyncHandler(async (req, _) => {
   const { usernameOrEmail, password } = req.body
 
   const { error } = validateLogin({ usernameOrEmail, password })
@@ -67,7 +67,7 @@ export const loginUser = asyncHandler(async (req, _) => {
   )
 })
 
-export const logoutUser = asyncHandler(async (req, _) => {
+export const signOutUser = asyncHandler(async (req, _) => {
   const { refreshToken } = req.body
 
   if (!refreshToken) {
