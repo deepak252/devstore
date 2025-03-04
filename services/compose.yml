@@ -3,6 +3,9 @@ services:
     build: ./api-gateway
     ports:
       - 3000:3000
+    volumes:
+      - ./api-gateway:/app # Sync code with container
+      - /app/node_modules       # Ignore node_modules
     env_file:
       - ./api-gateway/.env  
     environment:
@@ -18,6 +21,9 @@ services:
     build: ./identity-service
     ports:
       - 3001:3001
+    volumes:
+      - ./identity-service:/app # Sync code with container
+      - /app/node_modules       # Ignore node_modules
     env_file:
       - ./identity-service/.env
     environment:
@@ -29,6 +35,9 @@ services:
     build: ./project-service
     ports:
       - 3002:3002
+    volumes:
+      - ./project-service:/app # Sync code with container
+      - /app/node_modules       # Ignore node_modules
     env_file:
       - ./project-service/.env
     environment:
@@ -44,6 +53,9 @@ services:
     build: ./upload-service
     ports:
       - 3003:3003
+    volumes:
+      - ./upload-service:/app # Sync code with container
+      - /app/node_modules       # Ignore node_modules
     env_file:
       - ./upload-service/.env
     environment:

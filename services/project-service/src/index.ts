@@ -6,10 +6,10 @@ import logger from './utils/logger.js'
 import { connectRabbitMQ } from './config/rabbitmq.js'
 
 connectDB()
-  .then(() => {
+  .then(async () => {
     const httpServer = createServer(app)
 
-    connectRabbitMQ()
+    await connectRabbitMQ()
 
     httpServer.listen(SERVER_PORT, () => {
       logger.info(`🚀 Project Service is running on PORT : ${SERVER_PORT}`)

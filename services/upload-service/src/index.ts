@@ -3,13 +3,13 @@ import { SERVER_PORT } from './config/env.js'
 import { connectDB } from './config/db.js'
 import app from './app.js'
 import logger from './utils/logger.js'
-// import { connectRabbitMQ } from './config/rabbitmq.js'
+import { connectRabbitMQ } from './config/rabbitmq.js'
 // import { deleteMediaWorker } from './workers/mediaWorker.js'
 
 connectDB()
   .then(async () => {
     const httpServer = createServer(app)
-    // await connectRabbitMQ()
+    await connectRabbitMQ()
     // deleteMediaWorker()
     httpServer.listen(SERVER_PORT, () => {
       logger.info(`🚀 Upload Service is running on PORT : ${SERVER_PORT}`)
