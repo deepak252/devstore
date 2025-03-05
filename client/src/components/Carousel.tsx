@@ -74,7 +74,7 @@ export const CarouselShimmer = ({
         <Shimmer
           key={id}
           className={classNames(
-            'h-[87%] w-96 max-w-[70vw] min-w-60 m-3 aspect-video !rounded-2xl overflow-hidden max-md:w-80',
+            '!w-96 max-w-[70vw] min-w-60 m-3 aspect-video !rounded-2xl overflow-hidden max-md:!w-80',
             className
           )}
         />

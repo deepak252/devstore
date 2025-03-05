@@ -9,8 +9,8 @@ const Introduction = () => {
     <div className="">
       <div className="flex items-center max-lg:block">
         <div className="text-center m-6">
-          <h1 className="text-gray-900 m-2 max-lg:text-4xl max-lg:leading-normal">
-            Centralized Hub for App, Website, and Game Distribution
+          <h1 className="text-gray-900 m-2 max-lg:text-4xl">
+            Centralized Hub for <br /> App, Website, and Game Distribution
           </h1>
           <p className="text-2xl text-gray-700 font-light leading-normal m-1 max-lg:text-lg">
             Dev Store brings your creations to the world, all in one place. Join

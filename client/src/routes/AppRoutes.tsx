@@ -5,6 +5,9 @@ import authRoutes from './authRoutes'
 const RootLayout = lazy(() => import('@/components/layouts/RootLayout'))
 const MainLayout = lazy(() => import('@/components/layouts/MainLayout'))
 const AppsPage = lazy(() => import('@/features/apps/pages/AppsPage'))
+const WebsitesPage = lazy(
+  () => import('@/features/websites/pages/WebsitesPage')
+)
 const HomePage = lazy(() => import('@/pages/HomePage'))
 const PageNotFound = lazy(() => import('@/pages/PageNotFound'))
 
@@ -24,6 +27,10 @@ const routes = [
           {
             path: 'apps',
             element: <AppsPage />,
+          },
+          {
+            path: 'websites',
+            element: <WebsitesPage />,
           },
         ],
       },

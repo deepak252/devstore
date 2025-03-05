@@ -10,6 +10,7 @@ export default {
       },
       boxShadow: {
         '3xl': '1px 1px 8px 2px #BDBDBD',
+        thin: '0 1px 2px 0 rgba(60,64,67,.3),0 1px 3px 1px rgba(60,64,67,.15)',
       },
       colors: {
         primary: {

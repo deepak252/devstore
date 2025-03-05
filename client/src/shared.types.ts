@@ -3,7 +3,7 @@ export type ToastData = {
   message?: string | null
 }
 
-export type Platform = 'all' | 'android' | 'ios'
+export type Platform = 'all' | 'android' | 'ios' | 'website'
 
 export type RemoteFile = {
   url: string
@@ -47,31 +47,61 @@ export type Banner = {
   updatedAt: string
 }
 
+// platform: Platform
+//   name: string
+//   owner: Schema.Types.ObjectId
+//   isPrivate: boolean
+//   description?: string
+//   icon?: string
+//   images?: string[]
+//   video?: string
+//   featureGraphic?: string
+
+//   demoUrl?: string
+//   sourceCodeUrl?: string
+
 export type ProjectFormValues = {
   name: string
   description?: string
-  categories?: []
-  sourceCode?: string
-  isSourceCodePublic?: boolean
   isPrivate: boolean
-  attachmentIcon: File | null
-  attachmentImages: File[] | null
-  attachmentVideo?: File | null
-  attachmentGraphic?: File | null
+  categories?: []
+  sourceCodeUrl?: string
+  demoUrl?: string
 }
 
 export type ProjectFormError = {
   name?: string
   description?: string
-  categories?: string
-  sourceCode?: string
-  isSourceCodePublic?: string
   isPrivate?: string
-  attachmentIcon?: string
-  attachmentImages?: string
-  attachmentVideo?: string
-  attachmentGraphic?: string
+  categories?: string
+  sourceCodeUrl?: string
+  demoUrl?: string
 }
+// export type ProjectFormValues = {
+//   name: string
+//   description?: string
+//   categories?: []
+//   sourceCode?: string
+//   isSourceCodePublic?: boolean
+//   isPrivate: boolean
+//   attachmentIcon: File | null
+//   attachmentImages: File[] | null
+//   attachmentVideo?: File | null
+//   attachmentGraphic?: File | null
+// }
+
+// export type ProjectFormError = {
+//   name?: string
+//   description?: string
+//   categories?: string
+//   sourceCode?: string
+//   isSourceCodePublic?: string
+//   isPrivate?: string
+//   attachmentIcon?: string
+//   attachmentImages?: string
+//   attachmentVideo?: string
+//   attachmentGraphic?: string
+// }
 
 export type ProjectDetails = {
   _id: string
