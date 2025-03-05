@@ -2,7 +2,7 @@ import amqp from 'amqplib'
 import { RABBITMQ_URL } from './env'
 import logger from '../utils/logger'
 
-let connection: amqp.Connection | null = null
+let connection: amqp.ChannelModel | null = null
 let channel: amqp.Channel | null = null
 const MAX_RETRIES = 5
 const RETRY_DELAY = 6000
