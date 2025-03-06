@@ -60,6 +60,12 @@ export type Banner = {
 //   demoUrl?: string
 //   sourceCodeUrl?: string
 
+type Attachment = {
+  file?: File | null
+  url?: string
+  publicId?: string
+}
+
 export type ProjectFormValues = {
   name: string
   description?: string
@@ -67,6 +73,12 @@ export type ProjectFormValues = {
   categories?: []
   sourceCodeUrl?: string
   demoUrl?: string
+  icon?: Attachment
+  images?: Attachment[]
+  featureImage?: Attachment
+  // attachmentIcon?: File | null
+  // attachmentImages?: File[] | null
+  // attachmentFeature?: File | null
 }
 
 export type ProjectFormError = {
@@ -76,6 +88,9 @@ export type ProjectFormError = {
   categories?: string
   sourceCodeUrl?: string
   demoUrl?: string
+  icon?: string
+  images?: string
+  featureImage?: string
 }
 // export type ProjectFormValues = {
 //   name: string

@@ -9,6 +9,10 @@ import MinimizeIcon from '@/assets/icons/minimize.svg?react'
 import useFormikErrors from '@/hooks/useFormikErrors'
 import { validateWebsiteForm } from '../websitesUtil'
 import { WebsiteFormError, WebsiteFormValues } from '../websites.types'
+import { useAppDispatch } from '@/hooks'
+import { uploadWebsiteIcon } from '../websitesSlice'
+import Attachment from '@/components/Attachment'
+import _ from 'lodash'
 
 const categories = [
   'Education',
@@ -19,7 +23,10 @@ const categories = [
   'sdfsdfdsfdfdsf',
 ]
 
+const MAX_IMAGES_COUNT = 5
+
 const WebsiteForm = ({ onClose }: { onClose: () => void }) => {
+  const dispatch = useAppDispatch()
   const formik = useFormik<WebsiteFormValues>({
     initialValues: {
       name: '',
@@ -38,11 +45,52 @@ const WebsiteForm = ({ onClose }: { onClose: () => void }) => {
   })
   const errors = useFormikErrors<WebsiteFormValues, WebsiteFormError>(formik)
 
+  const handleIconSelect = ([file]: File[]) => {
+    formik.setFieldValue('icon', { file })
+    // dispatch(uploadWebsiteIcon({ icon: file }))
+  }
+
+  const handleImagesSelect = (files: File[]) => {
+    const currentImages = formik.values.images || []
+
+    const incomingImages = files.map((file) => ({
+      file,
+    }))
+    formik.setFieldValue(
+      'images',
+      [...currentImages, ...incomingImages].slice(0, MAX_IMAGES_COUNT)
+    )
+  }
+
+  const handleRemoveImage = (item: any) => {
+    const updatedFiles = formik.values.images?.filter(
+      (e) => !_.isEqual(e, item)
+    )
+    formik.setFieldValue('images', updatedFiles || [])
+  }
+
+  const handleRemoveIcon = () => {
+    formik.setFieldValue('icon', undefined)
+  }
+
+  // const handleRemoveFile = (field, file) => {
+  //   if (field === 'attachmentPackage') {
+  //     handleInputChange(field, null)
+  //     dispatch(uploadAppPackageCancelled())
+  //   } else if (field === 'attachmentImages') {
+  //     let updatedFiles = formData?.[field]?.filter((e) => e.name !== file.name)
+  //     handleInputChange(field, updatedFiles)
+  //   } else {
+  //     //attachmentIcon, attachmentVideo
+  //     handleInputChange(field, null)
+  //   }
+  // }
+
   return (
     <ModalWrapper onClose={onClose} isOpen closeOnEsc>
       <div className="flex flex-col bg-white rounded-2xl max-w-3xl w-[80vw] max-h-[80vh] min-h-[50vh]">
         <div className="flex items-start justify-between p-6 max-md:p-5">
-          <h5>Create App</h5>
+          <h5>Add Website</h5>
           <div className="flex-center">
             <button className="mx-2">
               <MinimizeIcon className="size-7" />
@@ -61,7 +109,7 @@ const WebsiteForm = ({ onClose }: { onClose: () => void }) => {
               }}
               checked={!formik.values.isPrivate}
             />
-            <FormInputWrapper
+            {/* <FormInputWrapper
               title="Upload Package File*"
               // error={errors.attachmentPackage}
             >
@@ -75,12 +123,12 @@ const WebsiteForm = ({ onClose }: { onClose: () => void }) => {
                   formik.setFieldValue('attachmentPackage', file)
                 }
               />
-            </FormInputWrapper>
-            <FormInputWrapper title="App Name*" error={errors.name}>
+            </FormInputWrapper> */}
+            <FormInputWrapper title="Website Title*" error={errors.name}>
               <input
                 name="name"
                 type="text"
-                placeholder="Enter app name"
+                placeholder="Enter website title"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 className="textfield"
@@ -89,7 +137,7 @@ const WebsiteForm = ({ onClose }: { onClose: () => void }) => {
             <FormInputWrapper title="Description">
               <textarea
                 name="description"
-                placeholder="Enter app description"
+                placeholder="Enter website description"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 className="textfield"
@@ -126,6 +174,56 @@ const WebsiteForm = ({ onClose }: { onClose: () => void }) => {
                 className="textfield"
               />
             </FormInputWrapper>
+            <FormInputWrapper
+              title="Add Icon"
+              error={errors.icon}
+              className="mt-6"
+            >
+              {formik.values.icon ? (
+                <Attachment
+                  file={formik.values.icon.file}
+                  wrapperClassName="!size-32"
+                  onRemove={handleRemoveIcon}
+                />
+              ) : (
+                <FileInput
+                  hintDescription="(Only png/jpg file allowed | Maximum file size: 512KB)"
+                  allowedFileTypes={['.png', '.jpg', '.jpeg']}
+                  maxFileSizeKB={512}
+                  multiple={false}
+                  onSelectFiles={handleIconSelect}
+                />
+              )}
+            </FormInputWrapper>
+
+            <FormInputWrapper
+              title="Add Screenshots"
+              error={errors.images}
+              className="mt-6"
+            >
+              <div className="flex flex-wrap gap-4">
+                {(formik.values.images?.length || 0) < 5 && (
+                  <FileInput
+                    hintDescription="(Only png/jpg file allowed | Maximum file size: 1024KB)"
+                    allowedFileTypes={['.png', '.jpg', '.jpeg']}
+                    maxFileSizeKB={1024}
+                    multiple={true}
+                    onSelectFiles={handleImagesSelect}
+                    className="w-full"
+                  />
+                )}
+                {formik.values.images?.map((item) => (
+                  <Attachment
+                    key={item.file?.name || item.publicId}
+                    file={item.file}
+                    wrapperClassName="!size-32"
+                    onRemove={() => {
+                      handleRemoveImage(item)
+                    }}
+                  />
+                ))}
+              </div>
+            </FormInputWrapper>
           </form>
         </div>
         <hr />
@@ -136,7 +234,7 @@ const WebsiteForm = ({ onClose }: { onClose: () => void }) => {
             className="btn-filled"
             onClick={() => formik.handleSubmit()}
           >
-            Create
+            Submit
           </button>
         </div>
       </div>

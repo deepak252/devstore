@@ -1,6 +1,6 @@
 # Node.js dependencies
 node_modules/
-
+.vscode/chrome
 # Logs
 logs/
 *.log

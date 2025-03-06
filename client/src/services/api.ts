@@ -51,6 +51,7 @@ const makeRequest = async <T = any>(
   endpoint: string,
   { headers = {}, ...args }: RequestConfig = {}
 ): Promise<AxiosResponse<T> | undefined> => {
+  console.log(headers)
   headers = getAuthHeader(headers)
 
   return api
@@ -103,20 +104,33 @@ export const deleteRequest = <T = any>(
 export function* uploadTask<T = any>(
   endpoint: string = '',
   config: RequestConfig = {},
-  cb: (success: T | null, error: any | null) => void = () => {}
+  // cb: (success: T | null, error: any | null) => void = () => {}
+  {
+    onSuccess,
+    onFailure,
+  }: {
+    onSuccess?: (response: any) => Generator
+    onFailure?: (error: any) => Generator
+  }
 ): Generator<any, void, AxiosResponse<T>> {
   try {
-    const response: AxiosResponse<T> = yield call(postRequest, endpoint, config)
+    const response: AxiosResponse<T> = yield call(postRequest, endpoint, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      ...config,
+    })
 
     if (response && response.status >= 200 && response.status < 300) {
-      yield call(cb, response.data, null)
+      // yield call(cb, response.data, null)
+      yield onSuccess?.(response)
     } else if (!config.signal?.aborted) {
       // Handle non-cancelled unsuccessful responses
       throw response.data || response
     }
-  } catch (error) {
-    console.error('Upload task error:', error)
-    yield call(cb, null, error)
+  } catch (e) {
+    console.error('Upload task error:', e)
+    yield onFailure?.(e)
   }
 }
 

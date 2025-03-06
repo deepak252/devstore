@@ -24,16 +24,16 @@ type WebsitesState = {
   }
   websiteForm: {
     data: ProjectFormValues
+    icon: {
+      isUploading: boolean
+    }
+    screenshots: {
+      isUploading: boolean
+    }
     isOpen: boolean
     isMinimize: boolean
     isLoading: boolean
     error: string | null
-    package: {
-      info: null
-      isLoading: boolean
-      progress: number | null
-      error: string | null
-    }
   }
   banner: {
     list: Banner[]
@@ -81,12 +81,8 @@ const initialState: WebsitesState = {
     isMinimize: false,
     isLoading: false,
     error: null,
-    package: {
-      info: null,
-      isLoading: false,
-      progress: null,
-      error: null,
-    },
+    icon: { isUploading: false },
+    screenshots: { isUploading: false },
   },
   banner: {
     list: [],
@@ -176,6 +172,24 @@ const websitesSlice = createSlice({
       console.log('createWebsiteCancelled')
     },
 
+    uploadWebsiteIcon: (state, _: PayloadAction<{ icon: File }>) => {
+      state.websiteForm.icon.isUploading = true
+    },
+    uploadWebsiteIconSuccess: (state) => {
+      state.websiteForm = initialState.websiteForm
+    },
+    uploadWebsiteIconFailure: (state, action) => {
+      state.websiteForm.icon.isUploading = false
+      state.toastData = {
+        type: 'failure',
+        message: action.payload || 'Something went wrong',
+      }
+    },
+    uploadWebsiteIconCancelled: (state, _) => {
+      state.websiteForm.icon.isUploading = false
+      console.log('uploadWebsiteIconCancelled')
+    },
+
     getWebsitesBanner: (state, _) => {
       state.banner.isLoading = true
     },
@@ -211,6 +225,11 @@ export const {
   createWebsiteSuccess,
   createWebsiteFailure,
   createWebsiteCancelled,
+
+  uploadWebsiteIcon,
+  uploadWebsiteIconSuccess,
+  uploadWebsiteIconFailure,
+  uploadWebsiteIconCancelled,
 
   getWebsitesBanner,
   getWebsitesBannerSuccess,

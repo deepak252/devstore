@@ -12,3 +12,5 @@ export const WEBSITES_API = 'project/websites'
 export const PACKAGE_UPLOAD_API = 'project/package/upload'
 export const BANNER_API = 'featured/banners'
 export const FEATURED_ALL_API = 'featured/all'
+
+export const MEDIA_UPLOAD_API = 'upload/media'

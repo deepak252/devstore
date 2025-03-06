@@ -10,7 +10,7 @@ type AppLogoProps = {
 }
 
 const AppLogo = ({
-  showText,
+  showText = true,
   className,
   textClassName,
   pointerDisabled,
@@ -35,16 +35,12 @@ const AppLogo = ({
               textClassName
             )}
           >
-            Dev Store
+            Play Store
           </span>
         )}
       </Link>
     </div>
   )
-}
-
-AppLogo.defaultProps = {
-  showText: true,
 }
 
 export default AppLogo
