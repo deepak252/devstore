@@ -8,20 +8,47 @@ import asyncHandler from '../utils/asyncHandler'
 import ProjectService from '../../services/ProjectService'
 import Project from '../../models/Project'
 import { Platform } from '../../constants/enums'
+import { S3Service } from '../../services/S3Service'
+import { S3_MEDIA_BUCKET } from '../../config/env'
+import { removeFile, removeFiles } from '../../utils/fileUtil'
 
 export const createProject = asyncHandler(async (req, _) => {
-  const { error } = validateCreateProject(req.body)
-  if (error) {
-    throw new ApiError(error.details[0].message)
+  const {
+    attachmentIcon = [],
+    attachmentImages = [],
+    attachmentGraphic = []
+  }: any = req.files
+  try {
+    const { error } = validateCreateProject(req.body)
+    if (error) {
+      throw new ApiError(error.details[0].message)
+    }
+
+    if (!attachmentIcon.length) {
+      throw new ApiError('Icon field is required')
+    }
+    const s3Service = new S3Service(S3_MEDIA_BUCKET)
+
+    const project = await ProjectService.createProject(
+      req.user.userId,
+      req.body
+    )
+
+    return new ResponseSuccess(
+      'Project created successfully',
+      project.toJSON(),
+      201
+    )
+  } finally {
+    if (req.file) {
+      // removeFile(req.file.path)
+      removeFiles([
+        ...attachmentIcon.map((e: Express.Multer.File) => e.path),
+        ...attachmentImages.map((e: Express.Multer.File) => e.path),
+        ...attachmentGraphic.map((e: Express.Multer.File) => e.path)
+      ])
+    }
   }
-
-  const project = await ProjectService.createProject(req.user.userId, req.body)
-
-  return new ResponseSuccess(
-    'Project created successfully',
-    project.toJSON(),
-    201
-  )
 })
 
 export const getProjects = asyncHandler(async (req, _) => {
