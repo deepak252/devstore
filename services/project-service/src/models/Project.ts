@@ -1,6 +1,6 @@
 import { Schema, model, Model } from 'mongoose'
 import { IProject, IProjectMethods } from '../types/project.types'
-import { Platform } from '../constants/enums'
+import { Platform, Status } from '../constants/enums'
 
 interface ProjectModel extends Model<IProject, object, IProjectMethods> {
   test: () => void
@@ -35,7 +35,12 @@ const projectSchema = new Schema<IProject, ProjectModel, IProjectMethods>(
     video: String,
     featureGraphic: String,
     demoUrl: String,
-    sourceCodeUrl: String
+    sourceCodeUrl: String,
+    status: {
+      type: String,
+      enum: Object.values(Status),
+      default: Status.Pending
+    }
   },
   {
     timestamps: true

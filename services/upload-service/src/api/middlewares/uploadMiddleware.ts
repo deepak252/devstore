@@ -39,42 +39,49 @@ const storage = multer.diskStorage({
   }
 })
 
-const uploadMiddleware = ({
-  fieldName = 'file',
-  fileMaxKb = 10 * 1024,
-  type = 'single',
-  maxCount = 1,
-  allowedExtensions = []
-}: {
-  fieldName?: string
-  type?: 'single' | 'multiple'
-  fileMaxKb?: number
+interface CustomField {
+  name: string
   maxCount?: number
+  maxSizeKB?: number
   allowedExtensions?: string[] // eg. [".png", ".jpg", ".jpeg", ".gif", ".pdf"]
-}) => {
+}
+
+const uploadMiddleware = (fields: CustomField[]) => {
+  const maxSizeKB = Math.max(...fields.map((field) => field.maxSizeKB || 128))
+  console.log(maxSizeKB)
+
   const multr = multer({
     storage: storage,
     fileFilter: function (req, file, cb) {
-      const ext = path.extname(file.originalname).toLowerCase()
-      if (allowedExtensions?.length && !allowedExtensions.includes(ext)) {
-        return cb(
-          new Error(
-            `Invalid file type. Allowed: ${allowedExtensions.join(', ')}`
-          )
-        )
+      console.log(file)
+
+      for (const field of fields) {
+        if (field.name === file.fieldname) {
+          const ext = path.extname(file.originalname).toLowerCase()
+          if (
+            field.allowedExtensions?.length &&
+            !field.allowedExtensions.includes(ext)
+          ) {
+            return cb(
+              new Error(
+                `Invalid file type for field ${field.name}. Allowed: ${field.allowedExtensions.join(', ')}`
+              )
+            )
+          }
+          break
+        }
       }
       cb(null, true)
     },
     limits: {
-      fileSize: fileMaxKb * 1024
+      fileSize: maxSizeKB * 1024
     }
   })
 
   return (req: Request, res: Response, next: NextFunction) => {
-    const upload =
-      type === 'single'
-        ? multr.single(fieldName)
-        : multr.array(fieldName, maxCount)
+    const upload = multr.fields(
+      fields.map(({ name, maxCount }) => ({ name, maxCount }))
+    )
 
     upload(req, res, (err) => {
       if (err) {

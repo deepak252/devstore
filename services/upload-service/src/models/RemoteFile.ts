@@ -24,6 +24,9 @@ const remoteFileSchema = new Schema<
       type: String,
       required: true
     },
+    parentId: {
+      type: String
+    },
     url: {
       type: String,
       required: true

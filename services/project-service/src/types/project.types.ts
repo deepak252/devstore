@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose'
-import { Platform } from '../constants/enums'
+import { Platform, Status } from '../constants/enums'
 
 // export type ProjectType = 'app' | 'website' | 'game'
 // export type Platform = 'android' | 'ios'
@@ -17,6 +17,8 @@ export interface IProject {
 
   demoUrl?: string
   sourceCodeUrl?: string
+
+  status?: Status
 
   // Apps
 

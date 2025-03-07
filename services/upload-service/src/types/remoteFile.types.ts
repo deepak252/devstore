@@ -7,6 +7,7 @@ export interface IRemoteFile {
   url: string
   mimeType: string
   user: Schema.Types.ObjectId
+  parentId?: string
   createdAt: Date
   updatedAt: Date
 }
