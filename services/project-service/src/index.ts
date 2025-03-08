@@ -4,12 +4,14 @@ import { connectDB } from './config/db.js'
 import app from './app.js'
 import logger from './utils/logger.js'
 import { connectRabbitMQ } from './config/rabbitmq.js'
+import { updateProjectWorker } from './workers/projectWorker.js'
 
 connectDB()
   .then(async () => {
     const httpServer = createServer(app)
 
     await connectRabbitMQ()
+    await updateProjectWorker()
 
     httpServer.listen(SERVER_PORT, () => {
       logger.info(`🚀 Project Service is running on PORT : ${SERVER_PORT}`)

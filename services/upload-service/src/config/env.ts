@@ -17,5 +17,8 @@ export const {
   AWS_SECRET_KEY = '',
   S3_APPLICATION_BUCKET = 'application',
   S3_MEDIA_BUCKET = 'media',
-  SUPABASE_PROJECT_URL = ''
+  SUPABASE_PROJECT_URL = '',
+
+  USER_SERVICE_URL = 'http://localhost:3001',
+  PROJECT_SERVICE_URL = 'http://localhost:3002'
 } = process.env

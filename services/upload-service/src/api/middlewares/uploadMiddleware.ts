@@ -48,13 +48,10 @@ interface CustomField {
 
 const uploadMiddleware = (fields: CustomField[]) => {
   const maxSizeKB = Math.max(...fields.map((field) => field.maxSizeKB || 128))
-  console.log(maxSizeKB)
 
   const multr = multer({
     storage: storage,
     fileFilter: function (req, file, cb) {
-      console.log(file)
-
       for (const field of fields) {
         if (field.name === file.fieldname) {
           const ext = path.extname(file.originalname).toLowerCase()

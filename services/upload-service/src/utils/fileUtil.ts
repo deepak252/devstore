@@ -17,3 +17,7 @@ export const removeFile = (filePath: string) => {
     }
   })
 }
+
+export const removeFiles = (filePaths: string[]) => {
+  filePaths.forEach((fp) => removeFile(fp))
+}

@@ -61,6 +61,7 @@ services:
     environment:
       - REDIS_HOST=redis
       - RABBITMQ_URL=amqp://rabbitmq
+      - PROJECT_SERVICE_URL=http://project-service:3002
     depends_on:
       rabbitmq:
         condition: service_healthy

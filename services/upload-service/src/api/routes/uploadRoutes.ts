@@ -2,10 +2,12 @@ import { Router } from 'express'
 import {
   getAllRemoteFiles,
   uploadApplication,
-  uploadMedia
+  uploadMedia,
+  uploadProjectMedia
 } from '../controllers/uploadController'
 import { authenticateRequest } from '../middlewares/authMiddleware'
 import uploadMiddleware from '../middlewares/uploadMiddleware'
+import { validateUserProject } from '../middlewares/projectMiddleware'
 
 const router = Router()
 
@@ -38,7 +40,8 @@ router.post(
 )
 
 router.post(
-  '/project-media',
+  '/project-media/:projectId',
+  validateUserProject,
   uploadMiddleware([
     {
       name: 'attachmentIcon',
@@ -53,13 +56,13 @@ router.post(
       allowedExtensions: ['.png', '.jpg', '.jpeg']
     },
     {
-      name: 'attachmentGraphic',
+      name: 'attachmentBanner',
       maxCount: 1,
       maxSizeKB: 1024,
       allowedExtensions: ['.png', '.jpg', '.jpeg']
     }
   ]),
-  uploadMedia
+  uploadProjectMedia
 )
 router.get('/all', getAllRemoteFiles)
 

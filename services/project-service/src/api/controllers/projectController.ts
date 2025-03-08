@@ -106,6 +106,15 @@ export const deleteProject = asyncHandler(async (req, _) => {
   return new ResponseSuccess('Project deleted successfully', result)
 })
 
+export const checkProjectExists = asyncHandler(async (req, _) => {
+  const { projectId, userId } = req.body
+
+  const result = await ProjectService.getUserProject(projectId, userId)
+  return new ResponseSuccess('Success', {
+    exists: !!result
+  })
+})
+
 // export const createProject = asyncHandler(async (req, _) => {
 //   const {
 //     attachmentIcon = [],

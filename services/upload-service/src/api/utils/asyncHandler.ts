@@ -9,7 +9,7 @@ const asyncHandler = (
       .then((result) => {
         if (result instanceof ApiResponse) {
           return res.status(result.code).json(result)
-        } else {
+        } else if (result) {
           return res.json(result)
         }
       })

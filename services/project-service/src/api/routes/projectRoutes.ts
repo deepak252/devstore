@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import {
+  checkProjectExists,
   createProject,
   deleteProject,
   getProjectDetails,
@@ -16,6 +17,7 @@ router.post('/create', requireAuth, createProject)
 router.put('/:projectId', requireAuth, updateProject)
 router.get('/:projectId', optionalAuth, getProjectDetails)
 router.delete('/:projectId', requireAuth, deleteProject)
+router.post('/exists', checkProjectExists)
 
 export default router
 

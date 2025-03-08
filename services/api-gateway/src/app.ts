@@ -132,3 +132,26 @@ app.get('/', (req, res) => {
 
 app.use(errorHandler)
 export default app
+
+// app.use(
+//   '/v1/upload/project-media/:projectId',
+//   validateAccessToken,
+//   validateUserProject,
+//   proxy(UPLOAD_SERVICE_URL, {
+//     ...proxyOptions,
+//     parseReqBody: false, // Important for multipart forms
+//     proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+//       proxyReqOpts.headers!['x-user-id'] = srcReq.user.userId
+//       if (!srcReq.headers!['content-type']?.startsWith('multipart/form-data')) {
+//         proxyReqOpts.headers!['content-type'] = 'application/json'
+//       }
+//       return proxyReqOpts
+//     },
+//     userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
+//       logger.info(
+//         `Response received from upload-service (upload/project-media): ${proxyRes.statusCode}`
+//       )
+//       return proxyResData
+//     }
+//   })
+// )

@@ -6,10 +6,10 @@ import { IProject } from '../types/project.types'
 export default class ProjectService {
   static invalidateProjectCache = async (
     platform: Platform,
-    postId?: string
+    projectId?: string
   ) => {
-    if (postId) {
-      await redisClient.del(`${platform}:${postId}`)
+    if (projectId) {
+      await redisClient.del(`${platform}:${projectId}`)
     }
     const keys = await redisClient.keys(`${platform}s:*`)
     if (keys.length) {
@@ -18,15 +18,13 @@ export default class ProjectService {
   }
 
   static createProject = async (userId: string, values: Partial<IProject>) => {
-    let post = new Project({
+    const project = await Project.create({
       ...values,
       owner: userId
     })
-    post = await post.save()
-
     // await this.invalidateProjectCache()
 
-    return post
+    return project
   }
 
   static getProject = async (projectId: string) => {
@@ -39,6 +37,14 @@ export default class ProjectService {
     if (project) {
       // await redisClient.setex(cacheKey, 3600, JSON.stringify(post))
       return project
+    }
+  }
+
+  static getUserProject = async (projectId: string, userId: string) => {
+    try {
+      return await Project.findOne({ owner: userId, _id: projectId })
+    } catch {
+      return false
     }
   }
 
@@ -91,6 +97,21 @@ export default class ProjectService {
     //   }
     //   await this.invalidatePostCache(postId)
     // }
+    return project
+  }
+
+  static updateProject = async (
+    projectId: string,
+    userId: string,
+    values: Partial<IProject>
+  ) => {
+    const project = await Project.findOne({ _id: projectId, owner: userId })
+    if (!project) {
+      throw new Error('Project not found')
+    }
+    Object.assign(project, values)
+    await project?.save()
+
     return project
   }
 

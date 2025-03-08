@@ -5,7 +5,8 @@ import asyncHandler from '../utils/asyncHandler'
 import RemoteFile from '../../models/RemoteFile'
 import RemoteFileService from '../../services/RemoteFileService'
 import { S3_APPLICATION_BUCKET, S3_MEDIA_BUCKET } from '../../config/env'
-import { removeFile } from '../../utils/fileUtil'
+import { removeFile, removeFiles } from '../../utils/fileUtil'
+import UploadService from '../../services/UploadService'
 
 export const uploadApplication = asyncHandler(async (req, _) => {
   try {
@@ -41,6 +42,69 @@ export const uploadApplication = asyncHandler(async (req, _) => {
     if (req.file) {
       removeFile(req.file.path)
     }
+  }
+})
+
+export const uploadProjectMedia = asyncHandler(async (req, res) => {
+  const {
+    attachmentIcon = [],
+    attachmentImages = [],
+    attachmentBanner = []
+  }: any = req.files || {}
+  const { projectId } = req.params
+  const { userId } = req.user
+
+  try {
+    if (!projectId) {
+      throw new ApiError('projectId is required')
+    }
+
+    res
+      .status(201)
+      .json(
+        new ResponseSuccess('Processing project media files', undefined, 201)
+      )
+
+    const data: { icon?: any; images?: any; banner?: any } = {}
+
+    if (attachmentIcon.length) {
+      const uploadResult = await RemoteFileService.uploadMedia(
+        attachmentIcon[0],
+        userId,
+        projectId
+      )
+      data.icon = uploadResult?.id
+    }
+    if (attachmentImages.length) {
+      data.images = []
+      for (const attchImg of attachmentImages) {
+        const uploadResult = await RemoteFileService.uploadMedia(
+          attchImg,
+          userId,
+          projectId
+        )
+        data.images.push(uploadResult?.id)
+      }
+    }
+    if (attachmentBanner.length) {
+      const uploadResult = await RemoteFileService.uploadMedia(
+        attachmentBanner[0],
+        userId,
+        projectId
+      )
+      data.banner = uploadResult?.id
+    }
+    await UploadService.publishUpdateProjectMediaEvent({
+      projectId,
+      userId,
+      data
+    })
+  } finally {
+    removeFiles([
+      ...attachmentIcon.map((e: Express.Multer.File) => e.path),
+      ...attachmentImages.map((e: Express.Multer.File) => e.path),
+      ...attachmentBanner.map((e: Express.Multer.File) => e.path)
+    ])
   }
 })
 
