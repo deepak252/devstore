@@ -1,37 +1,17 @@
-import Carousel, { CarouselShimmer } from '@/components/Carousel'
+// import Carousel, { CarouselShimmer } from '@/components/Carousel'
 import WebsiteForm from '../components/WebsiteForm'
 import GridView from '@/components/GridView'
-import {
-  AppIconTileMemo,
-  AppIconTileShimmer,
-} from '@/components/tiles/AppIconTile'
 import AddIcon from '@/assets/icons/add.svg?react'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { toggleCreateWebsiteFormOpen } from '../websitesSlice'
+import { WebsiteTileMemo } from '@/components/tiles/WebsiteTile'
+import CustomCarousel from '@/components/CustomCarousel'
 
 function WebsitesPage() {
   const dispatch = useAppDispatch()
   const isFormOpen = useAppSelector(
     (state) => state.websites.websiteForm.isOpen
   )
-  const carouselItems = [
-    {
-      url: 'https://images.unsplash.com/photo-1579353977828-2a4eab540b9a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2FtcGxlfGVufDB8fDB8fHww',
-      redirect: '1',
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1579353977828-2a4eab540b9a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2FtcGxlfGVufDB8fDB8fHww',
-      redirect: '2',
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1579353977828-2a4eab540b9a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2FtcGxlfGVufDB8fDB8fHww',
-      redirect: '3',
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1579353977828-2a4eab540b9a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2FtcGxlfGVufDB8fDB8fHww',
-      redirect: '4',
-    },
-  ]
 
   const appItems = [
     {
@@ -64,15 +44,24 @@ function WebsitesPage() {
   }
   return (
     <div className="">
-      <Carousel items={carouselItems}></Carousel>
-      <CarouselShimmer count={3} />
+      {/* <Carousel items={carouselItems}></Carousel> */}
+      <div className="pt-4">
+        {/* <CustomCarousel /> */}
+        {/* <CustomCarousel2 /> */}
+        <CustomCarousel />
+      </div>
+      {/* <CarouselShimmer count={3} /> */}
       <div className="mx-6 mb-4 pt-6">
         <div className="chip active me-3">All</div>
         <div className="chip">Websites</div>
       </div>
-      <GridView heading="Top Websites" wrapperClass="my-8 mx-4">
+      <GridView
+        heading="Top Websites"
+        wrapperClass="my-8 mx-4"
+        itemsClass="gap-4 !grid-cols-1 sm:!grid-cols-2 lg:!grid-cols-3"
+      >
         {appItems?.map((app) => (
-          <AppIconTileMemo
+          <WebsiteTileMemo
             key={app._id}
             id={app._id}
             name={app.name}
@@ -81,11 +70,11 @@ function WebsitesPage() {
           />
         ))}
       </GridView>
-      <GridView heading="Top Websites" wrapperClass="my-8 mx-4">
+      {/* <GridView heading="Top Websites" wrapperClass="my-8 mx-4">
         {[...Array(6).keys()].map((id) => (
           <AppIconTileShimmer key={id} />
         ))}
-      </GridView>
+      </GridView> */}
       <button
         className="btn-fab fixed bottom-8 right-8"
         onClick={handleToggleWebsiteFormOpen}

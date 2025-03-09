@@ -13,6 +13,8 @@
     "@reduxjs/toolkit": "^2.2.2",
     "axios": "^1.6.8",
     "classnames": "^2.5.1",
+    "embla-carousel-autoplay": "^8.5.2",
+    "embla-carousel-react": "^8.5.2",
     "formik": "^2.4.5",
     "lodash": "^4.17.21",
     "react": "^18.2.0",

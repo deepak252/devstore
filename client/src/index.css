@@ -154,6 +154,10 @@
   .card {
     @apply bg-white rounded-xl shadow-thin;
   }
+
+  .gradient-bottom-shade {
+    @apply bg-gradient-to-tr from-transparent to-black/30;;
+  }
 }
 
 @layer utilities {
