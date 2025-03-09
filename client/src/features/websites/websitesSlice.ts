@@ -2,7 +2,6 @@
 import {
   WebsiteListItem,
   Banner,
-  ProjectFormValues,
   Platform,
   ProjectDetails,
   ProjectList,
@@ -20,41 +19,19 @@ type WebsitesState = {
   websiteDetails: {
     data: ProjectDetails | null
     isLoading: boolean
-    error: string | null
   }
   websiteForm: {
-    data: ProjectFormValues
-    icon: {
-      isUploading: boolean
-    }
-    screenshots: {
+    media: {
       isUploading: boolean
     }
     isOpen: boolean
-    isMinimize: boolean
     isLoading: boolean
-    error: string | null
   }
   banner: {
     list: Banner[]
     isLoading: boolean
-    error: string | null
   }
   toastData?: ToastData | null
-}
-
-const formDataInitialState: WebsiteFormValues = {
-  name: '',
-  description: '',
-  categories: [],
-  sourceCodeUrl: '',
-  isPrivate: false,
-  // platform: 'android',
-  // attachmentPackage: null, // File Instance
-  // attachmentIcon: null,
-  // attachmentImages: [],
-  // attachmentVideo: null,
-  // attachmentGraphic: null,
 }
 
 const initialState: WebsitesState = {
@@ -73,21 +50,16 @@ const initialState: WebsitesState = {
   websiteDetails: {
     data: null,
     isLoading: false,
-    error: null,
   },
   websiteForm: {
-    data: formDataInitialState,
+    // data: formDataInitialState,
     isOpen: false,
-    isMinimize: false,
     isLoading: false,
-    error: null,
-    icon: { isUploading: false },
-    screenshots: { isUploading: false },
+    media: { isUploading: false },
   },
   banner: {
     list: [],
     isLoading: false,
-    error: null,
   },
 }
 
@@ -116,51 +88,34 @@ const websitesSlice = createSlice({
     getWebsiteDetails: (state, _: PayloadAction<{ projectId: string }>) => {
       state.websiteDetails = {
         isLoading: true,
-        error: null,
         data: null,
       }
     },
     getWebsiteDetailsSuccess: (state, action) => {
       state.websiteDetails.isLoading = false
-      state.websiteDetails.error = null
       state.websiteDetails.data = action.payload?.data
     },
-    getWebsiteDetailsFailure: (state, action) => {
+    getWebsiteDetailsFailure: (state) => {
       state.websiteDetails.isLoading = false
-      state.websiteDetails.error = action.payload
     },
-    // Create Website Form
+
     toggleCreateWebsiteFormOpen: (state) => {
       state.websiteForm.isOpen = !state.websiteForm?.isOpen
-      if (!state.websiteForm.isOpen) {
-        // Form Closed
-        state.websiteForm.isMinimize = false
-        state.websiteForm.data = formDataInitialState
-      }
     },
-    toggleCreateWebsiteFormMinimize: (state) => {
-      state.websiteForm.isMinimize = !state.websiteForm?.isMinimize
-    },
-    setCreateWebsiteFormData: (
-      state,
-      action: PayloadAction<WebsiteFormValues>
-    ) => {
-      state.websiteForm.data = action.payload
-    },
-    createWebsite: (state, _: PayloadAction<FormData>) => {
+
+    // Create Website Form
+    createWebsite: (state, _: PayloadAction<WebsiteFormValues>) => {
       state.websiteForm.isLoading = true
-      state.websiteForm.error = null
     },
     createWebsiteSuccess: (state) => {
       state.websiteForm = initialState.websiteForm
       state.toastData = {
         type: 'success',
-        message: 'Website added successfully!',
+        message: 'Your website is being processed. It will appear soon.',
       }
     },
     createWebsiteFailure: (state, action) => {
       state.websiteForm.isLoading = false
-      state.websiteForm.error = action.payload
       state.toastData = {
         type: 'failure',
         message: action.payload || 'Something went wrong',
@@ -168,44 +123,47 @@ const websitesSlice = createSlice({
     },
     createWebsiteCancelled: (state, _) => {
       state.websiteForm.isLoading = false
-      state.websiteForm.error = null
       console.log('createWebsiteCancelled')
     },
-
-    uploadWebsiteIcon: (state, _: PayloadAction<{ icon: File }>) => {
-      state.websiteForm.icon.isUploading = true
+    // Upload Website Media
+    uploadWebsiteMedia: (state, _: PayloadAction<{ icon: File }>) => {
+      state.websiteForm.media.isUploading = true
     },
-    uploadWebsiteIconSuccess: (state) => {
+    uploadWebsiteMediaSuccess: (state) => {
       state.websiteForm = initialState.websiteForm
+      // state.toastData = {
+      //   type: 'success',
+      //   message: 'Website creation submitted',
+      // }
     },
-    uploadWebsiteIconFailure: (state, action) => {
-      state.websiteForm.icon.isUploading = false
+    uploadWebsiteMediaFailure: (state, action) => {
+      state.websiteForm.media.isUploading = false
       state.toastData = {
         type: 'failure',
-        message: action.payload || 'Something went wrong',
+        message: action.payload || 'Error while uploading website images',
       }
     },
-    uploadWebsiteIconCancelled: (state, _) => {
-      state.websiteForm.icon.isUploading = false
-      console.log('uploadWebsiteIconCancelled')
+    uploadWebsiteMediaCancelled: (state, _) => {
+      state.websiteForm.media.isUploading = false
+      console.log('uploadWebsiteMediaCancelled')
     },
 
-    getWebsitesBanner: (state, _) => {
-      state.banner.isLoading = true
-    },
-    getWebsitesBannerSuccess: (state, action) => {
-      state.banner.isLoading = false
-      state.banner.error = null
-      state.banner.list = action.payload?.data
-    },
-    getWebsitesBannerFailure: (state, action) => {
-      state.banner.isLoading = false
-      state.banner.error = action.payload
-    },
+    // getWebsitesBanner: (state, _) => {
+    //   state.banner.isLoading = true
+    // },
+    // getWebsitesBannerSuccess: (state, action) => {
+    //   state.banner.isLoading = false
+    //   state.banner.error = null
+    //   state.banner.list = action.payload?.data
+    // },
+    // getWebsitesBannerFailure: (state, action) => {
+    //   state.banner.isLoading = false
+    //   state.banner.error = action.payload
+    // },
     setWebsitesFilter: (state, action) => {
       state.filter = action.payload
     },
-    setWebsitesToast: (state, action) => {
+    setWebsitesToast: (state, action: PayloadAction<ToastData | null>) => {
       state.toastData = action.payload
     },
   },
@@ -218,22 +176,27 @@ export const {
   getWebsiteDetails,
   getWebsiteDetailsSuccess,
   getWebsiteDetailsFailure,
-  toggleCreateWebsiteFormOpen,
-  toggleCreateWebsiteFormMinimize,
-  setCreateWebsiteFormData,
+
   createWebsite,
   createWebsiteSuccess,
   createWebsiteFailure,
   createWebsiteCancelled,
 
-  uploadWebsiteIcon,
-  uploadWebsiteIconSuccess,
-  uploadWebsiteIconFailure,
-  uploadWebsiteIconCancelled,
+  uploadWebsiteMedia,
+  uploadWebsiteMediaSuccess,
+  uploadWebsiteMediaFailure,
+  uploadWebsiteMediaCancelled,
 
-  getWebsitesBanner,
-  getWebsitesBannerSuccess,
-  getWebsitesBannerFailure,
+  toggleCreateWebsiteFormOpen,
+
+  // uploadWebsiteIcon,
+  // uploadWebsiteIconSuccess,
+  // uploadWebsiteIconFailure,
+  // uploadWebsiteIconCancelled,
+
+  // getWebsitesBanner,
+  // getWebsitesBannerSuccess,
+  // getWebsitesBannerFailure,
   setWebsitesFilter,
   setWebsitesToast,
 } = websitesSlice.actions

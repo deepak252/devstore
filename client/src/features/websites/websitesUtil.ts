@@ -8,6 +8,9 @@ export const validateWebsiteForm = (values: WebsiteFormValues) => {
   if (!values.name?.trim()) {
     errors.name = 'Enter website name'
   }
+  if (!values.icon?.trim() && !values.attachmentIcon) {
+    errors.attachmentIcon = 'Upload website icon'
+  }
   if (urlError) {
     errors.sourceCodeUrl = 'Invalid source code URL'
   }

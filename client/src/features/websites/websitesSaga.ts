@@ -1,30 +1,67 @@
 import { all, put, takeLatest } from 'redux-saga/effects'
 import { PayloadAction } from '@reduxjs/toolkit'
-import { uploadTask } from '@/services/api'
-import { MEDIA_UPLOAD_API } from '@/constants'
+import { apiWorker, uploadTask } from '@/services/api'
+import { UPLOAD_PROJECT_MEDIA_API } from '@/constants'
 import {
-  uploadWebsiteIcon,
-  uploadWebsiteIconFailure,
-  uploadWebsiteIconSuccess,
+  createWebsite,
+  createWebsiteFailure,
+  createWebsiteSuccess,
+  uploadWebsiteMediaFailure,
+  uploadWebsiteMediaSuccess,
 } from './websitesSlice'
+import { WebsiteFormValues } from './websites.types'
+import WebsitesService from './websitesService'
+import { UploadProjectMediaPayload } from '@/shared.types'
 
-function* uploadWebsiteIconWorker(
-  action: PayloadAction<{ icon: File }>
+function* createWebsiteWorker(
+  action: PayloadAction<WebsiteFormValues>
 ): Generator {
+  const { attachmentIcon, attachmentImages, attachmentBanner, ...rest } =
+    action.payload
+  yield* apiWorker(WebsitesService.createWebsite, rest, {
+    onSuccess: function* (response) {
+      if (attachmentIcon || attachmentImages?.length || attachmentBanner) {
+        yield uploadMediaWorker({
+          projectId: response.data?.data?._id,
+          attachmentIcon,
+          attachmentImages: attachmentImages?.map(({ file }) => file),
+          attachmentBanner,
+        })
+      }
+      yield put(createWebsiteSuccess(response.data))
+    },
+    onFailure: function* (error) {
+      yield put(createWebsiteFailure(error?.message || 'Something went wrong'))
+    },
+  })
+}
+
+function* uploadMediaWorker({
+  projectId,
+  attachmentIcon,
+  attachmentImages = [],
+  attachmentBanner,
+}: {
+  projectId: string
+} & UploadProjectMediaPayload): Generator {
   const formData = new FormData()
-  formData.append('file', action.payload.icon)
-  console.log(formData, action.payload.icon)
+
+  if (attachmentIcon) formData.append('attachmentIcon', attachmentIcon)
+  if (attachmentBanner) formData.append('attachmentBanner', attachmentBanner)
+  for (const atchImg of attachmentImages) {
+    formData.append('attachmentImages', atchImg)
+  }
 
   yield* uploadTask(
-    MEDIA_UPLOAD_API,
+    `${UPLOAD_PROJECT_MEDIA_API}/${projectId}`,
     { data: formData },
     {
       onSuccess: function* (response) {
-        yield put(uploadWebsiteIconSuccess(response.data))
+        yield put(uploadWebsiteMediaSuccess(response.data))
       },
       onFailure: function* (error) {
         yield put(
-          uploadWebsiteIconFailure(error?.message || 'Something went wrong')
+          uploadWebsiteMediaFailure(error?.message || 'Something went wrong')
         )
       },
     }
@@ -32,5 +69,8 @@ function* uploadWebsiteIconWorker(
 }
 
 export default function* () {
-  yield all([takeLatest(uploadWebsiteIcon.type, uploadWebsiteIconWorker)])
+  yield all([
+    takeLatest(createWebsite.type, createWebsiteWorker),
+    // takeLatest(uploadWebsiteIcon.type, uploadWebsiteIconWorker),
+  ])
 }

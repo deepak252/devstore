@@ -13,7 +13,7 @@ export interface IProject {
   icon?: string
   images?: string[]
   video?: string
-  featureGraphic?: string
+  banner?: string
 
   demoUrl?: string
   sourceCodeUrl?: string

@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useFormik } from 'formik'
 import FormInputWrapper from '@/components/FormInputWrapper'
@@ -7,7 +6,7 @@ import GithubIcon from '@/assets/icons/github.svg?react'
 import VisibilityOnIcon from '@/assets/icons/visibility-on.svg?react'
 import VisibilityOffIcon from '@/assets/icons/visibility-off.svg?react'
 import { signIn } from '../authSlice'
-import { useAppDispatch } from '@/hooks'
+import { useAppDispatch, useFormikErrors } from '@/hooks'
 import { validateSignInForm } from '../authUtil'
 import { SignInFormError, SignInFormValues } from '../auth.types'
 
@@ -23,16 +22,7 @@ function SignInPage() {
   })
   const isPasswordVisible = formik.values.isPasswordVisible
 
-  const errors = useMemo(() => {
-    const e: SignInFormError = {}
-    if (formik.touched.usernameOrEmail && formik.errors.usernameOrEmail) {
-      e.usernameOrEmail = formik.errors.usernameOrEmail
-    }
-    if (formik.touched.password && formik.errors.password) {
-      e.password = formik.errors.password
-    }
-    return e
-  }, [formik.touched, formik.errors])
+  const errors = useFormikErrors<SignInFormValues, SignInFormError>(formik)
 
   const togllePasswordVisible = () => {
     formik.setFieldValue('isPasswordVisible', !isPasswordVisible)

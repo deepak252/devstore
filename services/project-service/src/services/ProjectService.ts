@@ -1,5 +1,6 @@
+import { validateCreateProject } from '../api/utils/validation'
 import { redisClient } from '../config/redis'
-import { Platform } from '../constants/enums'
+import { Platform, Status } from '../constants/enums'
 import Project from '../models/Project'
 import { IProject } from '../types/project.types'
 
@@ -110,6 +111,9 @@ export default class ProjectService {
       throw new Error('Project not found')
     }
     Object.assign(project, values)
+    const { error } = validateCreateProject(project)
+    project.status = error ? Status.Pending : Status.Completed
+
     await project?.save()
 
     return project

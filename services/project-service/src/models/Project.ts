@@ -33,7 +33,7 @@ const projectSchema = new Schema<IProject, ProjectModel, IProjectMethods>(
       }
     ],
     video: String,
-    featureGraphic: String,
+    banner: String,
     demoUrl: String,
     sourceCodeUrl: String,
     status: {

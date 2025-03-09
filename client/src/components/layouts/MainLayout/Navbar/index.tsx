@@ -6,11 +6,14 @@ import SignOutIcon from '@/assets/icons/sign-out.svg?react'
 import ProfileIcon from '@/assets/icons/profile.svg?react'
 import SettingsIcon from '@/assets/icons/settings.svg?react'
 import BookmarksIcon from '@/assets/icons/bookmarks.svg?react'
-import useWindowDimensions from '@/hooks/useWindowDimensions'
 import NavOptions from './NavOptions'
 import SearchField from './SearchField'
-import useNavigateWithState from '@/hooks/useNavigateWithState'
-import { useAppDispatch, useAppSelector } from '@/hooks'
+import {
+  useAppDispatch,
+  useAppSelector,
+  useNavigateWithState,
+  useWindowDimensions,
+} from '@/hooks'
 import { signOut } from '@/features/auth/authSlice'
 
 const Navbar = () => {

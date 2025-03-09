@@ -60,22 +60,32 @@ export type Banner = {
 //   demoUrl?: string
 //   sourceCodeUrl?: string
 
-type Attachment = {
-  file?: File | null
-  url?: string
-  publicId?: string
-}
+// type Attachment = {
+//   file?: File | null
+//   url?: string
+//   publicId?: string
+// }
 
 export type ProjectFormValues = {
   name: string
   description?: string
   isPrivate: boolean
-  categories?: []
+  platform: Platform
+  categories?: string[]
   sourceCodeUrl?: string
   demoUrl?: string
-  icon?: Attachment
-  images?: Attachment[]
-  featureImage?: Attachment
+  icon?: string
+  images?: string[]
+  banner?: string
+  attachmentIcon?: File
+  attachmentImages?: {
+    id: string
+    file: File
+  }[]
+  attachmentBanner?: File
+  // icon?: Attachment
+  // images?: Attachment[]
+  // featureImage?: Attachment
   // attachmentIcon?: File | null
   // attachmentImages?: File[] | null
   // attachmentFeature?: File | null
@@ -88,9 +98,25 @@ export type ProjectFormError = {
   categories?: string
   sourceCodeUrl?: string
   demoUrl?: string
-  icon?: string
-  images?: string
-  featureImage?: string
+  attachmentIcon?: string
+  attachmentImages?: string
+  attachmentBanner?: string
+}
+
+export type SaveProjectPayload = {
+  name: string
+  platform: Platform
+  isPrivate: boolean
+  description?: string
+  categories?: string[]
+  sourceCodeUrl?: string
+  demoUrl?: string
+}
+
+export type UploadProjectMediaPayload = {
+  attachmentIcon?: File
+  attachmentImages?: File[]
+  attachmentBanner?: File
 }
 // export type ProjectFormValues = {
 //   name: string

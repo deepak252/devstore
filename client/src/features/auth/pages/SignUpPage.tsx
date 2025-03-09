@@ -9,7 +9,7 @@ import CheckCicleIcon from '@/assets/icons/check-circle.svg?react'
 import VisibilityOnIcon from '@/assets/icons/visibility-on.svg?react'
 import VisibilityOffIcon from '@/assets/icons/visibility-off.svg?react'
 import { checkUsername, resetAuthState, signUp } from '../authSlice'
-import { useAppDispatch, useAppSelector } from '@/hooks'
+import { useAppDispatch, useAppSelector, useFormikErrors } from '@/hooks'
 import { validateSignUpForm } from '../authUtil'
 import { SignUpFormError, SignUpFormValues } from '../auth.types'
 import _ from 'lodash'
@@ -30,29 +30,13 @@ function SignUpPage() {
     initialValues: { email: '', username: '', password: '' },
     validate: validateSignUpForm,
     onSubmit: (values) => {
-      console.log(values)
-
       if (errors.username || !usernameState.isAvailable) return
       dispatch(signUp(values))
     },
   })
   const isPasswordVisible = formik.values.isPasswordVisible
 
-  const errors = useMemo(() => {
-    const e: SignUpFormError = {}
-    if (formik.touched.email && formik.errors.email) {
-      e.email = formik.errors.email
-    }
-    if (formik.touched.username && formik.errors.username) {
-      e.username = formik.errors.username
-    } else if (usernameState.error) {
-      e.username = usernameState.error
-    }
-    if (formik.touched.password && formik.errors.password) {
-      e.password = formik.errors.password
-    }
-    return e
-  }, [formik.touched, formik.errors, usernameState.error])
+  const errors = useFormikErrors<SignUpFormValues, SignUpFormError>(formik)
 
   useEffect(() => {
     //To reset username state

@@ -51,7 +51,6 @@ const makeRequest = async <T = any>(
   endpoint: string,
   { headers = {}, ...args }: RequestConfig = {}
 ): Promise<AxiosResponse<T> | undefined> => {
-  console.log(headers)
   headers = getAuthHeader(headers)
 
   return api
