@@ -8,14 +8,14 @@ interface CategoryModel extends Model<ICategory, object, ICategoryMethods> {
 
 const categorySchema = new Schema<ICategory, CategoryModel, ICategoryMethods>(
   {
-    platform: {
-      type: String,
-      enum: Object.values(Platform),
-      required: true
-    },
     name: {
       type: String,
-      required: true
+      required: true,
+      unique: true
+    },
+    platform: {
+      type: String,
+      enum: Object.values(Platform)
     }
   },
   {

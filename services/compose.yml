@@ -13,6 +13,7 @@ services:
       - IDENTITY_SERVICE_URL=http://identity-service:3001
       - PROJECT_SERVICE_URL=http://project-service:3002
       - UPLOAD_SERVICE_URL=http://upload-service:3003
+      - CONTENT_SERVICE_URL=http://content-service:3004
     depends_on:
       - redis
   
@@ -62,6 +63,24 @@ services:
       - REDIS_HOST=redis
       - RABBITMQ_URL=amqp://rabbitmq
       - PROJECT_SERVICE_URL=http://project-service:3002
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  content-service:
+    build: ./content-service
+    ports:
+      - 3004:3004
+    volumes:
+      - ./content-service:/app # Sync code with container
+      - /app/node_modules       # Ignore node_modules
+    env_file:
+      - ./content-service/.env
+    environment:
+      - REDIS_HOST=redis
+      - RABBITMQ_URL=amqp://rabbitmq
     depends_on:
       rabbitmq:
         condition: service_healthy

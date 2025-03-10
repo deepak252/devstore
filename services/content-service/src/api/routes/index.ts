@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import projectRouter from './metadataRoutes'
+import projectRouter from './categoryRoutes'
 import { ResponseSuccess } from '../utils/ApiResponse'
 
 const router = Router()

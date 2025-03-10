@@ -11,5 +11,6 @@ export const {
   IDENTITY_SERVICE_URL = 'http://localhost:3001',
   PROJECT_SERVICE_URL = 'http://localhost:3002',
   UPLOAD_SERVICE_URL = 'http://localhost:3003',
+  CONTENT_SERVICE_URL = 'http://localhost:3004',
   ACCESS_TOKEN_SECRET = 'STOREDEVACESSSECRETJWT12349876'
 } = process.env
