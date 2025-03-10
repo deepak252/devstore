@@ -16,9 +16,6 @@ const WebsiteTile = ({ id, name, imgUrl, username }: WebsiteTilePropTypes) => {
     <div>
       <Link
         to={`/websites/${id}`}
-        onClick={(e) => {
-          e.preventDefault()
-        }}
         className="relative block aspect-[1.3] overflow-hidden bg-white rounded-lg"
       >
         <img
@@ -40,6 +37,7 @@ const WebsiteTile = ({ id, name, imgUrl, username }: WebsiteTilePropTypes) => {
               <button
                 onClick={(e) => {
                   e.stopPropagation()
+                  e.preventDefault()
                 }}
               >
                 <ShareIcon className="size-10 bg-white rounded-full p-2.5 " />

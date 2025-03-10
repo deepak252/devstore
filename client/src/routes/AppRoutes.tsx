@@ -8,10 +8,13 @@ const AppsPage = lazy(() => import('@/features/apps/pages/AppsPage'))
 const WebsitesPage = lazy(
   () => import('@/features/websites/pages/WebsitesPage')
 )
+const WebsiteDetailsPage = lazy(
+  () => import('@/features/websites/pages/WebsiteDetailsPage')
+)
 const HomePage = lazy(() => import('@/pages/HomePage'))
 const PageNotFound = lazy(() => import('@/pages/PageNotFound'))
 
-const routes = [
+const routes: RouteObject[] = [
   {
     path: '/',
     element: <RootLayout />,
@@ -30,7 +33,16 @@ const routes = [
           },
           {
             path: 'websites',
-            element: <WebsitesPage />,
+            children: [
+              {
+                path: '',
+                element: <WebsitesPage />,
+              },
+              {
+                path: ':projectId',
+                element: <WebsiteDetailsPage />,
+              },
+            ],
           },
         ],
       },
