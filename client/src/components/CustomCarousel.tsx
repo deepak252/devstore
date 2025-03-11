@@ -4,6 +4,7 @@ import ForwardIcon from '@/assets/icons/forward.svg?react'
 import BackwardIcon from '@/assets/icons/backward.svg?react'
 import { useCallback, useMemo } from 'react'
 import { useWindowDimensions } from '@/hooks'
+import classNames from 'classnames'
 
 const images = [
   'https://images.unsplash.com/photo-1579353977828-2a4eab540b9a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2FtcGxlfGVufDB8fDB8fHww',
@@ -16,12 +17,23 @@ const images = [
 
 type CustomCarouselProps = {
   itemWidth?: number
+  itemClassName?: string
+  autoPlay?: boolean
 }
-export default function CustomCarousel({ itemWidth }: CustomCarouselProps) {
+export default function CustomCarousel({
+  itemWidth,
+  autoPlay = true,
+  itemClassName,
+}: CustomCarouselProps) {
+  const plugins = useMemo(() => {
+    return autoPlay ? [Autoplay({ stopOnInteraction: false })] : []
+  }, [autoPlay])
+
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, dragFree: false },
-    [Autoplay({ playOnInit: true, stopOnInteraction: false })]
+    plugins
   )
+
   const { width } = useWindowDimensions()
 
   const flexWidth = useMemo(() => {
@@ -47,7 +59,10 @@ export default function CustomCarousel({ itemWidth }: CustomCarouselProps) {
               <img
                 src={src}
                 alt={`Slide ${index}`}
-                className="w-full object-cover rounded-lg h-52 sm:h-56 md:h-60"
+                className={classNames(
+                  'w-full object-cover rounded-lg h-52 sm:h-56 md:h-60',
+                  itemClassName
+                )}
               />
             </div>
           ))}

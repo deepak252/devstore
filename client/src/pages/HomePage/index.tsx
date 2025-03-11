@@ -7,6 +7,7 @@ function HomePage() {
   return (
     <div className="p-6">
       <Introduction />
+      <div className="mt-10" />
       <GridView heading="Featured Apps" horizontalScroll>
         {appsList.map((item) => (
           <FeaturedTile

@@ -5,16 +5,7 @@ import { SignInFormValues, SignUpFormValues } from './auth.types'
 
 type AuthState = {
   isAuthenticated?: boolean
-  signIn: {
-    isLoading: boolean
-  }
-  signUp: {
-    isLoading: boolean
-  }
-  signOut: {
-    isLoading: boolean
-  }
-
+  isLoading?: boolean
   username: {
     value?: string
     isAvailable?: boolean
@@ -25,15 +16,6 @@ type AuthState = {
 }
 
 const initialState: AuthState = {
-  signIn: {
-    isLoading: false,
-  },
-  signUp: {
-    isLoading: false,
-  },
-  signOut: {
-    isLoading: false,
-  },
   username: {
     value: '',
     isAvailable: false,
@@ -47,14 +29,14 @@ const authSlice = createSlice({
   reducers: {
     // Sign In
     signIn: (state, _: PayloadAction<SignInFormValues>) => {
-      state.signIn.isLoading = true
+      state.isLoading = true
     },
     signInSuccess: (state) => {
-      state.signIn.isLoading = false
+      state.isLoading = false
       state.isAuthenticated = true
     },
     signInFailure: (state, action) => {
-      state.signIn.isLoading = false
+      state.isLoading = false
       state.toastData = {
         type: 'failure',
         message: action.payload,
@@ -63,14 +45,14 @@ const authSlice = createSlice({
 
     // Sign Up
     signUp: (state, _: PayloadAction<SignUpFormValues>) => {
-      state.signUp.isLoading = true
+      state.isLoading = true
     },
     signUpSuccess: (state) => {
-      state.signUp.isLoading = false
+      state.isLoading = false
       state.isAuthenticated = true
     },
     signUpFailure: (state, action) => {
-      state.signUp.isLoading = false
+      state.isLoading = false
       state.toastData = {
         type: 'failure',
         message: action.payload,
@@ -79,14 +61,14 @@ const authSlice = createSlice({
 
     // Sign Out
     signOut: (state) => {
-      state.signOut.isLoading = true
+      state.isLoading = true
     },
     signOutSuccess: (state) => {
-      state.signOut.isLoading = false
+      state.isLoading = false
       state.isAuthenticated = false
     },
     signOutFailure: (state) => {
-      state.signOut.isLoading = false
+      state.isLoading = false
     },
 
     // Check username available

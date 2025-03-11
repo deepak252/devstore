@@ -1,4 +1,3 @@
-/// <reference types="vite-plugin-svgr/client" />
 import { useEffect } from 'react'
 import AppRoutes from './routes/AppRoutes'
 import { setupInterceptor } from './services/api'
@@ -19,7 +18,7 @@ function App() {
       dispatch(getProfile())
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [isSignedIn])
 
   return (
     <>

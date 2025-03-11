@@ -1,10 +1,22 @@
+import { Link } from 'react-router-dom'
 import { useRef } from 'react'
+import CustomCarousel from '@/components/CustomCarousel'
 import AndroidImage from '@/assets/images/android.png'
 import IosImage from '@/assets/images/apple.png'
 import WebImage from '@/assets/images/web.png'
+import { useAuth } from '@/hooks'
 
 const Introduction = () => {
-  const endRef = useRef(null)
+  const bottomRef = useRef<HTMLDivElement>(null)
+  const isSignedIn = useAuth()
+
+  const handleExploreClick = () => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  if (isSignedIn) {
+    return <CustomCarousel />
+  }
   return (
     <div className="">
       <div className="flex items-center max-lg:block">
@@ -39,10 +51,17 @@ const Introduction = () => {
         </div>
       </div>
       <div className="flex-center mt-8">
-        <button className="btn-filled m-2 px-7 py-4">Get Started</button>
-        <button className="btn-outlined m-2 px-7 py-4">Explore</button>
+        <Link to="/auth/sign-in" className="btn-filled m-2 px-7 py-4">
+          Get Started
+        </Link>
+        <button
+          onClick={handleExploreClick}
+          className="btn-outlined m-2 px-7 py-4"
+        >
+          Explore
+        </button>
       </div>
-      <div ref={endRef}></div>
+      <div ref={bottomRef}></div>
       <hr className="my-16" />
     </div>
   )

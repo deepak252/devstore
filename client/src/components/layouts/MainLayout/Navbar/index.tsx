@@ -10,7 +10,7 @@ import NavOptions from './NavOptions'
 import SearchField from './SearchField'
 import {
   useAppDispatch,
-  useAppSelector,
+  useAuth,
   useNavigateWithState,
   useWindowDimensions,
 } from '@/hooks'
@@ -20,7 +20,8 @@ const Navbar = () => {
   const { width } = useWindowDimensions()
   const dispatch = useAppDispatch()
   const navigate = useNavigateWithState()
-  const userProfile = useAppSelector((state) => state.user.profile)
+  const isSignedIn = useAuth()
+  // const userProfile = useAppSelector((state) => state.user.profile)
   const isMdScreen = width < 768 // 992px
 
   const handleOptionSelect = (options: DropdownOption[]) => {
@@ -38,7 +39,7 @@ const Navbar = () => {
     }
   }
 
-  const options = userProfile.data
+  const options = isSignedIn
     ? [
         {
           label: 'Profile',
