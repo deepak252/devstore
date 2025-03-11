@@ -48,7 +48,11 @@ const Toast = ({
             {message}
           </p>
           <div>
-            <CloseIcon role="button" onClick={handleCloseToast} />
+            <CloseIcon
+              role="button"
+              className="fill-white"
+              onClick={handleCloseToast}
+            />
           </div>
         </div>
       )}
