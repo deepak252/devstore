@@ -1,13 +1,25 @@
 import Joi from 'joi'
 import { ICategory } from '../../types/category.types'
 import { Platform } from '../../constants/enums'
+import { IBanner } from '../../types/banner.types'
 
 const nameSchema = Joi.string().min(3).max(40)
 const platformSchema = Joi.string().valid(...Object.values(Platform))
+const imgUrlSchema = Joi.string().uri()
+const redirectUrlSchema = Joi.string().uri()
 
 export const validateCreateCategory = (values: Partial<ICategory>) => {
   const schema = Joi.object({
     name: nameSchema.required(),
+    platform: platformSchema.optional()
+  })
+  return schema.validate(values, { stripUnknown: true })
+}
+
+export const validateCreateBanner = (values: Partial<IBanner>) => {
+  const schema = Joi.object({
+    imgUrl: imgUrlSchema.required(),
+    redirectUrl: redirectUrlSchema.required(),
     platform: platformSchema.optional()
   })
   return schema.validate(values, { stripUnknown: true })
