@@ -67,12 +67,12 @@ export const signInUser = asyncHandler(async (req, _) => {
   )
 })
 
-export const signOutUser = asyncHandler(async (req, _) => {
-  const { refreshToken } = req.body
+export const signOutUser = asyncHandler(async (__, _) => {
+  // const { refreshToken } = req.body
 
-  if (!refreshToken) {
-    throw new ApiError('Refresh token missing')
-  }
+  // if (!refreshToken) {
+  //   throw new ApiError('Refresh token missing')
+  // }
   // let user = await User.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
 
   // if (!user || !(await user.comparePassword(password))) {
@@ -83,5 +83,5 @@ export const signOutUser = asyncHandler(async (req, _) => {
 
   // user = await user.save()
 
-  return new ResponseSuccess('Logout successful', 201)
+  return new ResponseSuccess('Sign out successful', 201)
 })
