@@ -4,7 +4,7 @@ import { setupInterceptor } from './services/api'
 import { useAppDispatch, useAuth } from './hooks'
 import useNavigateWithState from './hooks/useNavigateWithState'
 import { getProfile } from './features/user/userSlice'
-// import { getMetadata } from './slices/metadataSlice'
+import { getMetadata } from './features/metadata/metadataSlice'
 
 function App() {
   const navigate = useNavigateWithState()
@@ -13,12 +13,17 @@ function App() {
 
   useEffect(() => {
     setupInterceptor(navigate)
-    // dispatch(getMetadata())
+
     if (isSignedIn) {
       dispatch(getProfile())
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSignedIn])
+
+  useEffect(() => {
+    dispatch(getMetadata())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>
