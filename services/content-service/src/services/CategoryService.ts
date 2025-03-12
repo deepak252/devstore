@@ -1,13 +1,12 @@
+import { redisClient } from '../config/redis'
 import { Platform } from '../constants/enums'
 import Category from '../models/Category'
 
 export default class CategoryService {
-  // static invalidateMetadataCache = async (platform: Platform) => {
-  //   const keys = await redisClient.keys(`${projectType}s:*`)
-  //   if (keys.length) {
-  //     await redisClient.del(keys)
-  //   }
-  // }
+  static CACHE_KEY = 'content:categories'
+  static invalidateCategoryCache = async () => {
+    await redisClient.del(this.CACHE_KEY)
+  }
 
   static createCategory = async (name: string, platform?: Platform) => {
     const category = await Category.create({
@@ -15,20 +14,23 @@ export default class CategoryService {
       platform
     })
 
-    // await this.invalidateMetadataCache(platform)
+    await this.invalidateCategoryCache()
 
     return category
   }
 
   static getAllCategories = async () => {
-    // const cacheKey = `project:${projectId}`
-    // const cachedProject = await redisClient.get(cacheKey)
-    // if (cachedProject) {
-    //   return JSON.parse(cachedProject)
-    // }
-    const categories = await Category.find()
+    const cachedCategories = await redisClient.get(this.CACHE_KEY)
+    if (cachedCategories) {
+      return JSON.parse(cachedCategories)
+    }
+    const categories = await Category.find().select('_id, name')
     if (categories) {
-      // await redisClient.setex(cacheKey, 3600, JSON.stringify(post))
+      await redisClient.setex(
+        this.CACHE_KEY,
+        24 * 3600,
+        JSON.stringify(categories)
+      )
       return categories
     }
   }

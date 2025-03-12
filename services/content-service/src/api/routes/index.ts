@@ -1,5 +1,7 @@
 import { Router } from 'express'
-import projectRouter from './categoryRoutes'
+import categoryRouter from './categoryRoutes'
+import metadataRouter from './metadataRoutes'
+import bannerRouter from './bannerRoutes'
 import { ResponseSuccess } from '../utils/ApiResponse'
 
 const router = Router()
@@ -16,6 +18,8 @@ router.get('/', (req, res) => {
   res.json(new ResponseSuccess('Content Service is Up'))
 })
 
-router.use('/content', projectRouter)
+router.use('/content/categories', categoryRouter)
+router.use('/content/banners', bannerRouter)
+router.use('/content/metadata', metadataRouter)
 
 export default router

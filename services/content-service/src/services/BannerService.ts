@@ -2,10 +2,17 @@ import { Platform } from '../constants/enums'
 import Banner from '../models/Banner'
 
 export default class BannerService {
-  static createBanner = async (name: string, platform?: Platform) => {
+  static createBanner = async (
+    imgUrl: string,
+    redirectUrl: string,
+    platform?: Platform,
+    ref?: string
+  ) => {
     const banner = await Banner.create({
-      name,
-      platform
+      imgUrl,
+      redirectUrl,
+      platform,
+      ref
     })
 
     return banner
