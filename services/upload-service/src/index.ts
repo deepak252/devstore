@@ -4,13 +4,13 @@ import { connectDB } from './config/db.js'
 import app from './app.js'
 import logger from './utils/logger.js'
 import { connectRabbitMQ } from './config/rabbitmq.js'
-import { deleteRemoteFileWorker } from './workers/remoteFileWorker.js'
+import { deleteRemoteFileConsumer } from './events/consumer.js'
 
 connectDB()
   .then(async () => {
     const httpServer = createServer(app)
     await connectRabbitMQ()
-    await deleteRemoteFileWorker()
+    await deleteRemoteFileConsumer()
     httpServer.listen(SERVER_PORT, () => {
       logger.info(`🚀 Upload Service is running on PORT : ${SERVER_PORT}`)
     })

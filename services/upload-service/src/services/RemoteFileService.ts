@@ -1,5 +1,4 @@
 import { S3_MEDIA_BUCKET } from '../config/env'
-import { channel } from '../config/rabbitmq'
 import RemoteFile from '../models/RemoteFile'
 import logger from '../utils/logger'
 import { S3Service } from './S3Service'
@@ -67,38 +66,5 @@ export default class RemoteFileService {
       await this.deleteSingleFile(mediaId)
     }
     return true
-  }
-
-  static publishUpdateProjectMediaEvent = async ({
-    projectId,
-    userId,
-    mediaIds
-  }: {
-    projectId: string
-    userId: string
-    mediaIds: string[]
-  }) => {
-    if (!mediaIds.length) {
-      return
-    }
-    if (!channel) {
-      return
-    }
-    const exchange = 'media.direct'
-    const routingKey = 'media.delete'
-    await channel.assertExchange(exchange, 'direct', { durable: false })
-
-    channel.publish(
-      exchange,
-      routingKey,
-      Buffer.from(
-        JSON.stringify({
-          projectId,
-          userId,
-          mediaIds
-        })
-      )
-    )
-    logger.info(`Event published: ${routingKey}, ${mediaIds}`)
   }
 }

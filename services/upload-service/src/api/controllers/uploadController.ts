@@ -6,7 +6,7 @@ import RemoteFile from '../../models/RemoteFile'
 import RemoteFileService from '../../services/RemoteFileService'
 import { S3_APPLICATION_BUCKET, S3_MEDIA_BUCKET } from '../../config/env'
 import { removeFile, removeFiles } from '../../utils/fileUtil'
-import UploadService from '../../services/UploadService'
+import { publishProjectMediaUploadEvent } from '../../events/publisher'
 
 export const uploadApplication = asyncHandler(async (req, _) => {
   try {
@@ -94,7 +94,7 @@ export const uploadProjectMedia = asyncHandler(async (req, res) => {
       )
       data.banner = uploadResult?.id
     }
-    await UploadService.publishUpdateProjectMediaEvent({
+    await publishProjectMediaUploadEvent({
       projectId,
       userId,
       data

@@ -2,15 +2,18 @@ import { channel } from '../config/rabbitmq'
 import RemoteFileService from '../services/RemoteFileService'
 import logger from '../utils/logger'
 
-export const deleteRemoteFileWorker = async () => {
+export const deleteRemoteFileConsumer = async () => {
   if (!channel) {
     return
   }
-  const exchange = 'remotefile.direct'
+  // exchange: upload.events
+  // routing : project.media.uploaded
+  // queue   : project.queue
+  const exchange = 'remotefile'
   const bindingKey = 'remotefile.delete'
   const queue = 'remotefile.queue'
 
-  await channel.assertExchange(exchange, 'direct', { durable: false })
+  await channel.assertExchange(exchange, 'topic', { durable: false })
   await channel.assertQueue(queue, { durable: false })
 
   await channel.bindQueue(queue, exchange, bindingKey)

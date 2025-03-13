@@ -2,15 +2,15 @@ import { channel } from '../config/rabbitmq'
 import ProjectService from '../services/ProjectService'
 import logger from '../utils/logger'
 
-export const updateProjectWorker = async () => {
+export const updateProjectConsumer = async () => {
   if (!channel) {
     return
   }
-  const exchange = 'project.direct'
+  const exchange = 'upload.events'
   const queue = 'project.queue'
-  const bindingKey = 'project.update'
+  const bindingKey = 'project.media.uploaded'
 
-  await channel.assertExchange(exchange, 'direct', { durable: false })
+  await channel.assertExchange(exchange, 'topic', { durable: false })
   await channel.assertQueue(queue, { durable: false })
 
   await channel.bindQueue(queue, exchange, bindingKey)
