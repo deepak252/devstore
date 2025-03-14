@@ -33,9 +33,6 @@ export const deleteRemoteFileConsumer = async () => {
           ...(content.project?.images ?? [])
         ])
       }
-      // if (content.postId) {
-      //   await RemoteFileService.deleteMultipleFiles(content.fileIds)
-      // }
       channel?.ack(msg)
     }
   })

@@ -1,6 +1,7 @@
 import { validateCreateProject } from '../api/utils/validation'
 import { redisClient } from '../config/redis'
-import { Platform, Status } from '../constants/enums'
+import { Platform } from '../constants/enums'
+import { publishEvent } from '../events/producer'
 import Project from '../models/Project'
 import { IProject } from '../types/project.types'
 
@@ -112,43 +113,15 @@ export default class ProjectService {
     }
     Object.assign(project, values)
     const { error } = validateCreateProject(project)
-    project.status = error ? Status.Pending : Status.Completed
+    if (error) {
+      project.active = false
+    } else {
+      project.active = true
+      publishEvent('project.updated', JSON.stringify(project.toJSON()))
+    }
 
     await project?.save()
 
     return project
   }
-
-  // static publishDeleteMediaEvent = async ({
-  //   postId,
-  //   userId,
-  //   mediaIds
-  // }: {
-  //   postId: string
-  //   userId: string
-  //   mediaIds: string[]
-  // }) => {
-  //   if (!mediaIds.length) {
-  //     return
-  //   }
-  //   if (!channel) {
-  //     return
-  //   }
-  //   const exchange = 'media.direct'
-  //   const routingKey = 'media.delete'
-  //   await channel.assertExchange(exchange, 'direct', { durable: false })
-
-  //   channel.publish(
-  //     exchange,
-  //     routingKey,
-  //     Buffer.from(
-  //       JSON.stringify({
-  //         postId,
-  //         userId,
-  //         mediaIds
-  //       })
-  //     )
-  //   )
-  //   logger.info(`Event published: ${routingKey}, ${mediaIds}`)
-  // }
 }

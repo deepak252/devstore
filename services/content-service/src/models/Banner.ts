@@ -8,10 +8,17 @@ interface BannerModel extends Model<IBanner, object, IBannerMethods> {
 
 const bannerSchema = new Schema<IBanner, BannerModel, IBannerMethods>(
   {
-    imgUrl: {
-      type: String,
+    img: {
+      type: Schema.Types.ObjectId,
       required: true,
-      unique: true
+      unique: true,
+      ref: 'RemoteFile'
+    },
+    project: {
+      type: Schema.Types.ObjectId,
+      unique: true,
+      required: true,
+      ref: 'Project'
     },
     redirectUrl: {
       type: String,
@@ -22,8 +29,9 @@ const bannerSchema = new Schema<IBanner, BannerModel, IBannerMethods>(
       type: String,
       enum: Object.values(Platform)
     },
-    ref: {
-      type: Schema.Types.ObjectId
+    active: {
+      type: Boolean,
+      default: false
     }
   },
   {

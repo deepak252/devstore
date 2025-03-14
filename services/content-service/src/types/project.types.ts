@@ -1,10 +1,8 @@
 import { Schema } from 'mongoose'
 import { Platform } from '../constants/enums'
 
-// export type ProjectType = 'app' | 'website' | 'game'
-// export type Platform = 'android' | 'ios'
-
 export interface IProject {
+  _id: string
   platform: Platform
   name: string
   owner: Schema.Types.ObjectId
@@ -42,9 +40,4 @@ export interface IProject {
 
   createdAt: Date
   updatedAt: Date
-}
-
-export interface IProjectMethods {
-  test: () => void
-  //
 }

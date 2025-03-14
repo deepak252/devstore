@@ -1,7 +1,7 @@
 import { channel } from '../config/rabbitmq'
 import logger from '../utils/logger'
 
-type RoutingKey = 'project.deleted' | 'project.updated'
+type RoutingKey = 'content.banner.deleted' | 'content.category.deleted'
 
 export const publishEvent = async (routingKey: RoutingKey, data: string) => {
   if (!data) {
@@ -10,7 +10,7 @@ export const publishEvent = async (routingKey: RoutingKey, data: string) => {
   if (!channel) {
     return
   }
-  const exchange = 'project.events'
+  const exchange = 'content.events'
   await channel.assertExchange(exchange, 'topic', { durable: false })
 
   channel.publish(exchange, routingKey, Buffer.from(data))

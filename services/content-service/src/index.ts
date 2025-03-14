@@ -4,12 +4,14 @@ import { connectDB } from './config/db.js'
 import app from './app.js'
 import logger from './utils/logger.js'
 import { connectRabbitMQ } from './config/rabbitmq.js'
+import { updateBannerConsumer } from './events/consumer.js'
 
 connectDB()
-  .then(() => {
+  .then(async () => {
     const httpServer = createServer(app)
 
-    connectRabbitMQ()
+    await connectRabbitMQ()
+    await updateBannerConsumer()
 
     httpServer.listen(SERVER_PORT, () => {
       logger.info(`🚀 Content Service is running on PORT : ${SERVER_PORT}`)

@@ -5,7 +5,7 @@ import { IBanner } from '../../types/banner.types'
 
 const nameSchema = Joi.string().min(3).max(40)
 const platformSchema = Joi.string().valid(...Object.values(Platform))
-const imgUrlSchema = Joi.string().uri()
+const imgSchema = Joi.string()
 const redirectUrlSchema = Joi.string().uri()
 
 export const validateCreateCategory = (values: Partial<ICategory>) => {
@@ -18,7 +18,7 @@ export const validateCreateCategory = (values: Partial<ICategory>) => {
 
 export const validateCreateBanner = (values: Partial<IBanner>) => {
   const schema = Joi.object({
-    imgUrl: imgUrlSchema.required(),
+    img: imgSchema.required(),
     redirectUrl: redirectUrlSchema.required(),
     platform: platformSchema.optional()
   })

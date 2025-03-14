@@ -9,10 +9,10 @@ export const createBanner = asyncHandler(async (req, _) => {
   if (error) {
     throw new ApiError(error.details[0].message)
   }
-  const { imgUrl, redirectUrl, platform, ref } = req.body
+  const { img, redirectUrl, platform, ref } = req.body
 
   const category = await BannerService.createBanner(
-    imgUrl,
+    img,
     redirectUrl,
     platform,
     ref

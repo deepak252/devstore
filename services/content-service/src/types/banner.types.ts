@@ -1,10 +1,12 @@
+import { Schema } from 'mongoose'
 import { Platform } from '../constants/enums'
 
 export interface IBanner {
-  imgUrl: string
+  img: Schema.Types.ObjectId
+  project: Schema.Types.ObjectId
   redirectUrl: string
+  active?: boolean
   platform?: Platform
-  ref?: string
   createdAt: Date
   updatedAt: Date
 }
