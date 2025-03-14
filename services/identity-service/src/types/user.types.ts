@@ -3,7 +3,7 @@ export interface IUser {
   fullname: string
   email: string
   password: string
-  imgUrl?: string
+  img?: string
   phone?: string
   headline?: string
   bio?: string

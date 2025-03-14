@@ -8,6 +8,6 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3004
+EXPOSE 3004 9224
 
 CMD ["npm", "run", "dev"]

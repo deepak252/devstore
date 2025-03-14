@@ -54,9 +54,9 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
     bio: {
       type: String
     },
-    // imgUrl: {
-    //   type: remoteFileSchema
-    // },
+    img: {
+      type: String
+    },
     password: {
       type: String,
       trim: true,

@@ -43,20 +43,6 @@ export class S3Service {
         key: fileKey,
         location: `${SUPABASE_PROJECT_URL}/storage/v1/object/public/${this.bucket}/${fileKey}`
       }
-
-      //   const uploadParams = {
-      //     Bucket: this.bucket,
-      //     Key: fileKey,
-      //     Body: fileStream,
-      //     ContentType: file.mimetype
-      //   }
-
-      //   await s3Client.send(new PutObjectCommand(uploadParams))
-      //   return {
-      //     message: 'File uploaded successfully',
-      //     key: fileKey,
-      //     location: `https://${this.bucket}.s3.${S3_REGION}.amazonaws.com/${fileKey}`
-      //   }
     } catch (e) {
       logger.error('Error upload to S3', e)
     }

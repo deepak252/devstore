@@ -19,9 +19,9 @@ export const updateProjectConsumer = async () => {
     try {
       if (msg?.content) {
         const content = JSON.parse(msg.content.toString())
-        const { projectId, userId, data } = content
+        const { projectId, userId, media } = content
         logger.info(`Event recieved: ${bindingKey}, ${msg?.content}`)
-        await ProjectService.updateProject(projectId, userId, data)
+        await ProjectService.updateProject(projectId, userId, media)
         channel?.ack(msg)
       }
     } catch (e: any) {

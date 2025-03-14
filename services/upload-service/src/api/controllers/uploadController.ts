@@ -6,7 +6,7 @@ import RemoteFile from '../../models/RemoteFile'
 import RemoteFileService from '../../services/RemoteFileService'
 import { S3_APPLICATION_BUCKET, S3_MEDIA_BUCKET } from '../../config/env'
 import { removeFile, removeFiles } from '../../utils/fileUtil'
-import { publishProjectMediaUploadEvent } from '../../events/publisher'
+import { publishEvent } from '../../events/producer'
 
 export const uploadApplication = asyncHandler(async (req, _) => {
   try {
@@ -65,7 +65,7 @@ export const uploadProjectMedia = asyncHandler(async (req, res) => {
         new ResponseSuccess('Processing project media files', undefined, 201)
       )
 
-    const data: { icon?: any; images?: any; banner?: any } = {}
+    const media: { icon?: any; images?: any; banner?: any } = {}
 
     if (attachmentIcon.length) {
       const uploadResult = await RemoteFileService.uploadMedia(
@@ -73,17 +73,17 @@ export const uploadProjectMedia = asyncHandler(async (req, res) => {
         userId,
         projectId
       )
-      data.icon = uploadResult?.id
+      media.icon = uploadResult?.id
     }
     if (attachmentImages.length) {
-      data.images = []
+      media.images = []
       for (const attchImg of attachmentImages) {
         const uploadResult = await RemoteFileService.uploadMedia(
           attchImg,
           userId,
           projectId
         )
-        data.images.push(uploadResult?.id)
+        media.images.push(uploadResult?.id)
       }
     }
     if (attachmentBanner.length) {
@@ -92,13 +92,16 @@ export const uploadProjectMedia = asyncHandler(async (req, res) => {
         userId,
         projectId
       )
-      data.banner = uploadResult?.id
+      media.banner = uploadResult?.id
     }
-    await publishProjectMediaUploadEvent({
-      projectId,
-      userId,
-      data
-    })
+    await publishEvent(
+      'project.media.uploaded',
+      JSON.stringify({
+        projectId,
+        userId,
+        media
+      })
+    )
   } finally {
     removeFiles([
       ...attachmentIcon.map((e: Express.Multer.File) => e.path),

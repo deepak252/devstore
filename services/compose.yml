@@ -3,11 +3,12 @@ services:
     build: ./api-gateway
     ports:
       - 3000:3000
+      - 9220:9220
     volumes:
       - ./api-gateway:/app # Sync code with container
-      - /app/node_modules       # Ignore node_modules
+      - /app/node_modules # Ignore node_modules
     env_file:
-      - ./api-gateway/.env  
+      - ./api-gateway/.env
     environment:
       - REDIS_HOST=redis
       - IDENTITY_SERVICE_URL=http://identity-service:3001
@@ -16,15 +17,15 @@ services:
       - CONTENT_SERVICE_URL=http://content-service:3004
     depends_on:
       - redis
-  
 
   identity-service:
     build: ./identity-service
     ports:
       - 3001:3001
+      - 9221:9221
     volumes:
       - ./identity-service:/app # Sync code with container
-      - /app/node_modules       # Ignore node_modules
+      - /app/node_modules # Ignore node_modules
     env_file:
       - ./identity-service/.env
     environment:
@@ -36,9 +37,10 @@ services:
     build: ./project-service
     ports:
       - 3002:3002
+      - 9222:9222
     volumes:
       - ./project-service:/app # Sync code with container
-      - /app/node_modules       # Ignore node_modules
+      - /app/node_modules # Ignore node_modules
     env_file:
       - ./project-service/.env
     environment:
@@ -49,14 +51,15 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
-  
+
   upload-service:
     build: ./upload-service
     ports:
       - 3003:3003
+      - 9223:9223
     volumes:
       - ./upload-service:/app # Sync code with container
-      - /app/node_modules       # Ignore node_modules
+      - /app/node_modules # Ignore node_modules
     env_file:
       - ./upload-service/.env
     environment:
@@ -73,9 +76,10 @@ services:
     build: ./content-service
     ports:
       - 3004:3004
+      - 9224:9224
     volumes:
       - ./content-service:/app # Sync code with container
-      - /app/node_modules       # Ignore node_modules
+      - /app/node_modules # Ignore node_modules
     env_file:
       - ./content-service/.env
     environment:
@@ -92,13 +96,13 @@ services:
     ports:
       - 6379:6379
 
-  rabbitmq: 
+  rabbitmq:
     image: rabbitmq:management
     ports:
       - 5672:5672
       - 15672:15672
     healthcheck:
-      test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 6s
       timeout: 3s
       retries: 5

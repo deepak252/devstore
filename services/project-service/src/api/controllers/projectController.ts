@@ -8,6 +8,7 @@ import asyncHandler from '../utils/asyncHandler'
 import ProjectService from '../../services/ProjectService'
 import Project from '../../models/Project'
 import { Platform } from '../../constants/enums'
+import { publishEvent } from '../../events/producer'
 
 export const createProject = asyncHandler(async (req, _) => {
   const { error } = validateCreateProject(req.body)
@@ -103,6 +104,12 @@ export const deleteProject = asyncHandler(async (req, _) => {
   if (!result) {
     throw new ApiError('Project not found', 404)
   }
+  await publishEvent(
+    'project.deleted',
+    JSON.stringify({
+      project: result
+    })
+  )
   return new ResponseSuccess('Project deleted successfully', result)
 })
 

@@ -10,7 +10,7 @@ export default class RemoteFileService {
     parentId?: string
   ) => {
     const s3Service = new S3Service(S3_MEDIA_BUCKET)
-    const uploadResult = await s3Service.uploadToS3(file)
+    const uploadResult = await s3Service.uploadToS3(file, userId)
     if (uploadResult) {
       const remoteFile = await RemoteFile.create({
         publicId: uploadResult?.key,
@@ -49,12 +49,13 @@ export default class RemoteFileService {
   }
 
   static deleteSingleFile = async (mediaId: string) => {
-    const s3Service = new S3Service('uploads')
+    if (!mediaId) return
 
     const media = await RemoteFile.findOneAndDelete({
       _id: mediaId
     })
     if (media) {
+      const s3Service = new S3Service(media.bucketName)
       await s3Service.deleteFromS3(media.publicId)
       logger.info(`Remote file deleted successfully: ${mediaId}`)
     }
@@ -62,6 +63,7 @@ export default class RemoteFileService {
   }
 
   static deleteMultipleFiles = async (mediaIds: string[]) => {
+    logger.info('deleteMultipleFiles', mediaIds)
     for (const mediaId of mediaIds) {
       await this.deleteSingleFile(mediaId)
     }
