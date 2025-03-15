@@ -6,12 +6,13 @@ import GithubIcon from '@/assets/icons/github.svg?react'
 import VisibilityOnIcon from '@/assets/icons/visibility-on.svg?react'
 import VisibilityOffIcon from '@/assets/icons/visibility-off.svg?react'
 import { signIn } from '../authSlice'
-import { useAppDispatch, useFormikErrors } from '@/hooks'
+import { useAppDispatch, useAppSelector, useFormikErrors } from '@/hooks'
 import { validateSignInForm } from '../authUtil'
 import { SignInFormError, SignInFormValues } from '../auth.types'
 
 function SignInPage() {
   const dispatch = useAppDispatch()
+  const isLoading = useAppSelector((state) => state.auth.isLoading)
 
   const formik = useFormik<SignInFormValues>({
     initialValues: { usernameOrEmail: '', password: '' },
@@ -94,7 +95,11 @@ function SignInPage() {
             Forgot Password?
           </Link>
         </p>
-        <button type="submit" className="btn-filled w-full my-5">
+        <button
+          type="submit"
+          className="btn-filled w-full my-5"
+          disabled={isLoading}
+        >
           Log In
         </button>
       </form>

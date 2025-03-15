@@ -1,10 +1,10 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import classNames from 'classnames'
 import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
 import ForwardIcon from '@/assets/icons/forward.svg?react'
 import BackwardIcon from '@/assets/icons/backward.svg?react'
-import { useCallback, useMemo } from 'react'
 import { useWindowDimensions } from '@/hooks'
-import classNames from 'classnames'
 
 const images = [
   'https://images.unsplash.com/photo-1579353977828-2a4eab540b9a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2FtcGxlfGVufDB8fDB8fHww',
@@ -19,10 +19,14 @@ type CustomCarouselProps = {
   itemWidth?: number
   itemClassName?: string
   autoPlay?: boolean
+  loop?: boolean
+  dragFree?: boolean
 }
 export default function CustomCarousel({
   itemWidth,
   autoPlay = true,
+  loop = true,
+  dragFree = false,
   itemClassName,
 }: CustomCarouselProps) {
   const plugins = useMemo(() => {
@@ -30,7 +34,7 @@ export default function CustomCarousel({
   }, [autoPlay])
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true, dragFree: false },
+    { loop: loop, dragFree: dragFree },
     plugins
   )
 
@@ -43,8 +47,38 @@ export default function CustomCarousel({
     return 50
   }, [width])
 
+  const [canScroll, setCanScroll] = useState({
+    next: true,
+    prev: true,
+  })
+
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi])
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi])
+
+  useEffect(() => {
+    if (!emblaApi) return
+
+    const checkScroll = () => {
+      const prev = emblaApi.canScrollPrev()
+      const next = emblaApi.canScrollNext()
+      setCanScroll((curr) => {
+        if (curr.prev == prev && curr.next == next) {
+          return curr
+        }
+        return {
+          prev,
+          next,
+        }
+      })
+    }
+
+    emblaApi.on('select', checkScroll) // Update state on selection change
+    checkScroll() // Initial check
+
+    return () => {
+      emblaApi.off('select', checkScroll)
+    }
+  }, [emblaApi])
 
   return (
     <div className="relative w-full mx-auto">
@@ -70,18 +104,22 @@ export default function CustomCarousel({
       </div>
 
       {/* Navigation Buttons */}
-      <button
-        className="absolute left-2 top-1/2 -translate-y-1/2"
-        onClick={scrollPrev}
-      >
-        <BackwardIcon className="size-12 bg-black/40 p-3 rounded-full hover:bg-black/50" />
-      </button>
-      <button
-        className="absolute right-2 top-1/2 -translate-y-1/2"
-        onClick={scrollNext}
-      >
-        <ForwardIcon className="size-12 bg-black/40 p-3 rounded-full hover:bg-black/50" />
-      </button>
+      {canScroll.prev && (
+        <button
+          className="absolute left-2 top-1/2 -translate-y-1/2"
+          onClick={scrollPrev}
+        >
+          <BackwardIcon className="size-12 bg-black/40 p-3 rounded-full hover:bg-black/50" />
+        </button>
+      )}
+      {canScroll.next && (
+        <button
+          className="absolute right-2 top-1/2 -translate-y-1/2"
+          onClick={scrollNext}
+        >
+          <ForwardIcon className="size-12 bg-black/40 p-3 rounded-full hover:bg-black/50" />
+        </button>
+      )}
     </div>
   )
 }

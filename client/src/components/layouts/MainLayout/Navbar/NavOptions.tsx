@@ -7,7 +7,7 @@ const NavOptions = () => {
   const { pathname } = useLocation()
 
   return (
-    <div className="text-gray-700 flex-grow max-md:flex max-md:w-full max-md:justify-around">
+    <div className="text-gray-700 flex-grow max-md:order-3 max-md:flex max-md:w-full max-md:justify-around">
       {navItems.map((item) => (
         <Link
           key={item}

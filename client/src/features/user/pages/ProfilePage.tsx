@@ -1,19 +1,36 @@
 import { useAppSelector } from '@/hooks'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { Spinner } from '@/components/Loader'
+import PageNotFound from '@/pages/PageNotFound'
+import Introduction from '../components/profile/Introduction'
+import AboutMe from '../components/profile/AboutMe'
+import Projects from '../components/profile/Projects'
 
 function ProfilePage() {
   const { username } = useParams()
-  const currUser = useAppSelector((state) => state.user.profile)
-  const currUserProfile = currUser.data
+  const userProfile = useAppSelector((state) => state.user.profile)
 
   useEffect(() => {
     console.log(username)
   }, [username])
 
+  if (userProfile.isLoading) {
+    return (
+      <div className="absolute-center">
+        <Spinner />
+      </div>
+    )
+  }
+  if (!userProfile.data) {
+    return <PageNotFound />
+  }
+
   return (
     <div>
-      <p>{currUserProfile?.username}</p>
+      <Introduction user={userProfile.data} />
+      <AboutMe about={userProfile.data.about} />
+      <Projects />
     </div>
   )
 }

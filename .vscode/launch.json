@@ -63,6 +63,7 @@
       "address": "localhost",
       "restart": true,
       "localRoot": "${workspaceFolder}/services/project-service",
+      "remoteRoot": "/app",
       "skipFiles": ["<node_internals>/**"],
       "outFiles": ["${workspaceFolder}/services/project-service/**/*.js"]
     },
@@ -74,8 +75,21 @@
       "address": "localhost",
       "restart": true,
       "localRoot": "${workspaceFolder}/services/upload-service",
+      "remoteRoot": "/app",
       "skipFiles": ["<node_internals>/**"],
       "outFiles": ["${workspaceFolder}/services/upload-service/**/*.js"]
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Content Service: Attach to Node",
+      "port": 9224,
+      "address": "localhost",
+      "restart": true,
+      "localRoot": "${workspaceFolder}/services/content-service",
+      "remoteRoot": "/app",
+      "skipFiles": ["<node_internals>/**"],
+      "outFiles": ["${workspaceFolder}/services/content-service/**/*.js"]
     }
   ]
 }

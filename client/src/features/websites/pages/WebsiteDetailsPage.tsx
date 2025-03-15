@@ -81,14 +81,14 @@ function WebsiteDetailsPage() {
             <a
               href={websiteDetails.demoUrl}
               target="_blank"
-              className="btn-filled flex-center gap-2 rounded-full !py-2"
+              className="btn-filled flex-center gap-2 rounded-full !py-2.5"
             >
               Demo <RedirectIcon className="fill-white size-4" />
             </a>
             <a
               href={websiteDetails.demoUrl}
               target="_blank"
-              className="btn-outlined flex-center gap-2 rounded-full !py-2"
+              className="btn-outlined flex-center gap-2 rounded-full !py-2.5"
             >
               Code <CodeIcon className="fill-primary size-5" />
             </a>
@@ -98,8 +98,10 @@ function WebsiteDetailsPage() {
       <div className="mt-10">
         <CustomCarousel
           itemWidth={30}
-          itemClassName="h-96 sm:h-96 md:h-96"
+          itemClassName="min-w-80 h-96 sm:h-96 md:h-96"
           autoPlay={false}
+          loop={false}
+          dragFree={true}
         />
       </div>
       <div className="mt-12">

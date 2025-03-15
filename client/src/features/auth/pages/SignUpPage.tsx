@@ -16,7 +16,7 @@ import _ from 'lodash'
 
 function SignUpPage() {
   const dispatch = useAppDispatch()
-  const isLoading = useAppSelector((state) => state.auth.signUp.isLoading)
+  const isLoading = useAppSelector((state) => state.auth.isLoading)
   const usernameState = useAppSelector((state) => state.auth.username)
   const debouncedCheckUsername = useMemo(
     () =>

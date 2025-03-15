@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useFormik } from 'formik'
 import ModalWrapper from '@/components/ModalWrapper'
 import CheckboxInput from '@/components/CheckboxInput'
@@ -12,22 +13,23 @@ import { WebsiteFormError, WebsiteFormValues } from '../websites.types'
 import { useAppDispatch, useAppSelector, useFormikErrors } from '@/hooks'
 import { createWebsite } from '../websitesSlice'
 
-const categories = [
-  'Education',
-  'Healthcare',
-  'Fitness',
-  'SAKSDJKDF',
-  'sdfsdfsdf',
-  'sdfsdfdsfdfdsf',
-]
-
 const MAX_IMAGES_COUNT = 5
 
 const WebsiteForm = ({ onClose }: { onClose: () => void }) => {
   const dispatch = useAppDispatch()
+  const categories = useAppSelector(
+    (state) => state.content.metadata.data?.categories
+  )
   const isLoading = useAppSelector(
     (state) => state.websites.websiteForm.isLoading
   )
+  const categoryOptions = useMemo(() => {
+    if (categories) {
+      return categories.map((e) => ({ label: e.name, value: e.name }))
+    }
+    return []
+  }, [categories])
+
   const formik = useFormik<WebsiteFormValues>({
     initialValues: {
       name: '',
@@ -44,9 +46,9 @@ const WebsiteForm = ({ onClose }: { onClose: () => void }) => {
     validate: validateWebsiteForm,
     onSubmit: (values) => {
       dispatch(createWebsite(values))
-      // dispatch(signIn(values))
     },
   })
+
   const totalImages =
     (formik.values.images?.length || 0) +
     (formik.values.attachmentImages?.length || 0)
@@ -113,9 +115,10 @@ const WebsiteForm = ({ onClose }: { onClose: () => void }) => {
                 error={errors.categories}
               >
                 <Dropdown
-                  // selectedOptions={formik.values.categories || []}
-                  options={categories.toDropdownOptions()}
+                  selectedOptions={formik.values.categories || []}
+                  options={categoryOptions}
                   onChange={(options) => {
+                    console.log(options)
                     formik.setFieldTouched('categories')
                     formik.setFieldValue('categories', options)
                   }}
@@ -124,6 +127,16 @@ const WebsiteForm = ({ onClose }: { onClose: () => void }) => {
                   multiselect
                   targetClass="textfield py-0"
                   contentClass="left-0 right-auto mt-2"
+                />
+              </FormInputWrapper>
+              <FormInputWrapper title="Demo URL" error={errors.demoUrl}>
+                <input
+                  name="demoUrl"
+                  type="text"
+                  placeholder="Enter demo url"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="textfield"
                 />
               </FormInputWrapper>
               <FormInputWrapper

@@ -3,7 +3,8 @@ import { WebsiteFormError, WebsiteFormValues } from './websites.types'
 
 export const validateWebsiteForm = (values: WebsiteFormValues) => {
   const errors: WebsiteFormError = {}
-  const urlError = validateUrl(values.sourceCodeUrl)
+  const sourceCodeUrlError = validateUrl(values.sourceCodeUrl)
+  const demoUrlError = validateUrl(values.demoUrl)
 
   if (!values.name?.trim()) {
     errors.name = 'Enter website name'
@@ -11,8 +12,11 @@ export const validateWebsiteForm = (values: WebsiteFormValues) => {
   if (!values.icon?.trim() && !values.attachmentIcon) {
     errors.attachmentIcon = 'Upload website icon'
   }
-  if (urlError) {
+  if (sourceCodeUrlError) {
     errors.sourceCodeUrl = 'Invalid source code URL'
+  }
+  if (demoUrlError) {
+    errors.demoUrl = 'Invalid demo URL'
   }
 
   return errors

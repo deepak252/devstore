@@ -10,7 +10,7 @@ import {
 function* getMetadataWorker(): Generator {
   yield* apiWorker(ContentService.getMetadata, undefined, {
     onSuccess: function* (response) {
-      yield put(getMetadataSuccess(response.data))
+      yield put(getMetadataSuccess(response.data?.data))
     },
     onFailure: function* (error) {
       yield put(getMetadataFailure(error?.message || 'Something went wrong'))

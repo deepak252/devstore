@@ -87,7 +87,7 @@
 
 @layer components {
   .base-button {
-    @apply text-sm rounded-xl py-3 px-6;
+    @apply flex-center gap-2 text-sm py-3 px-6 rounded-full  border border-transparent lg:px-8;
   }
   .base-button:disabled {
     @apply opacity-60;
@@ -156,7 +156,7 @@
   }
 
   .gradient-bottom-shade {
-    @apply bg-gradient-to-tr from-transparent to-black/30;;
+    @apply bg-gradient-to-tr from-transparent to-black/30;
   }
 }
 

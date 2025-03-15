@@ -1,3 +1,5 @@
+import { DropdownOption } from './components/Dropdown'
+
 export type ToastData = {
   type?: 'success' | 'failure' | 'message' | null
   message?: string | null
@@ -71,7 +73,7 @@ export type ProjectFormValues = {
   description?: string
   isPrivate: boolean
   platform: Platform
-  categories?: string[]
+  categories?: DropdownOption[]
   sourceCodeUrl?: string
   demoUrl?: string
   icon?: string

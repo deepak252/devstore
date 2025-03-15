@@ -16,24 +16,38 @@ import { UploadProjectMediaPayload } from '@/shared.types'
 function* createWebsiteWorker(
   action: PayloadAction<WebsiteFormValues>
 ): Generator {
-  const { attachmentIcon, attachmentImages, attachmentBanner, ...rest } =
-    action.payload
-  yield* apiWorker(WebsitesService.createWebsite, rest, {
-    onSuccess: function* (response) {
-      if (attachmentIcon || attachmentImages?.length || attachmentBanner) {
-        yield uploadMediaWorker({
-          projectId: response.data?.data?._id,
-          attachmentIcon,
-          attachmentImages: attachmentImages?.map(({ file }) => file),
-          attachmentBanner,
-        })
-      }
-      yield put(createWebsiteSuccess(response.data))
+  const {
+    attachmentIcon,
+    attachmentImages,
+    attachmentBanner,
+    categories,
+    ...rest
+  } = action.payload
+  yield* apiWorker(
+    WebsitesService.createWebsite,
+    {
+      ...rest,
+      categories: categories?.flatDropdownOptions('label'),
     },
-    onFailure: function* (error) {
-      yield put(createWebsiteFailure(error?.message || 'Something went wrong'))
-    },
-  })
+    {
+      onSuccess: function* (response) {
+        if (attachmentIcon || attachmentImages?.length || attachmentBanner) {
+          yield uploadMediaWorker({
+            projectId: response.data?.data?._id,
+            attachmentIcon,
+            attachmentImages: attachmentImages?.map(({ file }) => file),
+            attachmentBanner,
+          })
+        }
+        yield put(createWebsiteSuccess(response.data))
+      },
+      onFailure: function* (error) {
+        yield put(
+          createWebsiteFailure(error?.message || 'Something went wrong')
+        )
+      },
+    }
+  )
 }
 
 function* uploadMediaWorker({

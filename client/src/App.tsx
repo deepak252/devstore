@@ -4,7 +4,7 @@ import { setupInterceptor } from './services/api'
 import { useAppDispatch, useAuth } from './hooks'
 import useNavigateWithState from './hooks/useNavigateWithState'
 import { getProfile } from './features/user/userSlice'
-import { getMetadata } from './features/metadata/metadataSlice'
+import { getMetadata } from './features/content/contentSlice'
 
 function App() {
   const navigate = useNavigateWithState()
