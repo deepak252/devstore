@@ -117,7 +117,7 @@ export default class ProjectService {
       project.active = false
     } else {
       project.active = true
-      publishEvent('project.updated', JSON.stringify(project.toJSON()))
+      publishEvent('project.updated', JSON.stringify({ project }))
     }
 
     await project?.save()

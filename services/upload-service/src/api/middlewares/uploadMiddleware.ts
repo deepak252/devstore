@@ -17,7 +17,7 @@ const getFileName = (file: Express.Multer.File, userId: string) => {
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const dirPath = destPath + req.path
+    const dirPath = `${destPath}/${req.user.userId ?? ''}`
     // Create the 'uploads/**' folder if it doesn't exist
     if (!fs.existsSync(dirPath)) {
       fs.mkdirSync(dirPath, { recursive: true })

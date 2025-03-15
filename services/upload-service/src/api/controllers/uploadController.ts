@@ -112,13 +112,15 @@ export const uploadProjectMedia = asyncHandler(async (req, res) => {
 })
 
 export const uploadMedia = asyncHandler(async (req, _) => {
+  const { file = [] }: any = req.files || {}
+  const mediaFile = file?.[0]
   try {
-    if (!req.file) {
+    if (!mediaFile) {
       throw new ApiError('No media file found')
     }
     const s3Service = new S3Service(S3_MEDIA_BUCKET)
 
-    const result = await s3Service.uploadToS3(req.file, req.user.userId)
+    const result = await s3Service.uploadToS3(mediaFile, req.user.userId)
 
     if (!result) {
       throw new ApiError('Unable to upload media')
@@ -127,9 +129,9 @@ export const uploadMedia = asyncHandler(async (req, _) => {
     const remoteFile = new RemoteFile({
       publicId: result?.key,
       bucketName: S3_MEDIA_BUCKET,
-      originalName: req.file.originalname,
+      originalName: mediaFile.originalname,
       user: req.user.userId,
-      mimeType: req.file.mimetype,
+      mimeType: mediaFile.mimetype,
       url: result?.location
     })
 
@@ -141,8 +143,8 @@ export const uploadMedia = asyncHandler(async (req, _) => {
       201
     )
   } finally {
-    if (req.file) {
-      removeFile(req.file.path)
+    if (mediaFile) {
+      removeFile(mediaFile.path)
     }
   }
 })

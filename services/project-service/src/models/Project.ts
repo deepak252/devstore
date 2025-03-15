@@ -26,12 +26,9 @@ const projectSchema = new Schema<IProject, ProjectModel, IProjectMethods>(
       default: false
     },
     description: String,
+    categories: { type: [String], default: [] },
     icon: String,
-    images: [
-      {
-        type: String
-      }
-    ],
+    images: { type: [String], default: [] },
     video: String,
     banner: String,
     demoUrl: String,

@@ -23,8 +23,6 @@ export default class BannerService {
     const { _id: projectId, platform, active, banner: bannerImg } = project
     let banner = await Banner.findOne({ project: projectId })
 
-    console.log(banner)
-
     if (!active || !bannerImg) {
       if (banner) {
         banner.active = false
@@ -50,7 +48,6 @@ export default class BannerService {
       banner.platform = platform
       await banner.save()
     }
-    console.log(banner)
 
     return banner
   }
@@ -60,6 +57,16 @@ export default class BannerService {
     if (banners) {
       return banners
     }
+  }
+
+  static deleteBanner = async (projectId: string) => {
+    if (!projectId) {
+      return
+    }
+    const banner = await Banner.findOneAndDelete({
+      project: projectId
+    })
+    return banner
   }
 
   static generateRedirectUrl = (platform: Platform, projectId: string) => {

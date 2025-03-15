@@ -30,10 +30,9 @@ router.post(
   '/media',
   uploadMiddleware([
     {
-      name: 'attachmentIcon',
+      name: 'file',
       maxCount: 1,
-      maxSizeKB: 512,
-      allowedExtensions: ['.png', '.jpg', '.jpeg']
+      maxSizeKB: 1024
     }
   ]),
   uploadMedia

@@ -10,6 +10,7 @@ export interface IProject {
   owner: Schema.Types.ObjectId
   isPrivate: boolean
   description?: string
+  categories?: []
   icon?: string
   images?: string[]
   video?: string

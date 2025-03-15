@@ -82,7 +82,7 @@ export const validateRegistration = (values: {
 }) => {
   const schema = Joi.object({
     username: usernameSchema.required(),
-    fullname: fullnameSchema.required(),
+    fullname: fullnameSchema.optional(),
     email: emailSchema.required(),
     password: passwordSchema.required()
   })
