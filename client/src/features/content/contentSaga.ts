@@ -6,10 +6,16 @@ import {
   getMetadataFailure,
   getMetadataSuccess,
 } from './contentSlice'
+import { getMetadataFromStorage, saveMetadataToStorage } from '@/utils/storage'
 
 function* getMetadataWorker(): Generator {
+  const savedMetadata = getMetadataFromStorage()
+  if (savedMetadata) {
+    yield put(getMetadataSuccess({ data: savedMetadata }))
+  }
   yield* apiWorker(ContentService.getMetadata, undefined, {
     onSuccess: function* (response) {
+      saveMetadataToStorage(response.data?.data)
       yield put(getMetadataSuccess(response.data?.data))
     },
     onFailure: function* (error) {

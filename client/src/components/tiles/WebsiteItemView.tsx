@@ -1,17 +1,23 @@
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
 import Shimmer from '../Shimmer'
+import ProfileImage from '../ProfileImage'
 import HeartIcon from '@/assets/icons/heart-outlined.svg?react'
 import ShareIcon from '@/assets/icons/share.svg?react'
 
-type WebsiteTilePropTypes = {
+type WebsiteItemViewProps = {
   id: string
   name: string
   imgUrl: string
   username: string
 }
 
-const WebsiteTile = ({ id, name, imgUrl, username }: WebsiteTilePropTypes) => {
+const WebsiteItemView = ({
+  id,
+  name,
+  imgUrl,
+  username,
+}: WebsiteItemViewProps) => {
   return (
     <div>
       <Link
@@ -47,11 +53,7 @@ const WebsiteTile = ({ id, name, imgUrl, username }: WebsiteTilePropTypes) => {
         </div>
       </Link>
       <div className="flex items-center">
-        <img
-          className="size-10 rounded-full aspect-square"
-          src={imgUrl}
-          alt="icon"
-        />
+        <ProfileImage />
         <div className="m-2 overflow-hidden">
           <p className="text-gray-900 text-15 font-medium overflow-ellipsis">
             {name}
@@ -63,11 +65,18 @@ const WebsiteTile = ({ id, name, imgUrl, username }: WebsiteTilePropTypes) => {
   )
 }
 
-const WebsiteTileMemo = memo(WebsiteTile)
-export { WebsiteTileMemo }
-
-export const WebsiteTileShimmer = () => {
-  return <Shimmer className="!rounded-3xl w-full h-40" />
+export const WebsiteItemShimmer = () => {
+  return (
+    <div>
+      <Shimmer className="aspect-[1.3] w-full !rounded-lg" />
+      <div className="flex items-center gap-2 mt-2">
+        <Shimmer className="!size-8 !rounded-full" />
+        <Shimmer className="h-8 w-2/3 !rounded-md" />
+      </div>
+    </div>
+  )
 }
 
-export default WebsiteTile
+export const WebsiteItemViewMemo = memo(WebsiteItemView)
+
+export default WebsiteItemView

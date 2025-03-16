@@ -16,6 +16,6 @@ router.get('/', (req, res) => {
   res.json(new ResponseSuccess('Project Service is Up'))
 })
 
-router.use('/project', projectRouter)
+router.use('/projects', projectRouter)
 
 export default router

@@ -13,7 +13,7 @@ const WebsiteDetailsPage = lazy(
   () => import('@/features/websites/pages/WebsiteDetailsPage')
 )
 const HomePage = lazy(() => import('@/pages/HomePage'))
-const PageNotFound = lazy(() => import('@/pages/PageNotFound'))
+const PageNotFound = lazy(() => import('@/components/PageNotFound'))
 
 const routes: RouteObject[] = [
   {

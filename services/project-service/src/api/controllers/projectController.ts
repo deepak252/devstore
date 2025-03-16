@@ -41,7 +41,7 @@ export const getProjects = asyncHandler(async (req, _) => {
 export const getProjectDetails = asyncHandler(async (req, _) => {
   const { projectId } = req.params
 
-  const result = await ProjectService.getProject(projectId)
+  const result = await ProjectService.getProjectDetails(projectId)
   if (!result) {
     throw new ApiError('Project not found', 404)
   }

@@ -4,14 +4,14 @@ import {
   Banner,
   Platform,
   ProjectDetails,
-  ProjectList,
   ToastData,
+  PaginatedList,
 } from '@/shared.types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { WebsiteFormValues } from './websites.types'
 
 type WebsitesState = {
-  data: ProjectList<WebsiteListItem>
+  data: PaginatedList<WebsiteListItem>
   filter: {
     platform: Platform
     categories: string[]
@@ -40,8 +40,8 @@ const initialState: WebsitesState = {
     page: 1,
     limit: 10,
     totalPages: 0,
+    totalResults: 0,
     isLoading: false,
-    error: null,
   },
   filter: {
     platform: 'all', // all, android, ios
@@ -76,24 +76,38 @@ const websitesSlice = createSlice({
       state.data.isLoading = true
     },
     getWebsitesSuccess: (state, action) => {
+      const { projects = [], metadata = {} } = action.payload || {}
       state.data.isLoading = false
-      state.data.error = null
-      state.data.list = action.payload.data?.projects
+      state.data.list = projects
+      state.data.page = metadata.currentPage
+      state.data.limit = metadata.itemsPerPage
+      state.data.totalPages = metadata.totalPages
+      state.data.totalResults = metadata.totalItems
     },
     getWebsitesFailure: (state, action) => {
       state.data.isLoading = false
-      state.data.error = action.payload
+      state.toastData = {
+        type: 'failure',
+        message: action.payload || 'Something went wrong',
+      }
     },
     // Website Details
-    getWebsiteDetails: (state, _: PayloadAction<{ projectId: string }>) => {
-      state.websiteDetails = {
-        isLoading: true,
-        data: null,
+    getWebsiteDetails: (
+      state,
+      action: PayloadAction<{ projectId: string }>
+    ) => {
+      if (action.payload.projectId !== state.websiteDetails.data?._id) {
+        state.websiteDetails = {
+          isLoading: true,
+          data: null,
+        }
       }
     },
     getWebsiteDetailsSuccess: (state, action) => {
-      state.websiteDetails.isLoading = false
-      state.websiteDetails.data = action.payload?.data
+      state.websiteDetails = {
+        isLoading: false,
+        data: action.payload,
+      }
     },
     getWebsiteDetailsFailure: (state) => {
       state.websiteDetails.isLoading = false
@@ -148,18 +162,21 @@ const websitesSlice = createSlice({
       console.log('uploadWebsiteMediaCancelled')
     },
 
-    // getWebsitesBanner: (state, _) => {
-    //   state.banner.isLoading = true
-    // },
-    // getWebsitesBannerSuccess: (state, action) => {
-    //   state.banner.isLoading = false
-    //   state.banner.error = null
-    //   state.banner.list = action.payload?.data
-    // },
-    // getWebsitesBannerFailure: (state, action) => {
-    //   state.banner.isLoading = false
-    //   state.banner.error = action.payload
-    // },
+    getWebsiteBanners: (state, _) => {
+      state.banner.isLoading = true
+    },
+    getWebsiteBannersSuccess: (state, action) => {
+      state.banner.isLoading = false
+      state.banner.list = action.payload
+    },
+    getWebsiteBannersFailure: (state, action) => {
+      state.banner.isLoading = false
+      state.toastData = {
+        type: 'failure',
+        message: action.payload || 'Something went wrong',
+      }
+    },
+
     setWebsitesFilter: (state, action) => {
       state.filter = action.payload
     },
@@ -173,6 +190,7 @@ export const {
   getWebsites,
   getWebsitesSuccess,
   getWebsitesFailure,
+
   getWebsiteDetails,
   getWebsiteDetailsSuccess,
   getWebsiteDetailsFailure,
@@ -194,9 +212,10 @@ export const {
   // uploadWebsiteIconFailure,
   // uploadWebsiteIconCancelled,
 
-  // getWebsitesBanner,
-  // getWebsitesBannerSuccess,
-  // getWebsitesBannerFailure,
+  getWebsiteBanners,
+  getWebsiteBannersSuccess,
+  getWebsiteBannersFailure,
+
   setWebsitesFilter,
   setWebsitesToast,
 } = websitesSlice.actions

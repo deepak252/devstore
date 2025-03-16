@@ -27,10 +27,24 @@ const projectSchema = new Schema<IProject, ProjectModel, IProjectMethods>(
     },
     description: String,
     categories: { type: [String], default: [] },
-    icon: String,
-    images: { type: [String], default: [] },
+    icon: {
+      type: Schema.Types.ObjectId,
+      ref: 'RemoteFile'
+    },
+    images: {
+      type: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: 'RemoteFile'
+        }
+      ],
+      default: []
+    },
     video: String,
-    banner: String,
+    banner: {
+      type: Schema.Types.ObjectId,
+      ref: 'RemoteFile'
+    },
     demoUrl: String,
     sourceCodeUrl: String,
     active: {

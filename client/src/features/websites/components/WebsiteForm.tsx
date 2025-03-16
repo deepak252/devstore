@@ -8,14 +8,39 @@ import FileInput from '@/components/FileInput'
 import Attachment from '@/components/Attachment'
 import Loader from '@/components/Loader'
 import CloseIcon from '@/assets/icons/close.svg?react'
+import AddIcon from '@/assets/icons/add.svg?react'
 import { validateWebsiteForm } from '../websitesUtil'
 import { WebsiteFormError, WebsiteFormValues } from '../websites.types'
 import { useAppDispatch, useAppSelector, useFormikErrors } from '@/hooks'
-import { createWebsite } from '../websitesSlice'
+import { createWebsite, toggleCreateWebsiteFormOpen } from '../websitesSlice'
 
 const MAX_IMAGES_COUNT = 5
 
-const WebsiteForm = ({ onClose }: { onClose: () => void }) => {
+export const WebsiteFormWrapper = () => {
+  const dispatch = useAppDispatch()
+  const isFormOpen = useAppSelector(
+    (state) => state.websites.websiteForm.isOpen
+  )
+
+  const handleToggleWebsiteFormOpen = () => {
+    dispatch(toggleCreateWebsiteFormOpen())
+  }
+
+  return (
+    <>
+      <button
+        className="btn-fab fixed bottom-8 right-8"
+        onClick={handleToggleWebsiteFormOpen}
+      >
+        <AddIcon className="fill-primary size-8" />
+        Create Website
+      </button>
+      {isFormOpen && <WebsiteForm onClose={handleToggleWebsiteFormOpen} />}
+    </>
+  )
+}
+
+export const WebsiteForm = ({ onClose }: { onClose: () => void }) => {
   const dispatch = useAppDispatch()
   const categories = useAppSelector(
     (state) => state.content.metadata.data?.categories
@@ -280,5 +305,3 @@ const WebsiteForm = ({ onClose }: { onClose: () => void }) => {
     </>
   )
 }
-
-export default WebsiteForm

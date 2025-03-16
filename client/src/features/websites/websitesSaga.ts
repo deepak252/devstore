@@ -6,12 +6,32 @@ import {
   createWebsite,
   createWebsiteFailure,
   createWebsiteSuccess,
+  getWebsiteBanners,
+  getWebsiteBannersFailure,
+  getWebsiteBannersSuccess,
+  getWebsiteDetails,
+  getWebsiteDetailsFailure,
+  getWebsiteDetailsSuccess,
+  getWebsites,
+  getWebsitesFailure,
+  getWebsitesSuccess,
   uploadWebsiteMediaFailure,
   uploadWebsiteMediaSuccess,
 } from './websitesSlice'
 import { WebsiteFormValues } from './websites.types'
 import WebsitesService from './websitesService'
 import { UploadProjectMediaPayload } from '@/shared.types'
+
+function* getWebsitesWorker(): Generator {
+  yield* apiWorker(WebsitesService.getWebsites, undefined, {
+    onSuccess: function* (response) {
+      yield put(getWebsitesSuccess(response.data?.data))
+    },
+    onFailure: function* (error) {
+      yield put(getWebsitesFailure(error?.message || 'Something went wrong'))
+    },
+  })
+}
 
 function* createWebsiteWorker(
   action: PayloadAction<WebsiteFormValues>
@@ -82,9 +102,41 @@ function* uploadMediaWorker({
   )
 }
 
+function* getWebsiteBannersWorker(): Generator {
+  yield* apiWorker(WebsitesService.getWebsiteBanners, undefined, {
+    onSuccess: function* (response) {
+      yield put(getWebsiteBannersSuccess(response.data?.data))
+    },
+    onFailure: function* (error) {
+      yield put(
+        getWebsiteBannersFailure(error?.message || 'Something went wrong')
+      )
+    },
+  })
+}
+
+function* getWebsiteDetailsWorker(
+  action: PayloadAction<{ projectId: string }>
+): Generator {
+  const { projectId } = action.payload || {}
+  yield* apiWorker(WebsitesService.getWebsiteDetails, projectId, {
+    onSuccess: function* (response) {
+      yield put(getWebsiteDetailsSuccess(response.data?.data))
+    },
+    onFailure: function* (error) {
+      yield put(
+        getWebsiteDetailsFailure(error?.message || 'Something went wrong')
+      )
+    },
+  })
+}
+
 export default function* () {
   yield all([
+    takeLatest(getWebsites.type, getWebsitesWorker),
     takeLatest(createWebsite.type, createWebsiteWorker),
+    takeLatest(getWebsiteBanners.type, getWebsiteBannersWorker),
+    takeLatest(getWebsiteDetails.type, getWebsiteDetailsWorker),
     // takeLatest(uploadWebsiteIcon.type, uploadWebsiteIconWorker),
   ])
 }

@@ -5,36 +5,40 @@ import Autoplay from 'embla-carousel-autoplay'
 import ForwardIcon from '@/assets/icons/forward.svg?react'
 import BackwardIcon from '@/assets/icons/backward.svg?react'
 import { useWindowDimensions } from '@/hooks'
+import Shimmer from './Shimmer'
 
-const images = [
-  'https://images.unsplash.com/photo-1579353977828-2a4eab540b9a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2FtcGxlfGVufDB8fDB8fHww',
-  'https://images.unsplash.com/photo-1579353977828-2a4eab540b9a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2FtcGxlfGVufDB8fDB8fHww',
-  'https://images.unsplash.com/photo-1579353977828-2a4eab540b9a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2FtcGxlfGVufDB8fDB8fHww',
-  'https://images.unsplash.com/photo-1579353977828-2a4eab540b9a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2FtcGxlfGVufDB8fDB8fHww',
-  'https://images.unsplash.com/photo-1579353977828-2a4eab540b9a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2FtcGxlfGVufDB8fDB8fHww',
-  'https://images.unsplash.com/photo-1579353977828-2a4eab540b9a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2FtcGxlfGVufDB8fDB8fHww',
-]
+type CarouselItem = {
+  id: string
+  imgUrl: string
+  redirectUrl?: string
+}
 
 type CustomCarouselProps = {
+  items: CarouselItem[]
   itemWidth?: number
-  itemClassName?: string
   autoPlay?: boolean
   loop?: boolean
   dragFree?: boolean
+  isLoading?: boolean
+  itemClassName?: string
+  onItemClick?: (id: string, redirectUrl?: string) => void
 }
 export default function CustomCarousel({
+  items = [],
   itemWidth,
   autoPlay = true,
   loop = true,
   dragFree = false,
+  isLoading,
   itemClassName,
+  onItemClick,
 }: CustomCarouselProps) {
   const plugins = useMemo(() => {
     return autoPlay ? [Autoplay({ stopOnInteraction: false })] : []
   }, [autoPlay])
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: loop, dragFree: dragFree },
+    { loop: loop, dragFree: dragFree, align: 'center' },
     plugins
   )
 
@@ -83,28 +87,67 @@ export default function CustomCarousel({
   return (
     <div className="relative w-full mx-auto">
       <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex">
-          {images.map((src, index) => (
-            <div
-              key={index}
-              className="px-3"
-              style={{ flex: `0 0 ${itemWidth || flexWidth}%` }} // Dynamic width
-            >
-              <img
-                src={src}
-                alt={`Slide ${index}`}
-                className={classNames(
-                  'w-full object-cover rounded-lg h-52 sm:h-56 md:h-60',
-                  itemClassName
-                )}
-              />
-            </div>
-          ))}
+        <div className="flex mx-auto">
+          {isLoading
+            ? [...Array(3).keys()].map((id) => (
+                <div
+                  className="px-3"
+                  style={{ flex: `0 0 ${itemWidth || flexWidth}%` }} // Dynamic width
+                >
+                  <Shimmer
+                    key={id}
+                    className={classNames(
+                      'w-full object-cover rounded-lg h-52 sm:h-56 md:h-60',
+                      itemClassName
+                    )}
+                  />
+                </div>
+              ))
+            : items.map(({ id, imgUrl, redirectUrl }) => (
+                <div
+                  key={id}
+                  className="px-3"
+                  style={{ flex: `0 0 ${itemWidth || flexWidth}%` }} // Dynamic width
+                >
+                  <div
+                    className={classNames(
+                      'bg-neutral-200 relative overflow-hidden rounded-lg h-52 sm:h-56 md:h-60',
+                      itemClassName
+                    )}
+                  >
+                    <img
+                      src={imgUrl}
+                      className="absolute-center"
+                      onClick={() => {
+                        onItemClick?.(id, redirectUrl)
+                      }}
+                    />
+                  </div>
+                </div>
+
+                // <div
+                //   key={id}
+                //   className="px-3"
+                //   style={{ flex: `0 0 ${itemWidth || flexWidth}%` }} // Dynamic width
+                // >
+                //   <img
+                //     src={imgUrl}
+                //     alt={`Devstore Banner ${id}`}
+                //     className={classNames(
+                //       'w-full object-cover rounded-lg h-52 sm:h-56 md:h-60',
+                //       itemClassName
+                //     )}
+                //     onClick={() => {
+                //       onItemClick?.(id, redirectUrl)
+                //     }}
+                //   />
+                // </div>
+              ))}
         </div>
       </div>
 
       {/* Navigation Buttons */}
-      {canScroll.prev && (
+      {canScroll.prev && items.length > 1 && (
         <button
           className="absolute left-2 top-1/2 -translate-y-1/2"
           onClick={scrollPrev}
@@ -112,7 +155,7 @@ export default function CustomCarousel({
           <BackwardIcon className="size-12 bg-black/40 p-3 rounded-full hover:bg-black/50" />
         </button>
       )}
-      {canScroll.next && (
+      {canScroll.next && items.length > 1 && (
         <button
           className="absolute right-2 top-1/2 -translate-y-1/2"
           onClick={scrollNext}

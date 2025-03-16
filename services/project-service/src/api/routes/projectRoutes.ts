@@ -12,7 +12,7 @@ import { validateProjectRoute } from '../middlewares/validateProjectRoute'
 
 const router = Router()
 
-router.get('/all', validateProjectRoute, optionalAuth, getProjects) // /project/all?type=game
+router.get('/', validateProjectRoute, optionalAuth, getProjects) // /project/all?type=game
 router.post('/create', requireAuth, createProject)
 router.put('/:projectId', requireAuth, updateProject)
 router.get('/:projectId', optionalAuth, getProjectDetails)

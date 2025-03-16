@@ -25,7 +25,8 @@ export const createBanner = asyncHandler(async (req, _) => {
   )
 })
 
-export const getBanners = asyncHandler(async (_, __) => {
-  const result = await BannerService.getBanners()
+export const getBanners = asyncHandler(async (req, __) => {
+  const { platform } = req.query
+  const result = await BannerService.getBanners(platform as string)
   return new ResponseSuccess('Banners fetched successfully', result)
 })

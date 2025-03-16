@@ -52,11 +52,45 @@ export default class BannerService {
     return banner
   }
 
-  static getBanners = async () => {
-    const banners = await Banner.find()
-    if (banners) {
-      return banners
-    }
+  static getBanners = async (platform?: Platform | string) => {
+    // const banners = await Banner.find()
+    // if (banners) {
+    //   return banners
+    // }
+    const filter = platform
+      ? [
+          {
+            $match: {
+              platform
+            }
+          }
+        ]
+      : []
+    const result = await Banner.aggregate([
+      ...filter,
+      {
+        $lookup: {
+          from: 'remotefiles',
+          localField: 'img',
+          foreignField: '_id',
+          as: 'img'
+        }
+      },
+      { $unwind: '$img' },
+      {
+        $project: {
+          redirectUrl: 1,
+          platform: 1,
+          img: {
+            _id: 1,
+            url: 1,
+            mimeType: 1
+          }
+        }
+      }
+    ])
+
+    return result
   }
 
   static deleteBanner = async (projectId: string) => {
@@ -71,7 +105,10 @@ export default class BannerService {
 
   static generateRedirectUrl = (platform: Platform, projectId: string) => {
     if (platform && projectId) {
-      return `/${platform}/${projectId}`
+      if (platform === 'website') {
+        return `/websites/${projectId}`
+      }
+      return `/apps/${projectId}`
     }
     return ''
   }

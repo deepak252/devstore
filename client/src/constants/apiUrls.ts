@@ -5,11 +5,11 @@ export const USERNAME_CHECK_API = 'user/check-username'
 
 export const USER_PROFILE_API = 'user/profile'
 
-export const PROJECTS_API = 'project'
-export const CREATE_PROJECT_API = 'project/create'
-export const APPS_API = 'project/apps'
-export const WEBSITES_API = 'project/websites'
-export const PACKAGE_UPLOAD_API = 'project/package/upload'
+export const PROJECTS_API = 'projects'
+export const CREATE_PROJECT_API = 'projects/create'
+export const APPS_API = 'projects/apps'
+export const WEBSITES_API = 'projects/websites'
+export const PACKAGE_UPLOAD_API = 'projects/package/upload'
 export const FEATURED_ALL_API = 'featured/all'
 
 export const MEDIA_UPLOAD_API = 'upload/media'

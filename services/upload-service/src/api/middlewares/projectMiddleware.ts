@@ -12,7 +12,7 @@ export const validateUserProject = async (
   const userId = req.user.userId
   try {
     const response = await axios.post(
-      `${PROJECT_SERVICE_URL}/api/project/exists`,
+      `${PROJECT_SERVICE_URL}/api/projects/exists`,
       {
         userId,
         projectId

@@ -27,13 +27,14 @@ export const proxyRoutes = [
     requireAuth: false
   },
   {
-    from: '/v1/project',
+    from: '/v1/projects',
     to: PROJECT_SERVICE_URL,
     requireAuth: true
   },
   {
     from: '/v1/upload',
     to: UPLOAD_SERVICE_URL,
+    requireAuth: true,
     parseReqBody: false
   }
 ]

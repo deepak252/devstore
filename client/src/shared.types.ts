@@ -8,20 +8,26 @@ export type ToastData = {
 export type Platform = 'all' | 'android' | 'ios' | 'website'
 
 export type RemoteFile = {
+  _id: string
   url: string
-  path: string
+  path?: string
+  mimeType?: string
+}
+
+export type Owner = {
+  _id: string
+  username: string
+  fullname?: string
+  profileImage?: RemoteFile
 }
 
 export type ProjectListItem = {
   _id: string
   name: string
   description: string
-  icon: string
+  icon?: RemoteFile
   categories: string[]
-  owner: {
-    _id: string
-    username: string
-  }
+  owner: Owner
 }
 export type WebsiteListItem = ProjectListItem
 export type GameListItem = ProjectListItem & {
@@ -37,16 +43,22 @@ export type ProjectList<T extends ProjectListItem> = {
   limit: number
   totalPages: number
   isLoading: boolean
-  error: string | null
+}
+
+export type PaginatedList<T> = {
+  list: T[]
+  page: number
+  limit: number
+  totalPages: number
+  totalResults: number
+  isLoading: boolean
 }
 
 export type Banner = {
   _id: string
-  image: string
-  redirectPath: string
-  category: string
-  createdAt: string
-  updatedAt: string
+  img: RemoteFile
+  redirectUrl: string
+  path: string
 }
 
 // platform: Platform
@@ -148,35 +160,28 @@ export type UploadProjectMediaPayload = {
 
 export type ProjectDetails = {
   _id: string
-  projectType: string
+  platform: Platform
   name: string
   isPrivate: boolean
   description?: string
-  icon: RemoteFile
-  images: RemoteFile[]
-  featureGraphic?: RemoteFile
-  video?: RemoteFile
   categories?: string[]
-  owner: {
-    _id: string
-    username: string
-    email: string
-  }
-  sourceCode?: string
-  isSourceCodePublic?: boolean
+  icon: RemoteFile
+  banner?: RemoteFile
+  images: RemoteFile[]
+  owner: Owner
+  demoUrl?: string
+  sourceCodeUrl?: string
   otherLinks?: string[]
   packageFile?: {
     url: string
     path: string
   }
-  platform?: string
   apkInfo?: {
     version: string
     package: string
     minSdkVersion: number
     targetSdkVersion: number
   }
-  lastUpdated: string
   createdAt: string
   updatedAt: string
 }

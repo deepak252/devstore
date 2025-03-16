@@ -1,3 +1,4 @@
+import mongoose from 'mongoose'
 import { validateCreateProject } from '../api/utils/validation'
 import { redisClient } from '../config/redis'
 import { Platform } from '../constants/enums'
@@ -42,6 +43,85 @@ export default class ProjectService {
     }
   }
 
+  static getProjectDetails = async (projectId: string) => {
+    const _id = new mongoose.Types.ObjectId(projectId)
+    const project = await Project.aggregate([
+      {
+        $match: {
+          _id
+        }
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'owner',
+          foreignField: '_id',
+          as: 'owner'
+        }
+      },
+      { $unwind: '$owner' },
+      {
+        $lookup: {
+          from: 'remotefiles',
+          localField: 'icon',
+          foreignField: '_id',
+          as: 'icon'
+        }
+      },
+      { $unwind: '$icon' },
+      {
+        $lookup: {
+          from: 'remotefiles',
+          localField: 'banner',
+          foreignField: '_id',
+          as: 'banner'
+        }
+      },
+      { $unwind: '$banner' },
+      {
+        $lookup: {
+          from: 'remotefiles',
+          localField: 'images',
+          foreignField: '_id',
+          as: 'images'
+        }
+      },
+      {
+        $project: {
+          name: 1,
+          categories: 1,
+          platform: 1,
+          description: 1,
+          demoUrl: 1,
+          sourceCodeUrl: 1,
+          owner: {
+            _id: 1,
+            username: 1,
+            fullname: 1
+          },
+          icon: {
+            _id: 1,
+            url: 1,
+            mimeType: 1
+          },
+          banner: {
+            _id: 1,
+            url: 1,
+            mimeType: 1
+          },
+          images: {
+            _id: 1,
+            url: 1,
+            mimeType: 1
+          },
+          createdAt: 1,
+          updatedAt: 1
+        }
+      }
+    ])
+    return project?.[0]
+  }
+
   static getUserProject = async (projectId: string, userId: string) => {
     try {
       return await Project.findOne({ owner: userId, _id: projectId })
@@ -55,33 +135,78 @@ export default class ProjectService {
     page: number,
     limit: number
   ) => {
-    const startIndex = (page - 1) * limit
+    const skip = (page - 1) * limit
     // const cacheKey = `posts:${page}:${limit}`
     // const cachedPosts = await redisClient.get(cacheKey)
     // if (cachedPosts) {
     //   return JSON.parse(cachedPosts)
     // }
-    const projects = await Project.find({ platform })
-      .sort({ createdAt: -1 })
-      .skip(startIndex)
-      .limit(limit)
-    const totalItems = await Project.countDocuments()
 
-    const pagination = {
-      totalItems,
-      totalPages: Math.ceil(totalItems / limit),
-      currentPage: page,
-      itemsPerPage: limit
-    }
-
-    const result = {
-      projects,
-      pagination
-    }
+    const result = await Project.aggregate([
+      {
+        $match: {
+          platform
+        }
+      },
+      {
+        $lookup: {
+          from: 'remotefiles',
+          localField: 'icon',
+          foreignField: '_id',
+          as: 'icon'
+        }
+      },
+      { $unwind: '$icon' },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'owner',
+          foreignField: '_id',
+          as: 'owner'
+        }
+      },
+      { $unwind: '$owner' },
+      {
+        $facet: {
+          metadata: [{ $count: 'totalItems' }],
+          data: [
+            { $sort: { createdAt: -1 } },
+            { $skip: skip },
+            { $limit: limit },
+            {
+              $project: {
+                name: 1,
+                categories: 1,
+                platform: 1,
+                owner: {
+                  _id: 1,
+                  username: 1,
+                  fullname: 1
+                },
+                icon: {
+                  _id: 1,
+                  url: 1,
+                  mimeType: 1
+                }
+              }
+            }
+          ]
+        }
+      },
+      { $unwind: { path: '$metadata', preserveNullAndEmptyArrays: true } }
+    ])
 
     // await redisClient.setex(cacheKey, 300, JSON.stringify(result)) // delete record after 5 mins
-
-    return result
+    const totalItems = result[0]?.metadata?.totalItems || 0
+    return {
+      projects: result[0]?.data,
+      metadata: {
+        currentPage: page,
+        itemsPerPage: limit,
+        totalItems,
+        totalPages: Math.ceil(totalItems / limit)
+      }
+    }
   }
 
   static deleteProject = async (projectId: string, userId: string) => {
