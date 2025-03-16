@@ -24,9 +24,10 @@ export type Owner = {
 export type ProjectListItem = {
   _id: string
   name: string
-  description: string
+  description?: string
   icon?: RemoteFile
-  categories: string[]
+  banner?: RemoteFile
+  // categories: string[]
   owner: Owner
 }
 export type WebsiteListItem = ProjectListItem

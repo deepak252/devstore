@@ -1,4 +1,4 @@
-import { useAppSelector } from '@/hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Spinner } from '@/components/Loader'
@@ -6,13 +6,16 @@ import PageNotFound from '@/components/PageNotFound'
 import Introduction from '../components/profile/Introduction'
 import AboutMe from '../components/profile/AboutMe'
 import Projects from '../components/profile/Projects'
+import { getProfile } from '../userSlice'
 
 function ProfilePage() {
+  const dispatch = useAppDispatch()
   const { username } = useParams()
   const userProfile = useAppSelector((state) => state.user.profile)
 
   useEffect(() => {
-    console.log(username)
+    dispatch(getProfile())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username])
 
   if (userProfile.isLoading) {

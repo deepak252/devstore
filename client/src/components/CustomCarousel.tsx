@@ -91,6 +91,7 @@ export default function CustomCarousel({
           {isLoading
             ? [...Array(3).keys()].map((id) => (
                 <div
+                  key={id}
                   className="px-3"
                   style={{ flex: `0 0 ${itemWidth || flexWidth}%` }} // Dynamic width
                 >

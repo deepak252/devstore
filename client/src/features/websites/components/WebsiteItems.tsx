@@ -15,13 +15,7 @@ export const WebsiteItems = () => {
       itemsClass="gap-4 !grid-cols-1 sm:!grid-cols-2 lg:!grid-cols-3"
     >
       {websiteItems.list?.map((item) => (
-        <WebsiteItemViewMemo
-          key={item._id}
-          id={item._id}
-          name={item.name}
-          username={item.owner?.username}
-          imgUrl={item.icon?.url ?? ''}
-        />
+        <WebsiteItemViewMemo key={item._id} websiteItem={item} />
       ))}
       {websiteItems.isLoading &&
         [...Array(6).keys()].map((id) => <WebsiteItemShimmer key={id} />)}

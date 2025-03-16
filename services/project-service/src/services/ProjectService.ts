@@ -159,6 +159,15 @@ export default class ProjectService {
       { $unwind: '$icon' },
       {
         $lookup: {
+          from: 'remotefiles',
+          localField: 'banner',
+          foreignField: '_id',
+          as: 'banner'
+        }
+      },
+      { $unwind: '$banner' },
+      {
+        $lookup: {
           from: 'users',
           localField: 'owner',
           foreignField: '_id',
@@ -184,6 +193,11 @@ export default class ProjectService {
                   fullname: 1
                 },
                 icon: {
+                  _id: 1,
+                  url: 1,
+                  mimeType: 1
+                },
+                banner: {
                   _id: 1,
                   url: 1,
                   mimeType: 1

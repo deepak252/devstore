@@ -4,29 +4,24 @@ import Shimmer from '../Shimmer'
 import ProfileImage from '../ProfileImage'
 import HeartIcon from '@/assets/icons/heart-outlined.svg?react'
 import ShareIcon from '@/assets/icons/share.svg?react'
+import { WebsiteListItem } from '@/shared.types'
 
 type WebsiteItemViewProps = {
-  id: string
-  name: string
-  imgUrl: string
-  username: string
+  websiteItem: WebsiteListItem
 }
 
-const WebsiteItemView = ({
-  id,
-  name,
-  imgUrl,
-  username,
-}: WebsiteItemViewProps) => {
+const WebsiteItemView = ({ websiteItem }: WebsiteItemViewProps) => {
+  const { _id, name, icon, banner, owner } = websiteItem
+
   return (
     <div>
       <Link
-        to={`/websites/${id}`}
+        to={`/websites/${_id}`}
         className="relative block aspect-[1.3] overflow-hidden bg-white rounded-lg"
       >
         <img
           className="size-full bg-white object-cover"
-          src={imgUrl}
+          src={banner?.url || icon?.url}
           alt={name}
         />
         <div className="absolute inset-0 bg-black/10">
@@ -53,12 +48,14 @@ const WebsiteItemView = ({
         </div>
       </Link>
       <div className="flex items-center">
-        <ProfileImage />
+        <ProfileImage imgUrl={owner.profileImage?.url} />
         <div className="m-2 overflow-hidden">
           <p className="text-gray-900 text-15 font-medium overflow-ellipsis">
             {name}
           </p>
-          <p className="text-13 text-gray-700">{username}</p>
+          <p className="text-13 text-gray-700">
+            {owner.fullname || owner.username}
+          </p>
         </div>
       </div>
     </div>
@@ -77,6 +74,11 @@ export const WebsiteItemShimmer = () => {
   )
 }
 
-export const WebsiteItemViewMemo = memo(WebsiteItemView)
+export const WebsiteItemViewMemo = memo(
+  WebsiteItemView,
+  (prevProps, nextProps) => {
+    return prevProps.websiteItem === nextProps.websiteItem
+  }
+)
 
 export default WebsiteItemView
