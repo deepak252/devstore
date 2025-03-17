@@ -22,14 +22,15 @@ export const updateProfile = asyncHandler(async (req, _) => {
   if (error) {
     throw new ApiError(error.details[0].message)
   }
-  const { fullname, headline, bio } = req.body
+  const { fullname, title, headline, about } = req.body
 
   const updatedUser = await User.findByIdAndUpdate(
     req.user.userId,
     {
       fullname,
+      title,
       headline,
-      bio
+      about
     },
     { new: true }
   )

@@ -23,6 +23,10 @@ export const WebsiteCarousel = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  if (!banner.isLoading && !banner.list.length) {
+    return <></>
+  }
+
   return (
     <div className="pt-4">
       <CustomCarousel

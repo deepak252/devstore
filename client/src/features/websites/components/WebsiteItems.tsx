@@ -10,7 +10,7 @@ export const WebsiteItems = () => {
 
   return (
     <GridView
-      heading="Top Websites"
+      heading=""
       wrapperClass="my-8 mx-4"
       itemsClass="gap-4 !grid-cols-1 sm:!grid-cols-2 lg:!grid-cols-3"
     >
@@ -19,6 +19,9 @@ export const WebsiteItems = () => {
       ))}
       {websiteItems.isLoading &&
         [...Array(6).keys()].map((id) => <WebsiteItemShimmer key={id} />)}
+      {!websiteItems.isLoading && !websiteItems.list.length && (
+        <div className="text-lg text-neutral-500">No websites available!</div>
+      )}
     </GridView>
   )
 }

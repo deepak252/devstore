@@ -53,7 +53,7 @@ const WebsiteItemView = ({ websiteItem }: WebsiteItemViewProps) => {
           <p className="text-gray-900 text-15 font-medium overflow-ellipsis">
             {name}
           </p>
-          <p className="text-13 text-gray-700">
+          <p className="text-13 text-neutral-600">
             {owner.fullname || owner.username}
           </p>
         </div>

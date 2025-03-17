@@ -37,6 +37,10 @@ const Navbar = () => {
         navigate(`/u/${userProfile.data?.username}`)
         break
       }
+      case 'settings': {
+        navigate(`/account`)
+        break
+      }
       default:
         break
     }

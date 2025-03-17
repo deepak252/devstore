@@ -8,3 +8,18 @@ export type User = {
   createdAt: string
   updatedAt: string
 }
+
+export type GeneralFormValues = {
+  _id: string
+  fullname?: string
+  title?: string
+  headline?: string
+  about?: string
+}
+
+export type GeneralFormError = {
+  fullname?: string
+  title?: string
+  headline?: string
+  about?: string
+}

@@ -39,7 +39,7 @@ const FeaturedTile = ({
           <p className="text-gray-800 text-15 font-medium overflow-ellipsis">
             {name}
           </p>
-          <p className="text-sm text-gray-700">
+          <p className="text-sm text-neutral-600">
             {owner?.name || owner?.username}
           </p>
           {rating && (

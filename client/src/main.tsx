@@ -8,6 +8,7 @@ import { BrowserRouter } from 'react-router-dom'
 import store from './store/index.ts'
 import '@/utils/fileUtil.ts'
 import '@/utils/listUtil.ts'
+import '@/utils/textUtil.ts'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

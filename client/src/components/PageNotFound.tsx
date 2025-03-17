@@ -8,7 +8,7 @@ const PageNotFound = () => {
         alt="error"
         className="mx-auto w-[500px] max-w-[80vw]"
       />
-      <p className="text-gray-700">
+      <p className="text-neutral-600">
         The page you are looking for might be unavailable or does not exist.
       </p>
     </div>

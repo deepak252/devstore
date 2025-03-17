@@ -47,11 +47,14 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
       unique: true,
       sparse: true //allows multiple documents to have a null or missing phone
     },
+    title: {
+      type: String
+    },
     headline: {
       type: String,
       trim: true
     },
-    bio: {
+    about: {
       type: String
     },
     profileImage: {

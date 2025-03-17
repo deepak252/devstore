@@ -71,8 +71,9 @@ const usernameSchema = Joi.string()
 const fullnameSchema = Joi.string().min(3).max(40)
 const emailSchema = Joi.string().min(3).max(50)
 const passwordSchema = Joi.string().min(6).max(30)
-const headlineSchema = Joi.string().min(5).max(100).optional()
-const bioSchema = Joi.string().min(5).max(4000).optional()
+const titleSchema = Joi.string().min(5).max(60)
+const headlineSchema = Joi.string().min(5).max(100)
+const aboutSchema = Joi.string().min(5).max(4000)
 
 export const validateRegistration = (values: {
   username: string
@@ -102,15 +103,17 @@ export const validateLogin = (values: {
 
 export const validateUpdateProfile = ({
   fullname,
+  title,
   headline,
-  bio
+  about
 }: Partial<IUser>) => {
   const schema = Joi.object({
     fullname: fullnameSchema.optional(),
-    headline: headlineSchema,
-    bio: bioSchema
+    title: titleSchema.optional(),
+    headline: headlineSchema.optional(),
+    about: aboutSchema.optional()
   })
-  return schema.validate({ fullname, headline, bio })
+  return schema.validate({ fullname, title, headline, about })
 }
 
 export const validateCheckUsername = ({ username }: { username: string }) => {

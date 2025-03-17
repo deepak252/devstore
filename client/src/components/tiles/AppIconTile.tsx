@@ -22,7 +22,7 @@ const AppIconTile = ({ id, name, imgUrl, username }: AppIconTilePropTypes) => {
       />
       <div className="mx-2 mt-2 mb-3">
         <p className="text-15 font-semibold text-gray-900">{name}</p>
-        <p className="text-13 text-gray-700">{username}</p>
+        <p className="text-13 text-neutral-600">{username}</p>
       </div>
     </Link>
   )

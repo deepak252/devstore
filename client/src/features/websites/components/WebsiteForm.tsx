@@ -33,7 +33,7 @@ export const WebsiteFormWrapper = () => {
         onClick={handleToggleWebsiteFormOpen}
       >
         <AddIcon className="fill-primary size-8" />
-        Create Website
+        Add Website
       </button>
       {isFormOpen && <WebsiteForm onClose={handleToggleWebsiteFormOpen} />}
     </>
@@ -143,7 +143,6 @@ export const WebsiteForm = ({ onClose }: { onClose: () => void }) => {
                   selectedOptions={formik.values.categories || []}
                   options={categoryOptions}
                   onChange={(options) => {
-                    console.log(options)
                     formik.setFieldTouched('categories')
                     formik.setFieldValue('categories', options)
                   }}

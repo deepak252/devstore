@@ -29,8 +29,8 @@ function WebsitesPage() {
     <div className="">
       <WebsiteCarousel />
       <div className="mx-6 mb-4 pt-6">
-        <div className="chip active me-3">All</div>
-        <div className="chip">Websites</div>
+        {/* <div className="chip active me-3">All</div> */}
+        <div className="chip active">Websites</div>
       </div>
       <WebsiteItems />
       <WebsiteFormWrapper />

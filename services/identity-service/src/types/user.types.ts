@@ -5,8 +5,9 @@ export interface IUser {
   password: string
   profileImage?: string
   phone?: string
+  title?: string
   headline?: string
-  bio?: string
+  about?: string
   createdAt: Date
   updatedAt: Date
   refreshToken?: string
