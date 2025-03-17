@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { validateCreateProject } from '../api/utils/validation'
+import { validateProject } from '../api/utils/validation'
 import { redisClient } from '../config/redis'
 import { Platform } from '../constants/enums'
 import { publishEvent } from '../events/producer'
@@ -59,7 +59,12 @@ export default class ProjectService {
           as: 'owner'
         }
       },
-      { $unwind: '$owner' },
+      {
+        $unwind: {
+          path: '$owner',
+          preserveNullAndEmptyArrays: true
+        }
+      },
       {
         $lookup: {
           from: 'remotefiles',
@@ -68,7 +73,12 @@ export default class ProjectService {
           as: 'icon'
         }
       },
-      { $unwind: '$icon' },
+      {
+        $unwind: {
+          path: '$icon',
+          preserveNullAndEmptyArrays: true
+        }
+      },
       {
         $lookup: {
           from: 'remotefiles',
@@ -77,7 +87,12 @@ export default class ProjectService {
           as: 'banner'
         }
       },
-      { $unwind: '$banner' },
+      {
+        $unwind: {
+          path: '$banner',
+          preserveNullAndEmptyArrays: true
+        }
+      },
       {
         $lookup: {
           from: 'remotefiles',
@@ -156,7 +171,12 @@ export default class ProjectService {
           as: 'icon'
         }
       },
-      { $unwind: '$icon' },
+      {
+        $unwind: {
+          path: '$icon',
+          preserveNullAndEmptyArrays: true
+        }
+      },
       {
         $lookup: {
           from: 'remotefiles',
@@ -165,7 +185,12 @@ export default class ProjectService {
           as: 'banner'
         }
       },
-      { $unwind: '$banner' },
+      {
+        $unwind: {
+          path: '$banner',
+          preserveNullAndEmptyArrays: true
+        }
+      },
       {
         $lookup: {
           from: 'users',
@@ -174,7 +199,12 @@ export default class ProjectService {
           as: 'owner'
         }
       },
-      { $unwind: '$owner' },
+      {
+        $unwind: {
+          path: '$owner',
+          preserveNullAndEmptyArrays: true
+        }
+      },
       {
         $facet: {
           metadata: [{ $count: 'totalItems' }],
@@ -251,7 +281,7 @@ export default class ProjectService {
       throw new Error('Project not found')
     }
     Object.assign(project, values)
-    const { error } = validateCreateProject(project)
+    const { error } = validateProject(project)
     if (error) {
       project.active = false
     } else {
