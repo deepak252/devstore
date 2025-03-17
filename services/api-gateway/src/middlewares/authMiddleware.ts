@@ -6,7 +6,8 @@ import { ACCESS_TOKEN_SECRET } from '../config/env'
 export const validateAccessToken = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
+  requireAuth?: boolean
 ) => {
   try {
     const accessToken = req.headers.authorization?.replace('Bearer ', '')
@@ -20,6 +21,10 @@ export const validateAccessToken = async (
     req.user = decodedToken
     next()
   } catch (e: any) {
-    next(new ApiError(e?.message || 'Unauthorized access', 401))
+    if (requireAuth) {
+      next(new ApiError(e?.message || 'Unauthorized access', 401))
+    } else {
+      next()
+    }
   }
 }

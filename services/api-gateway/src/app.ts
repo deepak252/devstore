@@ -31,10 +31,16 @@ app.use((req, res, next) => {
 // identity -> /api/auth/register -> 3001
 
 for (const { from, to, requireAuth, parseReqBody } of proxyRoutes) {
-  const middlewares = requireAuth ? [validateAccessToken] : []
   app.use(
     from,
-    ...middlewares,
+    (req, res, next) => {
+      validateAccessToken(
+        req,
+        res,
+        next,
+        req.method !== 'GET' && requireAuth === true
+      )
+    },
     proxy(to, generateProxyOptions({ parseReqBody }))
   )
 }

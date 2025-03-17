@@ -30,8 +30,6 @@ export const generateProxyOptions = ({
       return proxyReqOpts
     },
     userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
-      console.log(userReq.originalUrl)
-
       logger.info(
         `Response received from ${userReq.originalUrl}: ${proxyRes.statusCode}`
       )
