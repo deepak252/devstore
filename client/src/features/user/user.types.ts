@@ -4,13 +4,13 @@ export type User = {
   username: string
   email: string
   title?: string
+  headline?: string
   about?: string
   createdAt: string
   updatedAt: string
 }
 
 export type GeneralFormValues = {
-  _id: string
   fullname?: string
   title?: string
   headline?: string

@@ -24,6 +24,8 @@ export const updateProfile = asyncHandler(async (req, _) => {
   }
   const { fullname, title, headline, about } = req.body
 
+  console.log(req.user.userId)
+
   const updatedUser = await User.findByIdAndUpdate(
     req.user.userId,
     {

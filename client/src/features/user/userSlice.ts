@@ -8,6 +8,7 @@ type UserState = {
   profile: {
     data?: User
     isLoading?: boolean
+    isUpdating?: boolean
   }
   toastData?: ToastData | null
 }
@@ -31,6 +32,21 @@ const userSlice = createSlice({
     },
     getProfileFailure: (state, action) => {
       state.profile.isLoading = false
+      state.toastData = {
+        type: 'failure',
+        message: action.payload,
+      }
+    },
+
+    updateProfile: (state, _: PayloadAction<Partial<User>>) => {
+      state.profile.isUpdating = true
+    },
+    updateProfileSuccess: (state, action: PayloadAction<User>) => {
+      state.profile.isUpdating = false
+      state.profile.data = action.payload
+    },
+    updateProfileFailure: (state, action) => {
+      state.profile.isUpdating = false
       state.toastData = {
         type: 'failure',
         message: action.payload,
@@ -63,6 +79,10 @@ export const {
   getProfile,
   getProfileSuccess,
   getProfileFailure,
+
+  updateProfile,
+  updateProfileSuccess,
+  updateProfileFailure,
 
   setUserToast,
   resetUserState,

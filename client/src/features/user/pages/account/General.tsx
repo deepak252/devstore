@@ -1,29 +1,52 @@
-import FormInputWrapper from '@/components/FormInputWrapper'
+import { useEffect, useMemo } from 'react'
 import { useFormik } from 'formik'
+import FormInputWrapper from '@/components/FormInputWrapper'
 import { Spinner } from '@/components/Loader'
 import PageNotFound from '@/components/PageNotFound'
 import ProfileImage from '@/components/ProfileImage'
 import FileInput from '@/components/FileInput'
 import EditIcon from '@/assets/icons/edit.svg?react'
-import { useAppSelector, useFormikErrors } from '@/hooks'
+import { useAppDispatch, useAppSelector, useFormikErrors } from '@/hooks'
 import { GeneralFormError, GeneralFormValues } from '../../user.types'
 import { validateGeneralForm } from '../../userUtil'
+import { updateProfile } from '../../userSlice'
+import { getChangedFields } from '@/utils/formUtil'
 
 function GeneralSettings() {
+  const dispatch = useAppDispatch()
   const userProfile = useAppSelector((state) => state.user.profile)
   const formik = useFormik<GeneralFormValues>({
     initialValues: {
-      _id: '',
+      fullname: '',
+      title: '',
+      headline: '',
+      about: '',
     },
     validate: validateGeneralForm,
     onSubmit: (values) => {
-      console.log(values)
-
-      //   dispatch(createWebsite(values))
+      if (!userProfile.data) return
+      dispatch(updateProfile(getChangedFields(userProfile.data, values)))
     },
   })
+  const changedFields = useMemo(() => {
+    if (!userProfile.data) return {}
+
+    return getChangedFields(userProfile.data, formik.values)
+  }, [userProfile.data, formik.values])
 
   const errors = useFormikErrors<GeneralFormValues, GeneralFormError>(formik)
+
+  useEffect(() => {
+    if (userProfile.data) {
+      formik.setValues({
+        fullname: userProfile.data.fullname,
+        title: userProfile.data.title,
+        headline: userProfile.data.headline,
+        about: userProfile.data.about,
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userProfile.data])
 
   if (userProfile.isLoading) {
     return (
@@ -70,27 +93,25 @@ function GeneralSettings() {
             name="fullname"
             className="textfield"
             placeholder="Enter full name"
+            value={formik.values.fullname ?? ''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
         </FormInputWrapper>
-        <FormInputWrapper
-          title="Title"
-          error={errors.fullname}
-          className="mt-4"
-        >
+        <FormInputWrapper title="Title" error={errors.title} className="mt-4">
           <input
             type="text"
             name="title"
             className="textfield"
             placeholder="Enter title"
+            value={formik.values.title ?? ''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
         </FormInputWrapper>
         <FormInputWrapper
           title="Headline"
-          error={errors.fullname}
+          error={errors.headline}
           className="mt-4"
         >
           <input
@@ -98,21 +119,26 @@ function GeneralSettings() {
             name="headline"
             className="textfield"
             placeholder="Enter headline"
+            value={formik.values.headline ?? ''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
         </FormInputWrapper>
-        <FormInputWrapper title="About" className="mt-4">
+        <FormInputWrapper title="About" error={errors.about} className="mt-4">
           <textarea
             name="about"
             placeholder="About yourself"
+            value={formik.values.about ?? ''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             className="textfield h-32"
           />
         </FormInputWrapper>
         <div className="flex justify-end">
-          <button className="btn-filled mt-8 rounded-xl" disabled>
+          <button
+            className="btn-filled mt-8 rounded-xl"
+            disabled={!Object.keys(changedFields).length}
+          >
             Save Changes
           </button>
         </div>
