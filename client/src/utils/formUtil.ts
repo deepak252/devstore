@@ -1,6 +1,6 @@
 export const getChangedFields = <T extends Record<string, any>>(
   currentValues: T,
-  updatedValues: T
+  updatedValues: Partial<T>
 ): Partial<T> => {
   return Object.keys(updatedValues).reduce((changes, key) => {
     const typedKey = key as keyof T

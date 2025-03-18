@@ -1,21 +1,19 @@
 import { channel } from '../config/rabbitmq'
-import BannerService from '../services/BannerService'
+import UserService from '../sevices/userService'
 import logger from '../utils/logger'
 
-export const bannerConsumer = async () => {
+export const userProfileConsumer = async () => {
   if (!channel) {
     return
   }
-  const queue = 'content.queue'
-  const exchange1 = 'project.events'
-  const bindingKey1 = 'project.updated'
-  const bindingKey2 = 'project.deleted'
+  const queue = 'user.queue'
+  const exchange1 = 'upload.events'
+  const bindingKey1 = 'user.image.uploaded'
 
   await channel.assertExchange(exchange1, 'topic', { durable: false })
   await channel.assertQueue(queue, { durable: false })
 
   await channel.bindQueue(queue, exchange1, bindingKey1)
-  await channel.bindQueue(queue, exchange1, bindingKey2)
 
   channel.consume(queue, async (msg) => {
     try {
@@ -26,9 +24,9 @@ export const bannerConsumer = async () => {
         )
 
         if (msg.fields.routingKey === bindingKey1) {
-          await BannerService.createOrUpdateProjectBanner(content?.project)
-        } else if (msg.fields.routingKey === bindingKey2) {
-          await BannerService.deleteBanner(content?.project?._id)
+          await UserService.updateUser(content?.remoteFile?.user, {
+            profileImage: content?.remoteFile?._id
+          })
         }
 
         channel?.ack(msg)
@@ -41,5 +39,4 @@ export const bannerConsumer = async () => {
     }
   })
   logger.info(`Subscribed to event: ${bindingKey1}`)
-  logger.info(`Subscribed to event: ${bindingKey2}`)
 }

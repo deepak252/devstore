@@ -1,7 +1,7 @@
 import { channel } from '../config/rabbitmq'
 import logger from '../utils/logger'
 
-type RoutingKey = 'project.media.uploaded' | 'user.image.uploaded'
+type RoutingKey = 'user.image.deleted'
 
 export const publishEvent = async (routingKey: RoutingKey, data: string) => {
   if (!data) {
@@ -10,7 +10,7 @@ export const publishEvent = async (routingKey: RoutingKey, data: string) => {
   if (!channel) {
     return
   }
-  const exchange = 'upload.events'
+  const exchange = 'user.events'
   await channel.assertExchange(exchange, 'topic', { durable: false })
 
   channel.publish(exchange, routingKey, Buffer.from(data))

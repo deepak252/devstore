@@ -1,3 +1,5 @@
+import { RemoteFile } from '@/shared.types'
+
 export type User = {
   _id: string
   fullname?: string
@@ -6,6 +8,7 @@ export type User = {
   title?: string
   headline?: string
   about?: string
+  profileImage?: RemoteFile
   createdAt: string
   updatedAt: string
 }
@@ -15,6 +18,7 @@ export type GeneralFormValues = {
   title?: string
   headline?: string
   about?: string
+  attachmentProfileImage?: File
 }
 
 export type GeneralFormError = {
@@ -22,4 +26,5 @@ export type GeneralFormError = {
   title?: string
   headline?: string
   about?: string
+  attachmentProfileImage?: string
 }

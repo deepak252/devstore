@@ -1,9 +1,11 @@
+import { Schema } from 'mongoose'
+
 export interface IUser {
   username: string
   fullname: string
   email: string
   password: string
-  profileImage?: string
+  profileImage?: Schema.Types.ObjectId
   phone?: string
   title?: string
   headline?: string

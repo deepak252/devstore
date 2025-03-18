@@ -44,6 +44,10 @@ const userSlice = createSlice({
     updateProfileSuccess: (state, action: PayloadAction<User>) => {
       state.profile.isUpdating = false
       state.profile.data = action.payload
+      state.toastData = {
+        type: 'success',
+        message: 'Profile updated successfully',
+      }
     },
     updateProfileFailure: (state, action) => {
       state.profile.isUpdating = false

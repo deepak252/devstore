@@ -3,6 +3,7 @@ import {
   getAllRemoteFiles,
   uploadApplication,
   uploadMedia,
+  uploadProfileImage,
   uploadProjectMedia
 } from '../controllers/uploadController'
 import { authenticateRequest } from '../middlewares/authMiddleware'
@@ -36,6 +37,18 @@ router.post(
     }
   ]),
   uploadMedia
+)
+
+router.post(
+  '/profile-image',
+  uploadMiddleware([
+    {
+      name: 'attachmentProfileImage',
+      maxCount: 1,
+      maxSizeKB: 1024
+    }
+  ]),
+  uploadProfileImage
 )
 
 router.post(

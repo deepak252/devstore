@@ -41,19 +41,9 @@
       "address": "localhost",
       "restart": true,
       "localRoot": "${workspaceFolder}/services/identity-service",
+      "remoteRoot": "/app",
       "skipFiles": ["<node_internals>/**"],
       "outFiles": ["${workspaceFolder}/services/identity-service/**/*.js"]
-    },
-    {
-      "type": "node",
-      "request": "attach",
-      "name": "Identity Service Docker: Attach to Node",
-      "port": 9221,
-      "address": "localhost",
-      "restart": true,
-      "localRoot": "${workspaceFolder}",
-      "remoteRoot": "/app",
-      "skipFiles": ["<node_internals>/**"]
     },
     {
       "type": "node",

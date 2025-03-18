@@ -14,6 +14,7 @@ export const FEATURED_ALL_API = 'featured/all'
 
 export const MEDIA_UPLOAD_API = 'upload/media'
 export const UPLOAD_PROJECT_MEDIA_API = 'upload/project-media'
+export const UPLOAD_PROFILE_IMAGE_API = 'upload/profile-image'
 
 export const METADATA_API = 'content/metadata'
 export const BANNER_API = 'content/banners'

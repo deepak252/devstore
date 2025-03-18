@@ -7,7 +7,8 @@ export default class RemoteFileService {
   static uploadMedia = async (
     file: Express.Multer.File,
     userId: string,
-    parentId?: string
+    parentId?: string,
+    fileType?: string
   ) => {
     const s3Service = new S3Service(S3_MEDIA_BUCKET)
     const uploadResult = await s3Service.uploadToS3(file, userId)
@@ -15,6 +16,7 @@ export default class RemoteFileService {
       const remoteFile = await RemoteFile.create({
         publicId: uploadResult?.key,
         bucketName: S3_MEDIA_BUCKET,
+        fileType: fileType,
         parentId: parentId,
         originalName: file.originalname,
         user: userId,

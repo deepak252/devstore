@@ -1,5 +1,5 @@
 import { all, put, takeLatest } from 'redux-saga/effects'
-import { apiWorker } from '@/services/api'
+import { apiWorker, uploadTask } from '@/services/api'
 import { getUserFromStorage, saveUserToStorage } from '@/utils/storage'
 import UserService from './userService'
 import {
@@ -11,7 +11,8 @@ import {
   updateProfileSuccess,
 } from './userSlice'
 import { PayloadAction } from '@reduxjs/toolkit'
-import { User } from './user.types'
+import { GeneralFormValues, User } from './user.types'
+import { UPLOAD_PROFILE_IMAGE_API } from '@/constants'
 
 function* getProfileWorker(): Generator {
   const user = getUserFromStorage()
@@ -29,10 +30,18 @@ function* getProfileWorker(): Generator {
   })
 }
 
-function* updateProfileWorker(action: PayloadAction<Partial<User>>): Generator {
-  const data = action.payload
+function* updateProfileWorker(
+  action: PayloadAction<Partial<User & GeneralFormValues>>
+): Generator {
+  const { attachmentProfileImage, ...data } = action.payload
   yield* apiWorker(UserService.updateUserProfile, data, {
     onSuccess: function* (response) {
+      if (attachmentProfileImage) {
+        const res = yield uploadProfileImageWorker({
+          attachmentProfileImage,
+        })
+        console.log(res)
+      }
       saveUserToStorage(response.data?.data)
       yield put(updateProfileSuccess(response.data?.data))
     },
@@ -40,6 +49,33 @@ function* updateProfileWorker(action: PayloadAction<Partial<User>>): Generator {
       yield put(updateProfileFailure(error?.message || 'Something went wrong'))
     },
   })
+}
+
+function* uploadProfileImageWorker({
+  attachmentProfileImage,
+}: {
+  attachmentProfileImage: File
+}): Generator {
+  if (!attachmentProfileImage) return
+  const formData = new FormData()
+
+  if (attachmentProfileImage) {
+    formData.append('attachmentProfileImage', attachmentProfileImage)
+  }
+
+  yield* uploadTask(
+    UPLOAD_PROFILE_IMAGE_API,
+    { data: formData },
+    {
+      onSuccess: function* (response) {
+        console.log(response)
+        yield response
+      },
+      onFailure: function* (error) {
+        yield error
+      },
+    }
+  )
 }
 
 export default function* () {

@@ -26,7 +26,9 @@ export const deleteRemoteFileConsumer = async () => {
     if (msg?.content) {
       const content = JSON.parse(msg.content.toString())
       logger.info(`Event recieved: ${msg.fields.routingKey}, ${msg?.content}`)
-      if (msg.fields.routingKey === bindingKey2) {
+      if (msg.fields.routingKey === bindingKey1) {
+        await RemoteFileService.deleteSingleFile(content.user.profileImage)
+      } else if (msg.fields.routingKey === bindingKey2) {
         await RemoteFileService.deleteMultipleFiles([
           content.project?.icon,
           content.project?.banner,

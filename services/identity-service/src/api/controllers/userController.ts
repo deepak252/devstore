@@ -1,4 +1,5 @@
 import User from '../../models/User'
+import UserService from '../../sevices/userService'
 import { ApiError } from '../utils/ApiError'
 import { ResponseSuccess } from '../utils/ApiResponse'
 import asyncHandler from '../utils/asyncHandler'
@@ -8,13 +9,13 @@ import {
 } from '../utils/validation'
 
 export const getProfile = asyncHandler(async (req, _) => {
-  const user = await User.findById(req.user.userId)
+  const user = await UserService.getUser(req.user.userId || '')
 
   if (!user) {
     throw new ApiError('User not found', 404)
   }
 
-  return new ResponseSuccess('Profile fetched successfully', user?.toJSON())
+  return new ResponseSuccess('Profile fetched successfully', user)
 })
 
 export const updateProfile = asyncHandler(async (req, _) => {
@@ -22,21 +23,10 @@ export const updateProfile = asyncHandler(async (req, _) => {
   if (error) {
     throw new ApiError(error.details[0].message)
   }
-  const { fullname, title, headline, about } = req.body
-
-  console.log(req.user.userId)
-
-  const updatedUser = await User.findByIdAndUpdate(
-    req.user.userId,
-    {
-      fullname,
-      title,
-      headline,
-      about
-    },
-    { new: true }
+  const updatedUser = await UserService.updateUser(
+    req.user.userId ?? '',
+    req.body
   )
-
   if (!updatedUser) {
     throw new ApiError('User not found', 404)
   }

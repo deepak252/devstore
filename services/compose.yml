@@ -30,8 +30,12 @@ services:
       - ./identity-service/.env
     environment:
       - REDIS_HOST=redis
+      - RABBITMQ_URL=amqp://rabbitmq
     depends_on:
-      - redis
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_started
 
   project-service:
     build: ./project-service

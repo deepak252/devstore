@@ -59,6 +59,7 @@ function GeneralSettings() {
   if (!userProfile.data) {
     return <PageNotFound />
   }
+  console.log(userProfile.data?.profileImage?.url)
 
   return (
     <div className="p-6">
@@ -71,12 +72,16 @@ function GeneralSettings() {
             multiple={false}
             onSelectFiles={([file]) => {
               console.log(file)
-              // formik.setFieldValue('attachmentBanner', file)
+              formik.setFieldValue('attachmentProfileImage', file)
             }}
           >
             <div className="relative">
-              <ProfileImage className="!size-24 opacity-80 hover:opacity-70 border border-neutral-600" />
-              <div className="absolute -right-1 bottom-3 bg-neutral-500 border border-white rounded-full p-1">
+              <ProfileImage
+                imgFile={formik.values.attachmentProfileImage}
+                imgUrl={userProfile.data?.profileImage?.url}
+                className="!size-24 opacity-80 hover:opacity-70 border border-neutral-600"
+              />
+              <div className="absolute -right-1 bottom-3 bg-primary/80 border border-white rounded-full p-1">
                 <EditIcon className="size-4 fill-white" />
               </div>
             </div>
