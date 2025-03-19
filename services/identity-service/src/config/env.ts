@@ -3,7 +3,7 @@ dotenv.config()
 
 export const {
   NODE_ENV = 'development',
-  SERVER_PORT = 3001,
+  PORT = 3001,
   REDIS_URL = 'redis://localhost:6379',
   REDIS_HOST = 'localhost',
   REDIS_PORT = '6379',

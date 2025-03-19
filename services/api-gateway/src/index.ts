@@ -1,12 +1,12 @@
 import { createServer } from 'http'
-import { SERVER_PORT } from './config/env.js'
+import { PORT } from './config/env.js'
 import app from './app.js'
 import logger from './utils/logger.js'
 
 const httpServer = createServer(app)
 
-httpServer.listen(SERVER_PORT, () => {
-  logger.info(`🚀 Devstore API Gateway is running on port : ${SERVER_PORT}`)
+httpServer.listen(PORT, () => {
+  logger.info(`🚀 Devstore API Gateway is running on port : ${PORT}`)
 })
 
 process.on('unhandledRejection', (reason, promise) => {
