@@ -4,7 +4,7 @@ import helmet from 'helmet'
 import proxy from 'express-http-proxy'
 import { ResponseSuccess } from './utils/ApiResponse.js'
 import { errorHandler } from './middlewares/errorHandler.js'
-import { rateLimiter } from './middlewares/rateLimiter.js'
+// import { rateLimiter } from './middlewares/rateLimiter.js'
 import { validateAccessToken } from './middlewares/authMiddleware.js'
 import { generateProxyOptions } from './utils/proxyUtil.js'
 import { proxyRoutes } from './config/index.js'
@@ -20,7 +20,7 @@ app.use(
     // credentials: true
   })
 )
-app.use(rateLimiter)
+// app.use(rateLimiter)
 
 app.use((req, res, next) => {
   logger.info(`Received ${req.method} request to ${req.url}`)

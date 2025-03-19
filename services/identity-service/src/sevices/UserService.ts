@@ -38,7 +38,6 @@ export default class UserService {
         }
       }
     ])
-
     return result?.[0]
   }
   static updateUser = async (userId: string, data: Partial<IUser>) => {
