@@ -1,8 +1,9 @@
-import { channel } from '../config/rabbitmq'
+import { getAmqpChannel } from '../config/rabbitmq'
 import UserService from '../services/UserService'
 import logger from '../utils/logger'
 
 export const userProfileConsumer = async () => {
+  const channel = getAmqpChannel()
   if (!channel) {
     return
   }

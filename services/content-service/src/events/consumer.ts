@@ -1,8 +1,9 @@
-import { channel } from '../config/rabbitmq'
+import { getAmqpChannel } from '../config/rabbitmq'
 import BannerService from '../services/BannerService'
 import logger from '../utils/logger'
 
 export const bannerConsumer = async () => {
+  const channel = getAmqpChannel()
   if (!channel) {
     return
   }

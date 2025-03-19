@@ -16,3 +16,8 @@ export const connectDB = async () => {
     process.exit(1)
   }
 }
+
+export const checkMongoStatus = (): string => {
+  const states = ['disconnected', 'connected', 'connecting', 'disconnecting']
+  return states[mongoose.connection.readyState]
+}

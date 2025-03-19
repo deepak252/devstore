@@ -9,6 +9,9 @@ import helmet from 'helmet'
 import { errorHandler } from './api/middlewares/errorHandler.js'
 import logger from './utils/logger.js'
 import router from './api/routes/index.js'
+import { checkMongoStatus } from './config/db.js'
+import { checkRedisStatus } from './config/redis.js'
+import { checkAmqpStatus } from './config/rabbitmq.js'
 
 const app = express()
 
@@ -37,6 +40,18 @@ app.use((req, res, next) => {
 // app.use('/api/auth/register', sensitiveRateLimiter)
 
 app.use('/api', router)
+
+app.get('/health', (_, res) => {
+  res.status(200).json({
+    code: 200,
+    message: 'Identity Service OK',
+    data: {
+      mongo: checkMongoStatus(),
+      redis: checkRedisStatus(),
+      rabbitmq: checkAmqpStatus()
+    }
+  })
+})
 
 app.use(errorHandler)
 

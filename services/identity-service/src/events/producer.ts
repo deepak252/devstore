@@ -1,4 +1,4 @@
-import { channel } from '../config/rabbitmq'
+import { getAmqpChannel } from '../config/rabbitmq'
 import logger from '../utils/logger'
 
 type RoutingKey = 'user.image.deleted'
@@ -7,6 +7,7 @@ export const publishEvent = async (routingKey: RoutingKey, data: string) => {
   if (!data) {
     return
   }
+  const channel = getAmqpChannel()
   if (!channel) {
     return
   }

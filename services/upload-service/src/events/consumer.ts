@@ -1,8 +1,9 @@
-import { channel } from '../config/rabbitmq'
+import { getAmqpChannel } from '../config/rabbitmq'
 import RemoteFileService from '../services/RemoteFileService'
 import logger from '../utils/logger'
 
 export const deleteRemoteFileConsumer = async () => {
+  const channel = getAmqpChannel()
   if (!channel) {
     return
   }

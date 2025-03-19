@@ -21,4 +21,8 @@ redisClient.on('close', () => {
   logger.info('❌ Redis connection closed')
 })
 
-export { redisClient }
+const checkRedisStatus = (): string => {
+  return redisClient.status
+}
+
+export { redisClient, checkRedisStatus }
