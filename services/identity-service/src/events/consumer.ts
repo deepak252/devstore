@@ -1,5 +1,5 @@
 import { channel } from '../config/rabbitmq'
-import UserService from '../sevices/userService'
+import UserService from '../services/UserService'
 import logger from '../utils/logger'
 
 export const userProfileConsumer = async () => {

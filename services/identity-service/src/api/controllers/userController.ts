@@ -1,5 +1,5 @@
 import User from '../../models/User'
-import UserService from '../../sevices/userService'
+import UserService from '../../services/UserService'
 import { ApiError } from '../utils/ApiError'
 import { ResponseSuccess } from '../utils/ApiResponse'
 import asyncHandler from '../utils/asyncHandler'
