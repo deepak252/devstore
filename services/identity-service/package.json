@@ -23,7 +23,8 @@
     "mongoose": "^8.10.1",
     "rate-limit-redis": "^4.2.0",
     "rate-limiter-flexible": "^5.0.5",
-    "winston": "^3.17.0"
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",
