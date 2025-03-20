@@ -2,17 +2,16 @@
 import {
   AppListItem,
   Banner,
-  ProjectFormValues,
   Platform,
   ProjectDetails,
-  ProjectList,
   ToastData,
+  PaginatedList,
 } from '@/shared.types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppFormValues } from './apps.types'
 
 type AppsState = {
-  data: ProjectList<AppListItem>
+  data: PaginatedList<AppListItem>
   filter: {
     platform: Platform
     categories: string[]
@@ -20,42 +19,19 @@ type AppsState = {
   appDetails: {
     data: ProjectDetails | null
     isLoading: boolean
-    error: string | null
   }
   appForm: {
-    data: ProjectFormValues
-    isOpen: boolean
-    isMinimize: boolean
-    isLoading: boolean
-    error: string | null
-    package: {
-      info: null
-      isLoading: boolean
-      progress: number | null
-      error: string | null
+    media: {
+      isUploading: boolean
     }
+    isOpen: boolean
+    isLoading: boolean
   }
   banner: {
     list: Banner[]
     isLoading: boolean
-    error: string | null
   }
   toastData?: ToastData | null
-}
-
-const formDataInitialState: AppFormValues = {
-  name: '',
-  description: '',
-  categories: [],
-  sourceCode: '',
-  isSourceCodePublic: true,
-  isPrivate: false,
-  // platform: 'android',
-  attachmentPackage: null, // File Instance
-  attachmentIcon: null,
-  attachmentImages: [],
-  attachmentVideo: null,
-  attachmentGraphic: null,
 }
 
 const initialState: AppsState = {
@@ -64,8 +40,8 @@ const initialState: AppsState = {
     page: 1,
     limit: 10,
     totalPages: 0,
+    totalResults: 0,
     isLoading: false,
-    error: null,
   },
   filter: {
     platform: 'all', // all, android, ios
@@ -74,25 +50,16 @@ const initialState: AppsState = {
   appDetails: {
     data: null,
     isLoading: false,
-    error: null,
   },
   appForm: {
-    data: formDataInitialState,
+    // data: formDataInitialState,
     isOpen: false,
-    isMinimize: false,
     isLoading: false,
-    error: null,
-    package: {
-      info: null,
-      isLoading: false,
-      progress: null,
-      error: null,
-    },
+    media: { isUploading: false },
   },
   banner: {
     list: [],
     isLoading: false,
-    error: null,
   },
 }
 
@@ -109,60 +76,57 @@ const appsSlice = createSlice({
       state.data.isLoading = true
     },
     getAppsSuccess: (state, action) => {
+      const { projects = [], metadata = {} } = action.payload || {}
       state.data.isLoading = false
-      state.data.error = null
-      state.data.list = action.payload.data?.projects
+      state.data.list = projects
+      state.data.page = metadata.currentPage
+      state.data.limit = metadata.itemsPerPage
+      state.data.totalPages = metadata.totalPages
+      state.data.totalResults = metadata.totalItems
     },
     getAppsFailure: (state, action) => {
       state.data.isLoading = false
-      state.data.error = action.payload
+      state.toastData = {
+        type: 'failure',
+        message: action.payload || 'Something went wrong',
+      }
     },
     // App Details
-    getAppDetails: (state, _: PayloadAction<{ projectId: string }>) => {
-      state.appDetails = {
-        isLoading: true,
-        error: null,
-        data: null,
+    getAppDetails: (state, action: PayloadAction<{ projectId: string }>) => {
+      if (action.payload.projectId !== state.appDetails.data?._id) {
+        state.appDetails = {
+          isLoading: true,
+          data: null,
+        }
       }
     },
     getAppDetailsSuccess: (state, action) => {
-      state.appDetails.isLoading = false
-      state.appDetails.error = null
-      state.appDetails.data = action.payload?.data
-    },
-    getAppDetailsFailure: (state, action) => {
-      state.appDetails.isLoading = false
-      state.appDetails.error = action.payload
-    },
-    // Create App Form
-    toggleCreateAppFormOpen: (state) => {
-      state.appForm.isOpen = !state.appForm?.isOpen
-      if (!state.appForm.isOpen) {
-        // Form Closed
-        state.appForm.isMinimize = false
-        state.appForm.data = formDataInitialState
+      state.appDetails = {
+        isLoading: false,
+        data: action.payload,
       }
     },
-    toggleCreateAppFormMinimize: (state) => {
-      state.appForm.isMinimize = !state.appForm?.isMinimize
+    getAppDetailsFailure: (state) => {
+      state.appDetails.isLoading = false
     },
-    setCreateAppFormData: (state, action: PayloadAction<AppFormValues>) => {
-      state.appForm.data = action.payload
+
+    toggleCreateAppFormOpen: (state) => {
+      state.appForm.isOpen = !state.appForm?.isOpen
     },
-    createApp: (state, _: PayloadAction<FormData>) => {
+
+    // Create App Form
+    createApp: (state, _: PayloadAction<AppFormValues>) => {
       state.appForm.isLoading = true
-      state.appForm.error = null
     },
     createAppSuccess: (state) => {
       state.appForm = initialState.appForm
       state.toastData = {
         type: 'success',
-        message: 'App added successfully!',
+        message: 'Your app is being processed. It will appear soon.',
       }
     },
     createAppFailure: (state, action) => {
       state.appForm.isLoading = false
-      state.appForm.error = action.payload
       state.toastData = {
         type: 'failure',
         message: action.payload || 'Something went wrong',
@@ -170,59 +134,50 @@ const appsSlice = createSlice({
     },
     createAppCancelled: (state, _) => {
       state.appForm.isLoading = false
-      state.appForm.error = null
       console.log('createAppCancelled')
     },
-    uploadAppPackage: (state, _) => {
-      state.appForm.package.isLoading = true
-      state.appForm.package.error = null
-      state.appForm.package.info = null
+    // Upload App Media
+    uploadAppMedia: (state, _: PayloadAction<{ icon: File }>) => {
+      state.appForm.media.isUploading = true
     },
-    uploadAppPackageProgress: (state, action) => {
-      state.appForm.package.progress = action.payload
+    uploadAppMediaSuccess: (state) => {
+      state.appForm = initialState.appForm
+      // state.toastData = {
+      //   type: 'success',
+      //   message: 'App creation submitted',
+      // }
     },
-    uploadAppPackageSuccess: (state, action) => {
-      state.appForm.package.error = null
-      state.appForm.package.isLoading = false
-      state.appForm.package.info = action.payload?.data
-    },
-    uploadAppPackageCancelled: (state, _) => {
-      state.appForm.package = {
-        info: null,
-        isLoading: false,
-        progress: null,
-        error: null,
+    uploadAppMediaFailure: (state, action) => {
+      state.appForm.media.isUploading = false
+      state.toastData = {
+        type: 'failure',
+        message: action.payload || 'Error while uploading app images',
       }
-      console.log('uploadAppCancelled')
     },
-    uploadAppPackageFailure: (state, action) => {
-      state.appForm.package = {
-        info: null,
-        isLoading: false,
-        progress: null,
-        error: action.payload,
-      }
+    uploadAppMediaCancelled: (state, _) => {
+      state.appForm.media.isUploading = false
+      console.log('uploadAppMediaCancelled')
+    },
+
+    getAppBanners: (state, _) => {
+      state.banner.isLoading = true
+    },
+    getAppBannersSuccess: (state, action) => {
+      state.banner.isLoading = false
+      state.banner.list = action.payload
+    },
+    getAppBannersFailure: (state, action) => {
+      state.banner.isLoading = false
       state.toastData = {
         type: 'failure',
         message: action.payload || 'Something went wrong',
       }
     },
-    getAppsBanner: (state, _) => {
-      state.banner.isLoading = true
-    },
-    getAppsBannerSuccess: (state, action) => {
-      state.banner.isLoading = false
-      state.banner.error = null
-      state.banner.list = action.payload?.data
-    },
-    getAppsBannerFailure: (state, action) => {
-      state.banner.isLoading = false
-      state.banner.error = action.payload
-    },
+
     setAppsFilter: (state, action) => {
       state.filter = action.payload
     },
-    setAppsToast: (state, action) => {
+    setAppsToast: (state, action: PayloadAction<ToastData | null>) => {
       state.toastData = action.payload
     },
   },
@@ -232,24 +187,32 @@ export const {
   getApps,
   getAppsSuccess,
   getAppsFailure,
+
   getAppDetails,
   getAppDetailsSuccess,
   getAppDetailsFailure,
-  toggleCreateAppFormOpen,
-  toggleCreateAppFormMinimize,
-  setCreateAppFormData,
+
   createApp,
   createAppSuccess,
   createAppFailure,
   createAppCancelled,
-  uploadAppPackage,
-  uploadAppPackageProgress,
-  uploadAppPackageSuccess,
-  uploadAppPackageCancelled,
-  uploadAppPackageFailure,
-  getAppsBanner,
-  getAppsBannerSuccess,
-  getAppsBannerFailure,
+
+  uploadAppMedia,
+  uploadAppMediaSuccess,
+  uploadAppMediaFailure,
+  uploadAppMediaCancelled,
+
+  toggleCreateAppFormOpen,
+
+  // uploadAppIcon,
+  // uploadAppIconSuccess,
+  // uploadAppIconFailure,
+  // uploadAppIconCancelled,
+
+  getAppBanners,
+  getAppBannersSuccess,
+  getAppBannersFailure,
+
   setAppsFilter,
   setAppsToast,
 } = appsSlice.actions

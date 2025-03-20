@@ -7,6 +7,9 @@ import accountRoutes from './accountRoutes'
 const RootLayout = lazy(() => import('@/components/layouts/RootLayout'))
 const MainLayout = lazy(() => import('@/components/layouts/MainLayout'))
 const AppsPage = lazy(() => import('@/features/apps/pages/AppsPage'))
+const AppDetailsPage = lazy(
+  () => import('@/features/apps/pages/AppDetailsPage')
+)
 const WebsitesPage = lazy(
   () => import('@/features/websites/pages/WebsitesPage')
 )
@@ -31,7 +34,16 @@ const routes: RouteObject[] = [
           },
           {
             path: 'apps',
-            element: <AppsPage />,
+            children: [
+              {
+                path: '',
+                element: <AppsPage />,
+              },
+              {
+                path: ':projectId',
+                element: <AppDetailsPage />,
+              },
+            ],
           },
           {
             path: 'websites',

@@ -29,14 +29,11 @@ export type ProjectListItem = {
   banner?: RemoteFile
   // categories: string[]
   owner: Owner
+  platform?: Platform
 }
 export type WebsiteListItem = ProjectListItem
-export type GameListItem = ProjectListItem & {
-  platform: Platform
-}
-export type AppListItem = ProjectListItem & {
-  platform: Platform
-}
+export type GameListItem = ProjectListItem
+export type AppListItem = ProjectListItem
 
 export type ProjectList<T extends ProjectListItem> = {
   list: T[]
