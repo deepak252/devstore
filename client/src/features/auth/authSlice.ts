@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ToastData } from '@/shared.types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { SignInFormValues, SignUpFormValues } from './auth.types'
