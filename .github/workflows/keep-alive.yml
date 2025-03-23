@@ -1,17 +1,17 @@
-name: Keep Alive
+# name: Keep Alive
 
-on:
-  schedule: 
-    - cron: '* * * * *'
-  workflow_dispatch: # allows manual trigger too
+# on:
+#   schedule: 
+#     - cron: '* * * * *'
+#   workflow_dispatch: # allows manual trigger too
 
-jobs:
-  keepalive:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Ping Health Check
-        uses: fjogeleit/http-request-action@v1.14.0
-        with:
-          url: ${{ secrets.KEEP_ALIVE_URL }}
-          method: 'GET'
-          timeout: 120000
+# jobs:
+#   keepalive:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Ping Health Check
+#         uses: fjogeleit/http-request-action@v1.14.0
+#         with:
+#           url: ${{ secrets.KEEP_ALIVE_URL }}
+#           method: 'GET'
+#           timeout: 120000
