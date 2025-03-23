@@ -5,7 +5,7 @@ import { Platform } from '../constants/enums'
 // export type Platform = 'android' | 'ios'
 
 export interface IProject {
-  platform: Platform
+  platforms: Platform[]
   name: string
   owner: Schema.Types.ObjectId
   isPrivate: boolean

@@ -4,6 +4,11 @@ export enum Platform {
   website = 'website'
 }
 
+export enum ProjectType {
+  app = 'app',
+  web = 'web'
+}
+
 export enum Status {
   Pending = 'Pending',
   Completed = 'Completed'

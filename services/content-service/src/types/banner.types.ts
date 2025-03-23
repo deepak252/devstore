@@ -6,7 +6,7 @@ export interface IBanner {
   project: Schema.Types.ObjectId
   redirectUrl: string
   active?: boolean
-  platform?: Platform
+  platforms?: Platform[]
   createdAt: Date
   updatedAt: Date
 }

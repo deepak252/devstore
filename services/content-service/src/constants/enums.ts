@@ -3,3 +3,8 @@ export enum Platform {
   ios = 'ios',
   website = 'website'
 }
+
+export enum ProjectType {
+  app = 'app',
+  web = 'web'
+}

@@ -60,7 +60,7 @@ export const WebsiteForm = ({ onClose }: { onClose: () => void }) => {
       name: '',
       description: '',
       isPrivate: false,
-      platform: 'website',
+      platforms: ['website'],
       categories: [],
       sourceCodeUrl: '',
       demoUrl: '',

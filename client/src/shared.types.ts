@@ -82,7 +82,7 @@ export type ProjectFormValues = {
   name: string
   description?: string
   isPrivate: boolean
-  platform: Platform
+  platforms: Platform[]
   categories?: DropdownOption[]
   sourceCodeUrl?: string
   demoUrl?: string
@@ -117,7 +117,7 @@ export type ProjectFormError = {
 
 export type SaveProjectPayload = {
   name: string
-  platform: Platform
+  platforms: Platform[]
   isPrivate: boolean
   description?: string
   categories?: string[]
@@ -158,7 +158,7 @@ export type UploadProjectMediaPayload = {
 
 export type ProjectDetails = {
   _id: string
-  platform: Platform
+  platforms: Platform[]
   name: string
   isPrivate: boolean
   description?: string

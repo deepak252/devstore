@@ -25,8 +25,8 @@ const bannerSchema = new Schema<IBanner, BannerModel, IBannerMethods>(
       required: true,
       unique: true
     },
-    platform: {
-      type: String,
+    platforms: {
+      type: [String],
       enum: Object.values(Platform)
     },
     active: {

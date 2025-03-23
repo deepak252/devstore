@@ -8,7 +8,7 @@ import { errorHandler } from './middlewares/errorHandler.js'
 import { validateAccessToken } from './middlewares/authMiddleware.js'
 import { generateProxyOptions } from './utils/proxyUtil.js'
 import { proxyRoutes } from './config/index.js'
-import { healthCheck } from './middlewares/healthCheck.js'
+// import { healthCheck } from './middlewares/healthCheck.js'
 import { redisClient } from './config/redis.js'
 
 const app = express()
@@ -23,7 +23,7 @@ app.use(
 )
 // app.use(rateLimiter)
 
-app.use(healthCheck)
+// app.use(healthCheck)
 
 // api-gateway -> /v1/auth/register -> 3000
 // identity -> /api/auth/register -> 3001

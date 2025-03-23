@@ -7,8 +7,7 @@ import {
 import asyncHandler from '../utils/asyncHandler'
 import ProjectService from '../../services/ProjectService'
 import Project from '../../models/Project'
-import { Platform } from '../../constants/enums'
-import { publishEvent } from '../../events/producer'
+import { ProjectType } from '../../constants/enums'
 
 export const createProject = asyncHandler(async (req, _) => {
   const { error } = validateCreateProject(req.body)
@@ -27,10 +26,10 @@ export const createProject = asyncHandler(async (req, _) => {
 
 export const getProjects = asyncHandler(async (req, _) => {
   const { page, limit } = req.query
-  const platform = req.platform || Platform.android
+  const projectType = req.projectType || ProjectType.app
 
   const result = await ProjectService.getProjects(
-    platform,
+    projectType,
     Number(page) || 1,
     Number(limit) || 10
   )
@@ -104,12 +103,6 @@ export const deleteProject = asyncHandler(async (req, _) => {
   if (!result) {
     throw new ApiError('Project not found', 404)
   }
-  await publishEvent(
-    'project.deleted',
-    JSON.stringify({
-      project: result
-    })
-  )
   return new ResponseSuccess('Project deleted successfully', result)
 })
 

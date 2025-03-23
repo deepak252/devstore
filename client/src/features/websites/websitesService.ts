@@ -6,7 +6,7 @@ export default class WebsitesService {
   static getWebsites = async () => {
     return await getRequest(PROJECTS_API, {
       params: {
-        platform: 'website',
+        type: 'web',
       },
     })
   }
@@ -22,7 +22,7 @@ export default class WebsitesService {
   static getWebsiteBanners = async () => {
     return await getRequest(BANNER_API, {
       params: {
-        platform: 'website',
+        type: 'web',
       },
     })
   }

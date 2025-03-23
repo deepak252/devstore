@@ -6,7 +6,7 @@ export default class AppsService {
   static getApps = async () => {
     return await getRequest(PROJECTS_API, {
       params: {
-        platform: 'app',
+        type: 'app',
       },
     })
   }
@@ -22,7 +22,7 @@ export default class AppsService {
   static getAppBanners = async () => {
     return await getRequest(BANNER_API, {
       params: {
-        platform: 'app',
+        type: 'app',
       },
     })
   }

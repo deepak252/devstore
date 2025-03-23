@@ -8,8 +8,8 @@ interface ProjectModel extends Model<IProject, object, IProjectMethods> {
 
 const projectSchema = new Schema<IProject, ProjectModel, IProjectMethods>(
   {
-    platform: {
-      type: String,
+    platforms: {
+      type: [String],
       enum: Object.values(Platform)
     },
     name: {

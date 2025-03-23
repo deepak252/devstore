@@ -1,20 +1,20 @@
 import mongoose from 'mongoose'
 import { validateProject } from '../api/utils/validation'
 import { redisClient } from '../config/redis'
-import { Platform } from '../constants/enums'
+import { Platform, ProjectType } from '../constants/enums'
 import { publishEvent } from '../events/producer'
 import Project from '../models/Project'
 import { IProject } from '../types/project.types'
 
 export default class ProjectService {
   static invalidateProjectCache = async (
-    platform: Platform,
+    projectType: ProjectType,
     projectId?: string
   ) => {
     if (projectId) {
-      await redisClient.del(`${platform}:${projectId}`)
+      await redisClient.del(`${projectType}:${projectId}`)
     }
-    const keys = await redisClient.keys(`${platform}s:*`)
+    const keys = await redisClient.keys(`${projectType}s:*`)
     if (keys.length) {
       await redisClient.del(keys)
     }
@@ -105,7 +105,7 @@ export default class ProjectService {
         $project: {
           name: 1,
           categories: 1,
-          platform: 1,
+          platforms: 1,
           description: 1,
           demoUrl: 1,
           sourceCodeUrl: 1,
@@ -146,7 +146,7 @@ export default class ProjectService {
   }
 
   static getProjects = async (
-    platform: Platform,
+    projectType: ProjectType,
     page: number,
     limit: number
   ) => {
@@ -156,11 +156,15 @@ export default class ProjectService {
     // if (cachedPosts) {
     //   return JSON.parse(cachedPosts)
     // }
+    let platforms = [Platform.website]
+    if (projectType == ProjectType.app) {
+      platforms = [Platform.android, Platform.ios]
+    }
 
     const result = await Project.aggregate([
       {
         $match: {
-          platform
+          platforms: { $in: platforms }
         }
       },
       {
@@ -216,7 +220,8 @@ export default class ProjectService {
               $project: {
                 name: 1,
                 categories: 1,
-                platform: 1,
+                type: 1,
+                platforms: 1,
                 owner: {
                   _id: 1,
                   username: 1,
@@ -258,6 +263,12 @@ export default class ProjectService {
       _id: projectId,
       owner: userId
     })
+    await publishEvent(
+      'project.deleted',
+      JSON.stringify({
+        project
+      })
+    )
     // if (project) {
     //   if (post.mediaIds.length) {
     //     await this.publishDeleteMediaEvent({
