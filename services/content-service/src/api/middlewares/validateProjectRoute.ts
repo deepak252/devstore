@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express'
-import { ApiError } from '../utils/ApiError'
 import { ProjectType } from '../../constants/enums'
 
 export const validateProjectRoute = (
@@ -8,9 +7,11 @@ export const validateProjectRoute = (
   next: NextFunction
 ) => {
   const projectType = req.query.type as ProjectType
-  if (!Object.values(ProjectType).includes(projectType)) {
-    throw new ApiError('Not found', 404)
-  }
+  // if (!Object.values(ProjectType).includes(projectType)) {
+  //   req.projectType = undefined
+  // } else {
+  //   req.projectType = projectType
+  // }
   req.projectType = projectType
   next()
 }

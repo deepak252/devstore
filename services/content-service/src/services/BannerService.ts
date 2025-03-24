@@ -62,6 +62,8 @@ export default class BannerService {
       platforms = [Platform.android, Platform.ios]
     }
 
+    console.log(projectType, platforms)
+
     const filter = platforms
       ? [
           {

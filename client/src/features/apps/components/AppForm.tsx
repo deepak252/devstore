@@ -56,7 +56,7 @@ export const AppForm = ({ onClose }: { onClose: () => void }) => {
       name: '',
       description: '',
       isPrivate: false,
-      platform: 'android',
+      platforms: ['android'],
       categories: [],
       sourceCodeUrl: '',
       demoUrl: '',
