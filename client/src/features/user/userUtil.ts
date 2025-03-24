@@ -4,18 +4,18 @@ export const validateGeneralForm = (values: GeneralFormValues) => {
   const errors: GeneralFormError = {}
 
   if ((values.fullname?.length || 0) > 40) {
-    errors.title = 'Title limit exceed'
+    errors.fullname = 'Name should not contain more than 40 characters.'
   }
 
   if ((values.title?.length || 0) > 60) {
-    errors.title = 'Title limit exceed'
+    errors.title = 'Title should not contain more than 60 characters.'
   }
 
   if ((values.headline?.length || 0) > 100) {
-    errors.title = 'Headline limit exceed'
+    errors.headline = 'Headline should not contain more than 100 characters.'
   }
-  if ((values.about?.length || 0) > 100) {
-    errors.title = 'About limit exceed'
+  if ((values.about?.length || 0) > 4000) {
+    errors.about = 'About should not contain more than 40000 characters.'
   }
   return errors
 }

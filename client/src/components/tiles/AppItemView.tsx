@@ -22,18 +22,18 @@ const AppItemView = ({ appItem }: AppItemViewProps) => {
         className="card size-full aspect-square"
         alt="app_icon"
       />
-      <div className="flex items-center mt-2">
+      <div className="flex items-center gap-2 mt-2">
         {/* <img
           className="card size-14 aspect-square max-lg:size-12"
           src={iconUrl}
           alt="icon"
         /> */}
-        {/* <ProfileImage imgUrl={owner.profileImage?.url} /> */}
-        <div className="m-2 overflow-hidden">
-          <p className="text-gray-800 text-15 font-medium overflow-ellipsis">
+        {/* <ProfileImage imgUrl={owner.profileImage?.url} className="!size-7" /> */}
+        <div className="mt-1 overflow-hidden">
+          <p className="text-neutral-900 text-lg font-base overflow-ellipsis">
             {name}
           </p>
-          <p className="text-sm text-neutral-600">
+          <p className="text-13 text-neutral-600 overflow-ellipsis">
             {owner.fullname || owner.username}
           </p>
           {/* {rating && (

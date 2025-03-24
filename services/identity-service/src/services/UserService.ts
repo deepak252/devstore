@@ -71,6 +71,6 @@ export default class UserService {
       )
     }
 
-    return user
+    return await this.getUser(userId)
   }
 }

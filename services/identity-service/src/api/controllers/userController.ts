@@ -31,10 +31,7 @@ export const updateProfile = asyncHandler(async (req, _) => {
     throw new ApiError('User not found', 404)
   }
 
-  return new ResponseSuccess(
-    'Profile updated successfully',
-    updatedUser?.toJSON()
-  )
+  return new ResponseSuccess('Profile updated successfully', updatedUser)
 })
 
 export const deleteProfile = asyncHandler(async (req, _) => {

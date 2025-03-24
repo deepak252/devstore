@@ -68,12 +68,12 @@ const usernameSchema = Joi.string()
   .message('Username should only contain lowercase letters and numbers')
   .invalid(...INVALID_USERNAMES)
 
-const fullnameSchema = Joi.string().min(3).max(40)
+const fullnameSchema = Joi.string().allow('').max(40)
 const emailSchema = Joi.string().min(3).max(50)
 const passwordSchema = Joi.string().min(6).max(30)
-const titleSchema = Joi.string().min(5).max(60)
-const headlineSchema = Joi.string().min(5).max(100)
-const aboutSchema = Joi.string().min(5).max(4000)
+const titleSchema = Joi.string().allow('').max(60)
+const headlineSchema = Joi.string().allow('').max(100)
+const aboutSchema = Joi.string().allow('').max(4000)
 
 export const validateRegistration = (values: {
   username: string

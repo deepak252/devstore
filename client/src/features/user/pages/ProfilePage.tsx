@@ -32,7 +32,9 @@ function ProfilePage() {
   return (
     <div>
       <Introduction user={userProfile.data} />
-      <AboutMe about={userProfile.data.about} />
+      {userProfile.data.about?.trim() && (
+        <AboutMe about={userProfile.data.about} />
+      )}
       <Projects />
     </div>
   )

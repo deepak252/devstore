@@ -59,7 +59,6 @@ function GeneralSettings() {
   if (!userProfile.data) {
     return <PageNotFound />
   }
-  console.log(userProfile.data?.profileImage?.url)
 
   return (
     <div className="p-6">
