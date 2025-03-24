@@ -29,11 +29,11 @@ const AppItemView = ({ appItem }: AppItemViewProps) => {
           alt="icon"
         /> */}
         {/* <ProfileImage imgUrl={owner.profileImage?.url} className="!size-7" /> */}
-        <div className="mt-1 overflow-hidden">
+        <div className="my-1 overflow-hidden">
           <p className="text-neutral-900 text-lg font-base overflow-ellipsis">
             {name}
           </p>
-          <p className="text-13 text-neutral-600 overflow-ellipsis">
+          <p className="text-13 text-neutral-600 overflow-ellipsis underline">
             {owner.fullname || owner.username}
           </p>
           {/* {rating && (
@@ -72,10 +72,8 @@ const AppItemView = ({ appItem }: AppItemViewProps) => {
 export const AppItemShimmer = () => {
   return (
     <div>
-      <Shimmer className="aspect-[1.3] w-full !rounded-lg" />
-      <div className="flex items-center gap-2 mt-2">
-        <Shimmer className="h-8 w-2/3 !rounded-md" />
-      </div>
+      <Shimmer className="aspect-square !rounded-lg" />
+      <Shimmer className="h-8 w-2/3 !rounded-md mt-2" />
     </div>
   )
 }

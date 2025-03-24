@@ -20,7 +20,10 @@ const ProfileImage = ({
 
   return (
     <img
-      className={classNames('size-8 rounded-full aspect-square', className)}
+      className={classNames(
+        'size-8 rounded-full aspect-square border border-neutral-300',
+        className
+      )}
       src={
         fileUrl ||
         imgUrl ||

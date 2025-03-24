@@ -53,20 +53,6 @@ export default class ProjectService {
       },
       {
         $lookup: {
-          from: 'users',
-          localField: 'owner',
-          foreignField: '_id',
-          as: 'owner'
-        }
-      },
-      {
-        $unwind: {
-          path: '$owner',
-          preserveNullAndEmptyArrays: true
-        }
-      },
-      {
-        $lookup: {
           from: 'remotefiles',
           localField: 'icon',
           foreignField: '_id',
@@ -102,6 +88,34 @@ export default class ProjectService {
         }
       },
       {
+        $lookup: {
+          from: 'users',
+          localField: 'owner',
+          foreignField: '_id',
+          as: 'owner'
+        }
+      },
+      {
+        $unwind: {
+          path: '$owner',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $lookup: {
+          from: 'remotefiles',
+          localField: 'owner.profileImage',
+          foreignField: '_id',
+          as: 'owner.profileImage'
+        }
+      },
+      {
+        $unwind: {
+          path: '$owner.profileImage',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
         $project: {
           name: 1,
           categories: 1,
@@ -112,7 +126,12 @@ export default class ProjectService {
           owner: {
             _id: 1,
             username: 1,
-            fullname: 1
+            fullname: 1,
+            profileImage: {
+              _id: 1,
+              url: 1,
+              mimeType: 1
+            }
           },
           icon: {
             _id: 1,
@@ -210,6 +229,20 @@ export default class ProjectService {
         }
       },
       {
+        $lookup: {
+          from: 'remotefiles',
+          localField: 'owner.profileImage',
+          foreignField: '_id',
+          as: 'owner.profileImage'
+        }
+      },
+      {
+        $unwind: {
+          path: '$owner.profileImage',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
         $facet: {
           metadata: [{ $count: 'totalItems' }],
           data: [
@@ -225,7 +258,12 @@ export default class ProjectService {
                 owner: {
                   _id: 1,
                   username: 1,
-                  fullname: 1
+                  fullname: 1,
+                  profileImage: {
+                    _id: 1,
+                    url: 1,
+                    mimeType: 1
+                  }
                 },
                 icon: {
                   _id: 1,

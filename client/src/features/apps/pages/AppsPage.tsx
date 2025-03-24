@@ -28,9 +28,11 @@ function AppsPage() {
   return (
     <div className="">
       <AppCarousel />
-      <div className="mx-6 mb-4 pt-6">
+      <div className="flex gap-3 mx-6 mb-4 pt-6">
         {/* <div className="chip active me-3">All</div> */}
-        <div className="chip active">Apps</div>
+        <div className="chip active">All</div>
+        <div className="chip">Android</div>
+        <div className="chip">iOS</div>
       </div>
       <AppItems />
       <AppFormWrapper />
