@@ -1,4 +1,4 @@
-import { USER_PROFILE_API } from '@/constants'
+import { USER_PROFILE_API, USER_PROJECTS_API } from '@/constants'
 import { getRequest, putRequest } from '@/services/api'
 import { User } from './user.types'
 
@@ -9,5 +9,9 @@ export default class UserService {
 
   static updateUserProfile = async (data: Partial<User>) => {
     return await putRequest(USER_PROFILE_API, { data })
+  }
+
+  static getUserProjects = async (userId: string) => {
+    return await getRequest(`${USER_PROJECTS_API}/${userId}`)
   }
 }

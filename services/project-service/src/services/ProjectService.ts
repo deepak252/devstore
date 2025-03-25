@@ -167,7 +167,8 @@ export default class ProjectService {
   static getProjects = async (
     projectType: ProjectType,
     page: number,
-    limit: number
+    limit: number,
+    ownerId?: string
   ) => {
     const skip = (page - 1) * limit
     // const cacheKey = `posts:${page}:${limit}`
@@ -175,15 +176,25 @@ export default class ProjectService {
     // if (cachedPosts) {
     //   return JSON.parse(cachedPosts)
     // }
-    let platforms = [Platform.website]
-    if (projectType == ProjectType.app) {
+    let platforms: Platform[] = []
+    if ([ProjectType.all, ProjectType.app].includes(projectType)) {
       platforms = [Platform.android, Platform.ios]
+    }
+    if ([ProjectType.all, ProjectType.web].includes(projectType)) {
+      platforms.push(Platform.website)
+    }
+
+    let filter2 = {}
+    if (ownerId) {
+      const owner = new mongoose.Types.ObjectId(ownerId)
+      filter2 = { owner }
     }
 
     const result = await Project.aggregate([
       {
         $match: {
-          platforms: { $in: platforms }
+          platforms: { $in: platforms },
+          ...filter2
         }
       },
       {

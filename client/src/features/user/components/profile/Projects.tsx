@@ -1,14 +1,42 @@
-// import { projects } from '@/lib/utils'
+import { useCallback, useEffect } from 'react'
+import GridView from '@/components/GridView'
+import {
+  WebsiteItemShimmer,
+  WebsiteItemViewMemo,
+} from '@/components/tiles/WebsiteItemView'
+import { useAppDispatch, useAppSelector } from '@/hooks'
+import { getUserProjects } from '../../userSlice'
 
-const Projects = () => {
+const Projects = ({ userId }: { userId: string }) => {
+  const dispatch = useAppDispatch()
+  const userProjects = useAppSelector((state) => state.user.projects)
+
+  const fetchProjects = useCallback(() => {
+    dispatch(getUserProjects({ userId }))
+  }, [dispatch, userId])
+
+  useEffect(() => {
+    fetchProjects()
+  }, [fetchProjects])
+
+  useEffect(() => {}, [userId])
   return (
     <section id="projects" className="mt-12">
       <h3 className="mb-10">Projects</h3>
-      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {/* {projects.map((project) => (
-          <ProjectItem key={project.name} project={project} />
-        ))} */}
-      </div>
+      <GridView
+        heading=""
+        wrapperClass="my-8 mx-4"
+        itemsClass="gap-4 !grid-cols-1 sm:!grid-cols-2 lg:!grid-cols-3"
+      >
+        {userProjects.list?.map((item) => (
+          <WebsiteItemViewMemo key={item._id} websiteItem={item} />
+        ))}
+        {userProjects.isLoading &&
+          [...Array(6).keys()].map((id) => <WebsiteItemShimmer key={id} />)}
+        {!userProjects.isLoading && !userProjects.list.length && (
+          <div className="text-lg text-neutral-500">No projects available!</div>
+        )}
+      </GridView>
       {/* <div className="flex-center">
         <Link href="/projects" className="btn-primary px-16 mt-12">
           All Projects

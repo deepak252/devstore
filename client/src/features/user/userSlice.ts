@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { signOutSuccess } from '../auth/authSlice'
 import { User } from './user.types'
-import { ToastData } from '@/shared.types'
+import { PaginatedList, ProjectListItem, ToastData } from '@/shared.types'
 
 type UserState = {
   profile: {
@@ -9,11 +9,20 @@ type UserState = {
     isLoading?: boolean
     isUpdating?: boolean
   }
+  projects: PaginatedList<ProjectListItem>
   toastData?: ToastData | null
 }
 
 const initialState: UserState = {
   profile: {
+    isLoading: false,
+  },
+  projects: {
+    list: [],
+    page: 1,
+    limit: 10,
+    totalPages: 0,
+    totalResults: 0,
     isLoading: false,
   },
 }
@@ -31,6 +40,26 @@ const userSlice = createSlice({
     },
     getProfileFailure: (state, action) => {
       state.profile.isLoading = false
+      state.toastData = {
+        type: 'failure',
+        message: action.payload,
+      }
+    },
+
+    getUserProjects: (state, _: PayloadAction<{ userId: string }>) => {
+      state.projects.isLoading = true
+    },
+    getUserProjectsSuccess: (state, action) => {
+      const { projects = [], metadata = {} } = action.payload || {}
+      state.projects.isLoading = false
+      state.projects.list = projects
+      state.projects.page = metadata.currentPage
+      state.projects.limit = metadata.itemsPerPage
+      state.projects.totalPages = metadata.totalPages
+      state.projects.totalResults = metadata.totalItems
+    },
+    getUserProjectsFailure: (state, action) => {
+      state.projects.isLoading = false
       state.toastData = {
         type: 'failure',
         message: action.payload,
@@ -86,6 +115,10 @@ export const {
   updateProfile,
   updateProfileSuccess,
   updateProfileFailure,
+
+  getUserProjects,
+  getUserProjectsSuccess,
+  getUserProjectsFailure,
 
   setUserToast,
   resetUserState,

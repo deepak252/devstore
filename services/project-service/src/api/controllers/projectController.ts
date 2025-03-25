@@ -47,6 +47,20 @@ export const getProjectDetails = asyncHandler(async (req, _) => {
   return new ResponseSuccess('Project fetched successfully', result)
 })
 
+export const getUserProjects = asyncHandler(async (req, _) => {
+  const { page, limit } = req.query
+  const { userId } = req.params
+
+  const result = await ProjectService.getProjects(
+    ProjectType.all,
+    Number(page) || 1,
+    Number(limit) || 10,
+    userId
+  )
+
+  return new ResponseSuccess('Projects fetched successfully', result)
+})
+
 export const updateProject = asyncHandler(async (req, _) => {
   const { error } = validateUpdateProject(req.body)
   if (error) {

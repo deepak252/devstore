@@ -5,6 +5,7 @@ import {
   deleteProject,
   getProjectDetails,
   getProjects,
+  getUserProjects,
   updateProject
 } from '../controllers/projectController'
 import { optionalAuth, requireAuth } from '../middlewares/auth'
@@ -12,7 +13,8 @@ import { validateProjectRoute } from '../middlewares/validateProjectRoute'
 
 const router = Router()
 
-router.get('/', validateProjectRoute, optionalAuth, getProjects) // /project/all?type=game
+router.get('/', validateProjectRoute, optionalAuth, getProjects)
+router.get('/user/:userId', optionalAuth, getUserProjects)
 router.post('/create', requireAuth, createProject)
 router.put('/:projectId', requireAuth, updateProject)
 router.get('/:projectId', optionalAuth, getProjectDetails)

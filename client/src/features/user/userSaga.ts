@@ -6,6 +6,9 @@ import {
   getProfile,
   getProfileFailure,
   getProfileSuccess,
+  getUserProjects,
+  getUserProjectsFailure,
+  getUserProjectsSuccess,
   updateProfile,
   updateProfileFailure,
   updateProfileSuccess,
@@ -78,9 +81,25 @@ function* uploadProfileImageWorker({
   )
 }
 
+function* getUserProjectsWorker(
+  action: PayloadAction<{ userId: string }>
+): Generator {
+  yield* apiWorker(UserService.getUserProjects, action.payload.userId, {
+    onSuccess: function* (response) {
+      yield put(getUserProjectsSuccess(response.data?.data))
+    },
+    onFailure: function* (error) {
+      yield put(
+        getUserProjectsFailure(error?.message || 'Something went wrong')
+      )
+    },
+  })
+}
+
 export default function* () {
   yield all([
     takeLatest(getProfile.type, getProfileWorker),
     takeLatest(updateProfile.type, updateProfileWorker),
+    takeLatest(getUserProjects.type, getUserProjectsWorker),
   ])
 }

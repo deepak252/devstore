@@ -4,6 +4,7 @@ export const SIGN_OUT_API = 'auth/sign-out'
 export const USERNAME_CHECK_API = 'user/check-username'
 
 export const USER_PROFILE_API = 'user/profile'
+export const USER_PROJECTS_API = 'projects/user'
 
 export const PROJECTS_API = 'projects'
 export const CREATE_PROJECT_API = 'projects/create'

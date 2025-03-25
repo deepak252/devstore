@@ -35,7 +35,7 @@ function ProfilePage() {
       {userProfile.data.about?.trim() && (
         <AboutMe about={userProfile.data.about} />
       )}
-      <Projects />
+      {userProfile.data._id && <Projects userId={userProfile.data._id} />}
     </div>
   )
 }
