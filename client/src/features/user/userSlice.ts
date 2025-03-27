@@ -10,6 +10,11 @@ type UserState = {
     isUpdating?: boolean
   }
   projects: PaginatedList<ProjectListItem>
+  otherProfile: {
+    data?: User
+    isLoading?: boolean
+    isUpdating?: boolean
+  }
   toastData?: ToastData | null
 }
 
@@ -17,6 +22,7 @@ const initialState: UserState = {
   profile: {
     isLoading: false,
   },
+  otherProfile: {},
   projects: {
     list: [],
     page: 1,
@@ -47,7 +53,10 @@ const userSlice = createSlice({
     },
 
     getUserProjects: (state, _: PayloadAction<{ userId: string }>) => {
-      state.projects.isLoading = true
+      state.projects = {
+        ...initialState.projects,
+        isLoading: true,
+      }
     },
     getUserProjectsSuccess: (state, action) => {
       const { projects = [], metadata = {} } = action.payload || {}
@@ -79,6 +88,21 @@ const userSlice = createSlice({
     },
     updateProfileFailure: (state, action) => {
       state.profile.isUpdating = false
+      state.toastData = {
+        type: 'failure',
+        message: action.payload,
+      }
+    },
+
+    getOtherProfile: (state, _: PayloadAction<{ username: string }>) => {
+      state.otherProfile.isLoading = true
+    },
+    getOtherProfileSuccess: (state, action: PayloadAction<User>) => {
+      state.otherProfile.isLoading = false
+      state.otherProfile.data = action.payload
+    },
+    getOtherProfileFailure: (state, action) => {
+      state.otherProfile.isLoading = false
       state.toastData = {
         type: 'failure',
         message: action.payload,
@@ -119,6 +143,10 @@ export const {
   getUserProjects,
   getUserProjectsSuccess,
   getUserProjectsFailure,
+
+  getOtherProfile,
+  getOtherProfileFailure,
+  getOtherProfileSuccess,
 
   setUserToast,
   resetUserState,

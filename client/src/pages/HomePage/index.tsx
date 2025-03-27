@@ -1,14 +1,15 @@
 import FeaturedTile from '@/components/tiles/FeaturedTile'
 import Introduction from './Introduction'
 import GridView from '@/components/GridView'
+import HomeWebsites from './components/HomeWebsites'
 import { appsList, gamesList } from '@/constants/data'
 
 function HomePage() {
   return (
     <div className="p-6">
       <Introduction />
-      <div className="mt-10" />
-      <GridView heading="Featured Apps" horizontalScroll>
+      <HomeWebsites />
+      {/* <GridView heading="Featured Apps" horizontalScroll>
         {appsList.map((item) => (
           <FeaturedTile
             key={item._id}
@@ -19,7 +20,7 @@ function HomePage() {
             redirectUrl={`apps/${item._id}`}
           />
         ))}
-      </GridView>
+      </GridView> */}
       <GridView heading="Featured Games" horizontalScroll>
         {gamesList.map((item) => (
           <FeaturedTile

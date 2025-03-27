@@ -3,8 +3,10 @@ import { getRequest, putRequest } from '@/services/api'
 import { User } from './user.types'
 
 export default class UserService {
-  static getUserProfile = async () => {
-    return await getRequest(USER_PROFILE_API)
+  static getUserProfile = async (username?: string) => {
+    return await getRequest(
+      username ? `${USER_PROFILE_API}/${username}` : USER_PROFILE_API
+    )
   }
 
   static updateUserProfile = async (data: Partial<User>) => {

@@ -2,7 +2,7 @@ import GridView from '@/components/GridView'
 import { AppItemShimmer, AppItemViewMemo } from '@/components/tiles/AppItemView'
 import { useAppSelector } from '@/hooks'
 
-export const AppItems = () => {
+const AppItems = () => {
   const appItems = useAppSelector((state) => state.apps.data)
 
   return (
@@ -18,3 +18,5 @@ export const AppItems = () => {
     </GridView>
   )
 }
+
+export default AppItems

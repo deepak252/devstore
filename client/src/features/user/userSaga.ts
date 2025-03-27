@@ -3,6 +3,9 @@ import { apiWorker, uploadTask } from '@/services/api'
 import { getUserFromStorage, saveUserToStorage } from '@/utils/storage'
 import UserService from './userService'
 import {
+  getOtherProfile,
+  getOtherProfileFailure,
+  getOtherProfileSuccess,
   getProfile,
   getProfileFailure,
   getProfileSuccess,
@@ -96,10 +99,26 @@ function* getUserProjectsWorker(
   })
 }
 
+function* getOtherProfileWorker(
+  action: PayloadAction<{ username: string }>
+): Generator {
+  yield* apiWorker(UserService.getUserProfile, action.payload.username, {
+    onSuccess: function* (response) {
+      yield put(getOtherProfileSuccess(response.data?.data))
+    },
+    onFailure: function* (error) {
+      yield put(
+        getOtherProfileFailure(error?.message || 'Something went wrong')
+      )
+    },
+  })
+}
+
 export default function* () {
   yield all([
     takeLatest(getProfile.type, getProfileWorker),
     takeLatest(updateProfile.type, updateProfileWorker),
     takeLatest(getUserProjects.type, getUserProjectsWorker),
+    takeLatest(getOtherProfile.type, getOtherProfileWorker),
   ])
 }

@@ -30,6 +30,7 @@ type AppsState = {
     list: Banner[]
     isLoading: boolean
   }
+  home: PaginatedList<AppListItem>
   toastData?: ToastData | null
 }
 
@@ -58,6 +59,14 @@ const initialState: AppsState = {
   },
   banner: {
     list: [],
+    isLoading: false,
+  },
+  home: {
+    list: [],
+    page: 1,
+    limit: 10,
+    totalPages: 0,
+    totalResults: 0,
     isLoading: false,
   },
 }
@@ -173,6 +182,27 @@ const appsSlice = createSlice({
       }
     },
 
+    // Home Apps List
+    getHomeApps: (state) => {
+      state.home.isLoading = true
+    },
+    getHomeAppsSuccess: (state, action) => {
+      const { projects = [], metadata = {} } = action.payload || {}
+      state.home.isLoading = false
+      state.home.list = projects
+      state.home.page = metadata.currentPage
+      state.home.limit = metadata.itemsPerPage
+      state.home.totalPages = metadata.totalPages
+      state.home.totalResults = metadata.totalItems
+    },
+    getHomeAppsFailure: (state, action) => {
+      state.home.isLoading = false
+      state.toastData = {
+        type: 'failure',
+        message: action.payload || 'Something went wrong',
+      }
+    },
+
     setAppsFilter: (state, action) => {
       state.filter = action.payload
     },
@@ -211,6 +241,10 @@ export const {
   getAppBanners,
   getAppBannersSuccess,
   getAppBannersFailure,
+
+  getHomeApps,
+  getHomeAppsSuccess,
+  getHomeAppsFailure,
 
   setAppsFilter,
   setAppsToast,

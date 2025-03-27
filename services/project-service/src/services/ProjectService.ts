@@ -5,6 +5,7 @@ import { Platform, ProjectType } from '../constants/enums'
 import { publishEvent } from '../events/producer'
 import Project from '../models/Project'
 import { IProject } from '../types/project.types'
+import { getProjectType } from '../utils/projectUtil'
 
 export default class ProjectService {
   static invalidateProjectCache = async (
@@ -171,11 +172,17 @@ export default class ProjectService {
     ownerId?: string
   ) => {
     const skip = (page - 1) * limit
-    // const cacheKey = `posts:${page}:${limit}`
-    // const cachedPosts = await redisClient.get(cacheKey)
-    // if (cachedPosts) {
-    //   return JSON.parse(cachedPosts)
-    // }
+    let cacheKey = ''
+    if (page === 1 && limit === 10 && !ownerId) {
+      cacheKey = `${projectType}s:${page}:${limit}`
+    }
+    if (cacheKey) {
+      const cachedData = await redisClient.get(cacheKey)
+      if (cachedData) {
+        return JSON.parse(cachedData)
+      }
+    }
+
     let platforms: Platform[] = []
     if ([ProjectType.all, ProjectType.app].includes(projectType)) {
       platforms = [Platform.android, Platform.ios]
@@ -296,7 +303,7 @@ export default class ProjectService {
 
     // await redisClient.setex(cacheKey, 300, JSON.stringify(result)) // delete record after 5 mins
     const totalItems = result[0]?.metadata?.totalItems || 0
-    return {
+    const data = {
       projects: result[0]?.data,
       metadata: {
         currentPage: page,
@@ -305,6 +312,9 @@ export default class ProjectService {
         totalPages: Math.ceil(totalItems / limit)
       }
     }
+
+    await redisClient.setex(cacheKey, 3600, JSON.stringify(data)) // delete record after 1hr
+    return data
   }
 
   static deleteProject = async (projectId: string, userId: string) => {
@@ -318,16 +328,10 @@ export default class ProjectService {
         project
       })
     )
-    // if (project) {
-    //   if (post.mediaIds.length) {
-    //     await this.publishDeleteMediaEvent({
-    //       postId,
-    //       userId,
-    //       mediaIds: post.mediaIds
-    //     })
-    //   }
-    //   await this.invalidatePostCache(postId)
-    // }
+    await this.invalidateProjectCache(
+      getProjectType(project?.platforms ?? []),
+      projectId
+    )
     return project
   }
 
@@ -350,6 +354,11 @@ export default class ProjectService {
     }
 
     await project?.save()
+
+    await this.invalidateProjectCache(
+      getProjectType(project?.platforms ?? []),
+      projectId
+    )
 
     return project
   }

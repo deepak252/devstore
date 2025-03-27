@@ -6,6 +6,9 @@ import {
   createWebsite,
   createWebsiteFailure,
   createWebsiteSuccess,
+  getHomeWebsites,
+  getHomeWebsitesFailure,
+  getHomeWebsitesSuccess,
   getWebsiteBanners,
   getWebsiteBannersFailure,
   getWebsiteBannersSuccess,
@@ -131,12 +134,25 @@ function* getWebsiteDetailsWorker(
   })
 }
 
+function* getHomeWebsitesWorker(): Generator {
+  yield* apiWorker(WebsitesService.getHomeWebsites, undefined, {
+    onSuccess: function* (response) {
+      yield put(getHomeWebsitesSuccess(response.data?.data))
+    },
+    onFailure: function* (error) {
+      yield put(
+        getHomeWebsitesFailure(error?.message || 'Something went wrong')
+      )
+    },
+  })
+}
+
 export default function* () {
   yield all([
     takeLatest(getWebsites.type, getWebsitesWorker),
     takeLatest(createWebsite.type, createWebsiteWorker),
     takeLatest(getWebsiteBanners.type, getWebsiteBannersWorker),
     takeLatest(getWebsiteDetails.type, getWebsiteDetailsWorker),
-    // takeLatest(uploadWebsiteIcon.type, uploadWebsiteIconWorker),
+    takeLatest(getHomeWebsites.type, getHomeWebsitesWorker),
   ])
 }

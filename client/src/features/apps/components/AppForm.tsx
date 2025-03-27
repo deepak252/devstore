@@ -38,7 +38,7 @@ export const AppFormWrapper = () => {
   )
 }
 
-export const AppForm = ({ onClose }: { onClose: () => void }) => {
+const AppForm = ({ onClose }: { onClose: () => void }) => {
   const dispatch = useAppDispatch()
   const categories = useAppSelector(
     (state) => state.content.metadata.data?.categories
@@ -300,3 +300,5 @@ export const AppForm = ({ onClose }: { onClose: () => void }) => {
     </>
   )
 }
+
+export default AppForm

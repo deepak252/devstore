@@ -1,10 +1,9 @@
-// import Carousel, { CarouselShimmer } from '@/components/Carousel'
+import { useCallback, useEffect } from 'react'
+import AppItems from '../components/AppItems'
+import AppCarousel from '../components/AppsCarousel'
 import { AppFormWrapper } from '../components/AppForm'
 import { useAppDispatch } from '@/hooks'
 import { getAppBanners, getApps } from '../appsSlice'
-import { useCallback, useEffect } from 'react'
-import { AppItems } from '../components/AppItems'
-import { AppCarousel } from '../components/AppsCarousel'
 
 function AppsPage() {
   const dispatch = useAppDispatch()

@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react'
 import CustomCarousel from '@/components/CustomCarousel'
 import { useAppSelector, useNavigateWithState } from '@/hooks'
 
-export const WebsiteCarousel = () => {
+const WebsiteCarousel = () => {
   const banner = useAppSelector((state) => state.websites.banner)
   const navigate = useNavigateWithState()
   const carouselItems = useMemo(() => {
@@ -37,3 +37,5 @@ export const WebsiteCarousel = () => {
     </div>
   )
 }
+
+export default WebsiteCarousel

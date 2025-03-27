@@ -1,10 +1,9 @@
-// import Carousel, { CarouselShimmer } from '@/components/Carousel'
+import { useCallback, useEffect } from 'react'
+import WebsiteItems from '../components/WebsiteItems'
+import WebsiteCarousel from '../components/WebsiteCarousel'
 import { WebsiteFormWrapper } from '../components/WebsiteForm'
 import { useAppDispatch } from '@/hooks'
 import { getWebsiteBanners, getWebsites } from '../websitesSlice'
-import { useCallback, useEffect } from 'react'
-import { WebsiteItems } from '../components/WebsiteItems'
-import { WebsiteCarousel } from '../components/WebsiteCarousel'
 
 function WebsitesPage() {
   const dispatch = useAppDispatch()

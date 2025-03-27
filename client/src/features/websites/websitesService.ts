@@ -1,4 +1,9 @@
-import { BANNER_API, CREATE_PROJECT_API, PROJECTS_API } from '@/constants'
+import {
+  BANNER_API,
+  CREATE_PROJECT_API,
+  HOME_PROJECTS_API,
+  PROJECTS_API,
+} from '@/constants'
 import { getRequest, postRequest } from '@/services/api'
 import { SaveProjectPayload } from '@/shared.types'
 
@@ -21,6 +26,14 @@ export default class WebsitesService {
 
   static getWebsiteBanners = async () => {
     return await getRequest(BANNER_API, {
+      params: {
+        type: 'web',
+      },
+    })
+  }
+
+  static getHomeWebsites = async () => {
+    return await getRequest(HOME_PROJECTS_API, {
       params: {
         type: 'web',
       },

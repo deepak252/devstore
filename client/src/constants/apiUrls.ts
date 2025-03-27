@@ -7,6 +7,7 @@ export const USER_PROFILE_API = 'user/profile'
 export const USER_PROJECTS_API = 'projects/user'
 
 export const PROJECTS_API = 'projects'
+export const HOME_PROJECTS_API = 'projects/home'
 export const CREATE_PROJECT_API = 'projects/create'
 export const APPS_API = 'projects/apps'
 export const WEBSITES_API = 'projects/websites'

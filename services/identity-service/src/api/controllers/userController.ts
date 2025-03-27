@@ -66,5 +66,5 @@ export const getUserByUsername = asyncHandler(async (req, _) => {
   if (!user) {
     throw new ApiError('User not found')
   }
-  return new ResponseSuccess('User fetched successfully', { username })
+  return new ResponseSuccess('User fetched successfully', user)
 })

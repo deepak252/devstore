@@ -13,6 +13,6 @@ router.get('/profile', requireAuth, getProfile)
 router.put('/profile', requireAuth, updateProfile)
 router.delete('/profile', requireAuth, deleteProfile)
 router.post('/check-username', checkUsername)
-router.post('/:username', getUserByUsername)
+router.get('/profile/:username', getUserByUsername)
 
 export default router

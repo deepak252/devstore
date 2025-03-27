@@ -3,6 +3,7 @@ import {
   checkProjectExists,
   createProject,
   deleteProject,
+  getHomeProjects,
   getProjectDetails,
   getProjects,
   getUserProjects,
@@ -14,6 +15,7 @@ import { validateProjectRoute } from '../middlewares/validateProjectRoute'
 const router = Router()
 
 router.get('/', validateProjectRoute, optionalAuth, getProjects)
+router.get('/home', validateProjectRoute, optionalAuth, getHomeProjects)
 router.get('/user/:userId', optionalAuth, getUserProjects)
 router.post('/create', requireAuth, createProject)
 router.put('/:projectId', requireAuth, updateProject)

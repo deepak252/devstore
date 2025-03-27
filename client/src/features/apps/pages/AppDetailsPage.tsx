@@ -11,49 +11,6 @@ import { getAppDetails } from '../appsSlice'
 import { Spinner } from '@/components/Loader'
 import ProfileImage from '@/components/ProfileImage'
 
-// const appData = {
-//   _id: '67d5af2a0dfd1474ed3635cd',
-//   platform: 'app',
-//   name: 'Bus Tracking Application',
-//   owner: {
-//     _id: '67d5723b50e20a45fdfbd69c',
-//     username: 'deepak1',
-//   },
-//   description:
-//     'The Bus Tracking application is a comprehensive solution designed to enhance the efficiency and convenience of bus transportation services. The app provides real-time bus tracking, real time updates on map, and timely information to users, ensuring a seamless and reliable travel experience. ',
-//   categories: ['Social', 'Productivity'],
-//   images: [
-//     {
-//       _id: '67d5af2dc0bbf8026d9d84af',
-//       url: 'https://sufinwyvdnzrqbqlqufr.supabase.co/storage/v1/object/public/media/67d5723b50e20a45fdfbd69c/image_67d5723b50e20a45fdfbd69c_2025_03_15_16_47_38_730.png',
-//       mimeType: 'image/png',
-//     },
-//     {
-//       _id: '67d5af2ec0bbf8026d9d84b1',
-//       url: 'https://sufinwyvdnzrqbqlqufr.supabase.co/storage/v1/object/public/media/67d5723b50e20a45fdfbd69c/image_67d5723b50e20a45fdfbd69c_2025_03_15_16_47_38_730.png',
-//       mimeType: 'image/png',
-//     },
-//     {
-//       _id: '67d5af2fc0bbf8026d9d84b3',
-//       url: 'https://sufinwyvdnzrqbqlqufr.supabase.co/storage/v1/object/public/media/67d5723b50e20a45fdfbd69c/image_67d5723b50e20a45fdfbd69c_2025_03_15_16_47_38_733.png',
-//       mimeType: 'image/png',
-//     },
-//   ],
-//   demoUrl: 'https://github.com/deepak252/Bus-Tracking-App-Kotlin',
-//   sourceCodeUrl: 'https://github.com/deepak252/Bus-Tracking-App-Kotlin',
-//   createdAt: '2025-03-15T16:47:38.448Z',
-//   updatedAt: '2025-03-15T16:47:44.620Z',
-//   banner: {
-//     _id: '67d5af30c0bbf8026d9d84b5',
-//     url: 'https://sufinwyvdnzrqbqlqufr.supabase.co/storage/v1/object/public/media/67d5723b50e20a45fdfbd69c/image_67d5723b50e20a45fdfbd69c_2025_03_15_16_47_38_729.png',
-//     mimeType: 'image/png',
-//   },
-//   icon: {
-//     _id: '67d5af2bc0bbf8026d9d84ad',
-//     url: 'https://sufinwyvdnzrqbqlqufr.supabase.co/storage/v1/object/public/media/67d5723b50e20a45fdfbd69c/image_67d5723b50e20a45fdfbd69c_2025_03_15_16_47_38_728.png',
-//     mimeType: 'image/png',
-//   },
-// }
 function AppDetailsPage() {
   const dispatch = useAppDispatch()
   const { projectId = '' } = useParams()

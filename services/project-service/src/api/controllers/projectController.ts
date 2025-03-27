@@ -61,6 +61,14 @@ export const getUserProjects = asyncHandler(async (req, _) => {
   return new ResponseSuccess('Projects fetched successfully', result)
 })
 
+export const getHomeProjects = asyncHandler(async (req, _) => {
+  const projectType = req.projectType || ProjectType.app
+
+  const result = await ProjectService.getProjects(projectType, 1, 10)
+
+  return new ResponseSuccess('Projects fetched successfully', result)
+})
+
 export const updateProject = asyncHandler(async (req, _) => {
   const { error } = validateUpdateProject(req.body)
   if (error) {

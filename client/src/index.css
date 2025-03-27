@@ -158,6 +158,10 @@
   .gradient-bottom-shade {
     @apply bg-gradient-to-tr from-transparent to-black/30;
   }
+
+  .gradient-project-item {
+    @apply bg-gradient-to-b from-black/20 via-transparent to-black/20;
+  }
 }
 
 @layer utilities {

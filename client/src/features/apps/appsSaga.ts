@@ -15,6 +15,9 @@ import {
   getApps,
   getAppsFailure,
   getAppsSuccess,
+  getHomeApps,
+  getHomeAppsFailure,
+  getHomeAppsSuccess,
   uploadAppMediaFailure,
   uploadAppMediaSuccess,
 } from './appsSlice'
@@ -123,12 +126,24 @@ function* getAppDetailsWorker(
   })
 }
 
+function* getHomeAppsWorker(): Generator {
+  yield* apiWorker(AppsService.getHomeApps, undefined, {
+    onSuccess: function* (response) {
+      yield put(getHomeAppsSuccess(response.data?.data))
+    },
+    onFailure: function* (error) {
+      yield put(getHomeAppsFailure(error?.message || 'Something went wrong'))
+    },
+  })
+}
+
 export default function* () {
   yield all([
     takeLatest(getApps.type, getAppsWorker),
     takeLatest(createApp.type, createAppWorker),
     takeLatest(getAppBanners.type, getAppBannersWorker),
     takeLatest(getAppDetails.type, getAppDetailsWorker),
+    takeLatest(getHomeApps.type, getHomeAppsWorker),
     // takeLatest(uploadAppIcon.type, uploadAppIconWorker),
   ])
 }

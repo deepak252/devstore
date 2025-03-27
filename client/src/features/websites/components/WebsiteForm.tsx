@@ -40,7 +40,7 @@ export const WebsiteFormWrapper = () => {
   )
 }
 
-export const WebsiteForm = ({ onClose }: { onClose: () => void }) => {
+const WebsiteForm = ({ onClose }: { onClose: () => void }) => {
   const dispatch = useAppDispatch()
   const categories = useAppSelector(
     (state) => state.content.metadata.data?.categories
@@ -304,3 +304,5 @@ export const WebsiteForm = ({ onClose }: { onClose: () => void }) => {
     </>
   )
 }
+
+export default WebsiteForm
