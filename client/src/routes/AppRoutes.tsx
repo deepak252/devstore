@@ -4,6 +4,7 @@ import { Spinner } from '@/components/Loader'
 import authRoutes from './authRoutes'
 import userRoutes from './userRoutes'
 import accountRoutes from './accountRoutes'
+import projectRoutes from './projectRoutes'
 const RootLayout = lazy(() => import('@/components/layouts/RootLayout'))
 const MainLayout = lazy(() => import('@/components/layouts/MainLayout'))
 const AppsPage = lazy(() => import('@/features/apps/pages/AppsPage'))
@@ -59,6 +60,7 @@ const routes: RouteObject[] = [
             ],
           },
           accountRoutes,
+          projectRoutes,
         ],
       },
       authRoutes,

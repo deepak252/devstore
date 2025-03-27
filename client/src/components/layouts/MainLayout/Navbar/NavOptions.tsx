@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { Link, useLocation } from 'react-router-dom'
 
-const navItems = ['Apps', 'Websites', 'Developers']
+const navItems = ['Projects', 'Developers', 'Blogs']
 
 const NavOptions = () => {
   const { pathname } = useLocation()

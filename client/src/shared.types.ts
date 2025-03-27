@@ -6,6 +6,7 @@ export type ToastData = {
 }
 
 export type Platform = 'all' | 'android' | 'ios' | 'website'
+export type ProjectType = 'all' | 'app' | 'web'
 
 export type RemoteFile = {
   _id: string

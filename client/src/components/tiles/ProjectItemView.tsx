@@ -17,7 +17,7 @@ const ProjectItemView = ({ project }: ProjectItemViewProps) => {
   return (
     <div>
       <Link
-        to={`/websites/${_id}`}
+        to={`/projects/${_id}`}
         className="relative block aspect-[1.3] overflow-hidden bg-white rounded-lg"
       >
         <img

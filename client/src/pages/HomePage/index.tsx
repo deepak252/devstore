@@ -1,4 +1,4 @@
-import FeaturedTile from '@/components/tiles/FeaturedTile'
+import FeaturedItemView from '@/components/tiles/FeaturedItemView'
 import Introduction from './Introduction'
 import GridView from '@/components/GridView'
 import HomeWebsites from './components/HomeWebsites'
@@ -11,7 +11,7 @@ function HomePage() {
       <HomeWebsites />
       {/* <GridView heading="Featured Apps" horizontalScroll>
         {appsList.map((item) => (
-          <FeaturedTile
+          <FeaturedItemView
             key={item._id}
             name={item.name}
             iconUrl={item.icon?.url}
@@ -23,7 +23,7 @@ function HomePage() {
       </GridView> */}
       <GridView heading="Featured Games" horizontalScroll>
         {gamesList.map((item) => (
-          <FeaturedTile
+          <FeaturedItemView
             key={item._id}
             name={item.name}
             iconUrl={item.icon?.url}
@@ -35,7 +35,7 @@ function HomePage() {
       </GridView>
       <GridView heading="Featured Websites" horizontalScroll>
         {appsList.map((item) => (
-          <FeaturedTile
+          <FeaturedItemView
             key={item._id}
             name={item.name}
             iconUrl={item.icon?.url}

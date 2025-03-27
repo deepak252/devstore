@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import StarIcon from '@/assets/icons/star.svg?react'
 import Shimmer from '../Shimmer'
 
-type FeaturedTileProps = {
+type FeaturedItemViewProps = {
   redirectUrl: string
   name: string
   featuredImageUrl: string
@@ -11,14 +11,14 @@ type FeaturedTileProps = {
   owner: Record<string, any>
 }
 
-const FeaturedTile = ({
+const FeaturedItemView = ({
   redirectUrl,
   name,
   featuredImageUrl,
   iconUrl,
   rating,
   owner,
-}: FeaturedTileProps) => {
+}: FeaturedItemViewProps) => {
   return (
     <Link
       to={redirectUrl}
@@ -53,10 +53,10 @@ const FeaturedTile = ({
   )
 }
 
-export const FeaturedTileShimmer = () => {
+export const FeaturedItemViewShimmer = () => {
   return (
     <Shimmer className="rounded-xl w-[350px] max-lg:w-[315px] max-md:w-[280px]" />
   )
 }
 
-export default FeaturedTile
+export default FeaturedItemView

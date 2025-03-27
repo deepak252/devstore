@@ -154,14 +154,6 @@
   .card {
     @apply bg-white rounded-xl shadow-thin;
   }
-
-  .gradient-bottom-shade {
-    @apply bg-gradient-to-tr from-transparent to-black/30;
-  }
-
-  .gradient-project-item {
-    @apply bg-gradient-to-b from-black/20 via-transparent to-black/20;
-  }
 }
 
 @layer utilities {
@@ -183,6 +175,26 @@
 
   .overflow-ellipsis {
     @apply whitespace-nowrap overflow-hidden text-ellipsis;
+  }
+
+  .gradient-bottom-shade {
+    @apply bg-gradient-to-tr from-transparent to-black/30;
+  }
+
+  /* .gradient-project-item {
+    @apply bg-gradient-to-b from-black/40 via-transparent to-black/40;
+  }
+   */
+  .gradient-project-item {
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.4) 0%,
+      rgba(0, 0, 0, 0) 25%,
+      transparent 25%,
+      transparent 75%,
+      rgba(0, 0, 0, 0) 75%,
+      rgba(0, 0, 0, 0.4) 100%
+    );
   }
 }
 

@@ -5,9 +5,9 @@ import CloseIcon from '@/assets/icons/close.svg?react'
 
 const PATHNAMES = {
   HOME: '/',
-  APPS: '/apps',
-  WEBSITES: '/websites',
-  GAMES: '/games',
+  PROJECTS: '/projects',
+  DEVELOPERS: '/developers',
+  BLOGS: '/blogs',
 }
 
 const SearchField = () => {
@@ -59,16 +59,17 @@ const SearchField = () => {
   }
 
   const getPlaceholder = () => {
-    switch (pathname) {
-      case PATHNAMES.APPS:
-        return 'Search apps'
-      case PATHNAMES.WEBSITES:
-        return 'Search websites'
-      case PATHNAMES.GAMES:
-        return 'Search games'
-      default:
-        return 'Search'
-    }
+    return 'Search ...'
+    // switch (pathname) {
+    //   case PATHNAMES.APPS:
+    //     return 'Search apps'
+    //   case PATHNAMES.WEBSITES:
+    //     return 'Search websites'
+    //   case PATHNAMES.GAMES:
+    //     return 'Search games'
+    //   default:
+    //     return 'Search'
+    // }
   }
 
   return (
