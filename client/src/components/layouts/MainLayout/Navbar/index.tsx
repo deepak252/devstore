@@ -8,14 +8,14 @@ import ProfileIcon from '@/assets/icons/profile.svg?react'
 import SettingsIcon from '@/assets/icons/settings.svg?react'
 import FavoriteIcon from '@/assets/icons/heart-outlined.svg?react'
 import NavOptions from './NavOptions'
-import SearchField from './SearchField'
 import {
   useAppDispatch,
   useAppSelector,
   useAuth,
   useNavigateWithState,
 } from '@/hooks'
-import { signOut } from '@/features/auth/authSlice'
+import { confirmSignOut } from '@/features/auth/authSlice'
+import ProfileImage from '@/components/ProfileImage'
 
 const Navbar = () => {
   const dispatch = useAppDispatch()
@@ -30,7 +30,7 @@ const Navbar = () => {
         break
       }
       case 'signOut': {
-        dispatch(signOut())
+        dispatch(confirmSignOut())
         break
       }
       case 'portfolio': {
@@ -81,14 +81,21 @@ const Navbar = () => {
   }, [isSignedIn])
 
   return (
-    <nav className="fixed top-0 z-30 flex items-center font-light bg-white shadow p-2 w-full max-md:flex-wrap max-md:justify-between">
-      <AppLogo className="px-4 max-md:order-1" />
+    <nav className="fixed top-0 z-navbar flex items-center font-light bg-white shadow p-2 w-full max-md:flex-wrap">
+      <AppLogo className="px-4 max-md:order-1 max-md:flex-grow" />
       <NavOptions />
       <div className="flex items-center px-2 max-md:order-2">
-        <SearchField />
+        {/* <SearchField /> */}
         <Dropdown options={options} onChange={handleOptionSelect}>
           <button className="icon-button  ms-2">
-            <AccountIcon className="size-9" />
+            {!userProfile.data?.profileImage?.url ? (
+              <AccountIcon className="size-9" />
+            ) : (
+              <ProfileImage
+                className="size-8"
+                imgUrl={userProfile.data?.profileImage?.url}
+              />
+            )}
           </button>
         </Dropdown>
       </div>

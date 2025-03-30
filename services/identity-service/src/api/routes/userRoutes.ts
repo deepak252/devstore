@@ -4,11 +4,13 @@ import {
   deleteProfile,
   getProfile,
   getUserByUsername,
+  getUsers,
   updateProfile
 } from '../controllers/userController.js'
 import { requireAuth } from '../middlewares/auth.js'
 const router = Router()
 
+router.get('/all', getUsers)
 router.get('/profile', requireAuth, getProfile)
 router.put('/profile', requireAuth, updateProfile)
 router.delete('/profile', requireAuth, deleteProfile)

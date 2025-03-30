@@ -1,4 +1,4 @@
-import { all, put, takeLatest } from 'redux-saga/effects'
+import { all, put, select, takeLatest } from 'redux-saga/effects'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { apiWorker, uploadTask } from '@/services/api'
 import { UPLOAD_PROJECT_MEDIA_API } from '@/constants'
@@ -6,6 +6,9 @@ import {
   createProject,
   createProjectFailure,
   createProjectSuccess,
+  deleteProject,
+  deleteProjectFailure,
+  deleteProjectSuccess,
   getHomeProjects,
   getHomeProjectsFailure,
   getHomeProjectsSuccess,
@@ -22,8 +25,14 @@ import {
   uploadProjectMediaSuccess,
 } from './projectsSlice'
 import ProjectsService from './projectsService'
-import { ProjectFormValues, UploadProjectMediaPayload } from '@/shared.types'
+import {
+  Platform,
+  ProjectFormValues,
+  UploadProjectMediaPayload,
+} from '@/shared.types'
 import { ProjectSearchFilter } from './projects.types'
+import { RootState } from '@/store'
+import { getUserProjects } from '../user/userSlice'
 
 function* getProjectsWorker(
   action: PayloadAction<ProjectSearchFilter | undefined>
@@ -46,6 +55,7 @@ function* createProjectWorker(
     attachmentImages,
     attachmentBanner,
     categories,
+    platforms,
     ...rest
   } = action.payload
   yield* apiWorker(
@@ -53,6 +63,7 @@ function* createProjectWorker(
     {
       ...rest,
       categories: categories?.flatDropdownOptions('label'),
+      platforms: platforms?.flatDropdownOptions('value') as Platform[],
     },
     {
       onSuccess: function* (response) {
@@ -149,6 +160,25 @@ function* getHomeProjectsWorker(): Generator {
   })
 }
 
+function* deleteProjectWorker(): Generator {
+  const projectId = yield select(
+    (state: RootState) => state.projects.projectDelete.projectId
+  )
+  const userId = yield select(
+    (state: RootState) => state.user.profile.data?._id
+  )
+  yield* apiWorker(ProjectsService.deleteProject, projectId, {
+    onSuccess: function* (response) {
+      yield put(deleteProjectSuccess(response.data?.data))
+      yield put(getProjects())
+      yield put(getUserProjects({ userId }))
+    },
+    onFailure: function* (error) {
+      yield put(deleteProjectFailure(error?.message || 'Something went wrong'))
+    },
+  })
+}
+
 export default function* () {
   yield all([
     takeLatest(getProjects.type, getProjectsWorker),
@@ -156,5 +186,6 @@ export default function* () {
     takeLatest(getProjectBanners.type, getProjectBannersWorker),
     takeLatest(getProjectDetails.type, getProjectDetailsWorker),
     takeLatest(getHomeProjects.type, getHomeProjectsWorker),
+    takeLatest(deleteProject.type, deleteProjectWorker),
   ])
 }

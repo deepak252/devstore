@@ -20,25 +20,31 @@ function ProjectDetailsPage() {
   const projectData = projectDetails.data
 
   const projectImages = useMemo(() => {
-    if (projectData?.images?.length) {
-      return projectData?.images.map((item) => ({
-        id: item._id,
-        imgUrl: item.url,
-      }))
+    const images = []
+    if (projectData?.banner) {
+      images.push({
+        id: projectData.banner._id,
+        imgUrl: projectData.banner.url,
+      })
     }
-    return []
-  }, [projectData?.images])
+    if (projectData?.images?.length) {
+      projectData?.images.forEach((item) => {
+        images.push({
+          id: item._id,
+          imgUrl: item.url,
+        })
+      })
+    }
+
+    return images
+  }, [projectData?.banner, projectData?.images])
 
   useEffect(() => {
     dispatch(getProjectDetails({ projectId }))
   }, [dispatch, projectId])
 
   if (projectDetails.isLoading) {
-    return (
-      <div className="absolute-center">
-        <Spinner />
-      </div>
-    )
+    return <Spinner center />
   }
   if (!projectData) {
     return <PageNotFound />
@@ -119,16 +125,18 @@ function ProjectDetailsPage() {
         <p className="text-neutral-600 text-15">{projectData.description}</p>
       </div>
       {/* <Preview webUrl={''} /> */}
-      <div className="mt-12">
-        <h6 className="mb-4">Related To</h6>
-        <div className="flex gap-2 mb-4">
-          {projectData.categories?.map((cat) => (
-            <div key={cat} className="chip py-1">
-              {cat}
-            </div>
-          ))}
+      {!!projectData.categories?.length && (
+        <div className="mt-12">
+          <h6 className="mb-4">Related To</h6>
+          <div className="flex gap-2 mb-4">
+            {projectData.categories?.map((cat) => (
+              <div key={cat} className="chip py-1">
+                {cat}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

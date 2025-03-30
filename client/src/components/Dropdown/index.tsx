@@ -104,6 +104,7 @@ const Dropdown = ({
             isSelected={isSelected(option)}
             onClick={(e) => {
               e.stopPropagation()
+              e.preventDefault()
               handleItemClick(option)
             }}
             className={itemClass}

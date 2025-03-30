@@ -9,6 +9,9 @@ export const validateProjectForm = (values: ProjectFormValues) => {
   if (!values.name?.trim()) {
     errors.name = 'Enter project name'
   }
+  if (!values.platforms?.length) {
+    errors.platforms = 'Select platform'
+  }
   if (!values.icon?.trim() && !values.attachmentIcon) {
     errors.attachmentIcon = 'Upload project icon'
   }

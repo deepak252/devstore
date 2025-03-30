@@ -4,6 +4,9 @@ const AccountLayout = lazy(
   () => import('@/features/user/components/AccountLayout')
 )
 const GeneralPage = lazy(() => import('@/features/user/pages/account/General'))
+const MyProjectsPage = lazy(
+  () => import('@/features/user/pages/account/MyProjects')
+)
 
 const accountRoutes: RouteObject = {
   path: '/account',
@@ -15,7 +18,7 @@ const accountRoutes: RouteObject = {
     },
     {
       path: 'projects',
-      element: <GeneralPage />,
+      element: <MyProjectsPage />,
     },
   ],
 }

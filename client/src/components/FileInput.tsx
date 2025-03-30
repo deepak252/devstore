@@ -154,7 +154,7 @@ function FileInput({
           {children || (
             <div
               className={classNames(
-                'flex-center flex-col size-full p-5 border border-dashed border-gray-500 rounded-xl hover:border-primary',
+                'flex-center flex-col size-full p-5 border border-dashed border-neutral-300 rounded-xl hover:border-primary',
                 targetClassName,
                 {
                   'bg-gray-200': dragging,

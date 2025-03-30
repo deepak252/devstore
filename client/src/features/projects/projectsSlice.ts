@@ -24,12 +24,17 @@ type ProjectsState = {
     media: {
       isUploading: boolean
     }
-    isOpen: boolean
     isLoading: boolean
+    isSuccessful?: boolean
   }
   banner: {
     list: Banner[]
     isLoading: boolean
+  }
+  projectDelete: {
+    projectId?: string
+    isConfirm?: boolean
+    isLoading?: boolean
   }
   home: PaginatedList<ProjectListItem>
   toastData?: ToastData | null
@@ -54,7 +59,6 @@ const initialState: ProjectsState = {
   },
   projectForm: {
     // data: formDataInitialState,
-    isOpen: false,
     isLoading: false,
     media: { isUploading: false },
   },
@@ -70,6 +74,7 @@ const initialState: ProjectsState = {
     totalResults: 0,
     isLoading: false,
   },
+  projectDelete: {},
 }
 
 const projectsSlice = createSlice({
@@ -118,16 +123,13 @@ const projectsSlice = createSlice({
       state.projectDetails.isLoading = false
     },
 
-    toggleCreateProjectFormOpen: (state) => {
-      state.projectForm.isOpen = !state.projectForm?.isOpen
-    },
-
     // Create Project Form
     createProject: (state, _: PayloadAction<ProjectFormValues>) => {
       state.projectForm.isLoading = true
     },
     createProjectSuccess: (state) => {
       state.projectForm = initialState.projectForm
+      state.projectForm.isSuccessful = true
       state.toastData = {
         type: 'success',
         message: 'Your project is being processed. It will appear soon.',
@@ -143,6 +145,9 @@ const projectsSlice = createSlice({
     createProjectCancelled: (state, _) => {
       state.projectForm.isLoading = false
       console.log('createProjectCancelled')
+    },
+    resetProjectForm: (state) => {
+      state.projectForm = initialState.projectForm
     },
     // Upload Project Media
     uploadProjectMedia: (state, _: PayloadAction<{ icon: File }>) => {
@@ -203,6 +208,36 @@ const projectsSlice = createSlice({
       }
     },
 
+    confirmDeleteProject: (
+      state,
+      action: PayloadAction<{ projectId: string }>
+    ) => {
+      state.projectDelete = {
+        projectId: action.payload.projectId,
+        isConfirm: true,
+      }
+    },
+    cancelDeleteProject: (state) => {
+      state.projectDelete = initialState.projectDelete
+    },
+    deleteProject: (state) => {
+      state.projectDelete.isLoading = true
+    },
+    deleteProjectSuccess: (state) => {
+      state.projectDelete = initialState.projectDelete
+      state.toastData = {
+        type: 'success',
+        message: 'Project deleted successfully.',
+      }
+    },
+    deleteProjectFailure: (state, action) => {
+      state.projectDelete = initialState.projectDelete
+      state.toastData = {
+        type: 'failure',
+        message: action.payload || 'Something went wrong',
+      }
+    },
+
     setProjectsFilter: (state, action) => {
       state.filter = action.payload
     },
@@ -225,13 +260,12 @@ export const {
   createProjectSuccess,
   createProjectFailure,
   createProjectCancelled,
+  resetProjectForm,
 
   uploadProjectMedia,
   uploadProjectMediaSuccess,
   uploadProjectMediaFailure,
   uploadProjectMediaCancelled,
-
-  toggleCreateProjectFormOpen,
 
   // uploadProjectIcon,
   // uploadProjectIconSuccess,
@@ -245,6 +279,12 @@ export const {
   getHomeProjects,
   getHomeProjectsSuccess,
   getHomeProjectsFailure,
+
+  confirmDeleteProject,
+  cancelDeleteProject,
+  deleteProject,
+  deleteProjectFailure,
+  deleteProjectSuccess,
 
   setProjectsFilter,
   setProjectsToast,

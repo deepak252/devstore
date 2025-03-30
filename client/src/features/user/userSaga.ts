@@ -12,6 +12,9 @@ import {
   getUserProjects,
   getUserProjectsFailure,
   getUserProjectsSuccess,
+  getUsers,
+  getUsersFailure,
+  getUsersSuccess,
   updateProfile,
   updateProfileFailure,
   updateProfileSuccess,
@@ -114,11 +117,23 @@ function* getOtherProfileWorker(
   })
 }
 
+function* getUsersWorker(): Generator {
+  yield* apiWorker(UserService.getAllUsers, undefined, {
+    onSuccess: function* (response) {
+      yield put(getUsersSuccess(response.data?.data))
+    },
+    onFailure: function* (error) {
+      yield put(getUsersFailure(error?.message || 'Something went wrong'))
+    },
+  })
+}
+
 export default function* () {
   yield all([
     takeLatest(getProfile.type, getProfileWorker),
     takeLatest(updateProfile.type, updateProfileWorker),
     takeLatest(getUserProjects.type, getUserProjectsWorker),
     takeLatest(getOtherProfile.type, getOtherProfileWorker),
+    takeLatest(getUsers.type, getUsersWorker),
   ])
 }

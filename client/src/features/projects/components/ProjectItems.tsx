@@ -20,7 +20,9 @@ const ProjectItems = () => {
       {projectItems.isLoading &&
         [...Array(6).keys()].map((id) => <ProjectItemShimmer key={id} />)}
       {!projectItems.isLoading && !projectItems.list.length && (
-        <div className="text-lg text-neutral-500">No projects available!</div>
+        <div className="font-light text-neutral-500">
+          No projects available!
+        </div>
       )}
     </GridView>
   )

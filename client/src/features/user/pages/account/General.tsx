@@ -49,11 +49,7 @@ function GeneralSettings() {
   }, [userProfile.data])
 
   if (userProfile.isLoading) {
-    return (
-      <div className="absolute-center">
-        <Spinner />
-      </div>
-    )
+    return <Spinner center />
   }
 
   if (!userProfile.data) {

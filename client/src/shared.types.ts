@@ -83,7 +83,7 @@ export type ProjectFormValues = {
   name: string
   description?: string
   isPrivate: boolean
-  platforms: Platform[]
+  platforms: DropdownOption[]
   categories?: DropdownOption[]
   sourceCodeUrl?: string
   demoUrl?: string
@@ -107,6 +107,7 @@ export type ProjectFormValues = {
 export type ProjectFormError = {
   name?: string
   description?: string
+  platforms?: string
   isPrivate?: string
   categories?: string
   sourceCodeUrl?: string

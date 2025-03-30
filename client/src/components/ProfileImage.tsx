@@ -21,7 +21,7 @@ const ProfileImage = ({
   return (
     <img
       className={classNames(
-        'size-8 rounded-full aspect-square bg-neutral-200',
+        'size-8 rounded-full aspect-square bg-neutral-200 border border-neutral-300',
         className
       )}
       src={

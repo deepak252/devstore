@@ -2,9 +2,9 @@ import { useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import { Spinner } from '@/components/Loader'
 import PageNotFound from '@/components/PageNotFound'
-import Introduction from '../components/profile/Introduction'
-import AboutMe from '../components/profile/AboutMe'
-import Projects from '../components/profile/Projects'
+import Introduction from '../components/portfolio/Introduction'
+import AboutMe from '../components/portfolio/AboutMe'
+import UserProjects from '../components/portfolio/UserProjects'
 import { getOtherProfile, getProfile } from '../userSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 
@@ -32,16 +32,11 @@ function ProfilePage() {
   }, [username])
 
   if (userProfile.isLoading) {
-    return (
-      <div className="absolute-center">
-        <Spinner />
-      </div>
-    )
+    return <Spinner center />
   }
   if (!userProfile.data) {
     return <PageNotFound />
   }
-  console.log(userProfile.data._id)
 
   return (
     <div>
@@ -49,7 +44,7 @@ function ProfilePage() {
       {userProfile.data.about?.trim() && (
         <AboutMe about={userProfile.data.about} />
       )}
-      {userProfile.data._id && <Projects userId={userProfile.data._id} />}
+      {userProfile.data._id && <UserProjects userId={userProfile.data._id} />}
     </div>
   )
 }

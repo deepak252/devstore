@@ -1,21 +1,17 @@
 import { Platform, ProjectType } from '../constants/enums'
 
 export const getProjectType = (platforms: Platform[]) => {
-  if (
-    platforms.includes(Platform.android) &&
-    platforms.includes(Platform.ios) &&
-    platforms.includes(Platform.website)
-  ) {
+  const isAndroid = platforms.includes(Platform.android)
+  const isIos = platforms.includes(Platform.ios)
+  const isWeb = platforms.includes(Platform.website)
+  const isApp = isAndroid || isIos
+  if (isApp && isWeb) {
     return ProjectType.all
   }
-  if (
-    platforms.includes(Platform.android) &&
-    platforms.includes(Platform.ios)
-  ) {
+  if (isApp) {
     return ProjectType.app
   }
-
-  if (platforms.includes(Platform.website)) {
+  if (isWeb) {
     return ProjectType.web
   }
   return ProjectType.all

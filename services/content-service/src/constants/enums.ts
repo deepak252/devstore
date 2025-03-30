@@ -5,6 +5,7 @@ export enum Platform {
 }
 
 export enum ProjectType {
+  all = 'all',
   app = 'app',
   web = 'web'
 }

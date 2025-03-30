@@ -1,3 +1,4 @@
+import ProjectDeleteWrapper from '@/features/projects/components/ProjectDeleteWrapper'
 import classNames from 'classnames'
 import { Link, useLocation, Outlet } from 'react-router-dom'
 
@@ -12,6 +13,7 @@ function AccountLayout() {
       <h4>Account</h4>
       <AccountNavOptions />
       <Outlet />
+      <ProjectDeleteWrapper />
     </div>
   )
 }

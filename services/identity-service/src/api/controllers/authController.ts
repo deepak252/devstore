@@ -1,4 +1,5 @@
 import User from '../../models/User'
+import UserService from '../../services/UserService'
 import { ApiError } from '../utils/ApiError'
 import { ResponseSuccess } from '../utils/ApiResponse'
 import asyncHandler from '../utils/asyncHandler'
@@ -32,6 +33,7 @@ export const signUpUser = asyncHandler(async (req, _) => {
   user.refreshToken = refreshToken
 
   user = await user.save()
+  await UserService.invalidateUserCache()
 
   return new ResponseSuccess(
     'Register successful',

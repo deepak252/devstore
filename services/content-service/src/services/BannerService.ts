@@ -52,14 +52,21 @@ export default class BannerService {
     return banner
   }
 
-  static getBanners = async (projectType: ProjectType | string) => {
+  static getBanners = async (projectType: ProjectType) => {
     // const banners = await Banner.find()
     // if (banners) {
     //   return banners
     // }
-    let platforms = [Platform.website]
-    if (projectType == ProjectType.app) {
+    // let platforms = [Platform.website]
+    // if (projectType == ProjectType.app) {
+    //   platforms = [Platform.android, Platform.ios]
+    // }
+    let platforms: Platform[] = []
+    if ([ProjectType.all, ProjectType.app].includes(projectType)) {
       platforms = [Platform.android, Platform.ios]
+    }
+    if ([ProjectType.all, ProjectType.web].includes(projectType)) {
+      platforms.push(Platform.website)
     }
 
     const filter = platforms

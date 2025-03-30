@@ -4,7 +4,7 @@ import {
   HOME_PROJECTS_API,
   PROJECTS_API,
 } from '@/constants'
-import { getRequest, postRequest } from '@/services/api'
+import { deleteRequest, getRequest, postRequest } from '@/services/api'
 import { SaveProjectPayload } from '@/shared.types'
 import { ProjectSearchFilter } from './projects.types'
 
@@ -21,6 +21,10 @@ export default class ProjectsService {
 
   static getProjectDetails = async (projectId: string) => {
     return await getRequest(`${PROJECTS_API}/${projectId}`)
+  }
+
+  static deleteProject = async (projectId: string) => {
+    return await deleteRequest(`${PROJECTS_API}/${projectId}`)
   }
 
   static getProjectBanners = async () => {

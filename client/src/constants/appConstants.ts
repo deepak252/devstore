@@ -33,14 +33,14 @@ export const FILE_EXTENSIONS = Object.freeze({
   VIDEO: ['.mp4', '.avi', '.mkv', '.webm', '.3gp'],
 })
 
-export const PLATFORM = Object.freeze({
-  All: 'all',
-  Android: 'android',
-  iOS: 'ios',
-})
+// export const PLATFORM = Object.freeze({
+//   All: 'all',
+//   Android: 'android',
+//   iOS: 'ios',
+// })
 
-export const PROJECT_TYPE = Object.freeze({
-  APPS: 'apps',
-  GAMES: 'games',
-  WEBSITES: 'websites',
-})
+// export const PROJECT_TYPE = Object.freeze({
+//   APPS: 'apps',
+//   GAMES: 'games',
+//   WEBSITES: 'websites',
+// })

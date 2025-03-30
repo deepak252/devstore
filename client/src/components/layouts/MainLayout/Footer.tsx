@@ -7,14 +7,14 @@ const Footer = () => {
       <div className="flex items-start justify-around mt-5 mb-10">
         <AppLogo className="px-4" textClassName="text-white" />
         <div className="flex flex-col text-white">
-          <NavLink className="p-2" to={'apps'}>
-            Apps
+          <NavLink className="p-2" to="/projects">
+            Projects
           </NavLink>
-          <NavLink className="p-2" to={'games'}>
-            Games
+          <NavLink className="p-2" to="/developers">
+            Developers
           </NavLink>
-          <NavLink className="p-2" to={'websites'}>
-            Websites
+          <NavLink className="p-2" to="blogs">
+            Blogs
           </NavLink>
         </div>
         <div className="flex flex-col text-white">

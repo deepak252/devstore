@@ -5,18 +5,9 @@ import authRoutes from './authRoutes'
 import userRoutes from './userRoutes'
 import accountRoutes from './accountRoutes'
 import projectRoutes from './projectRoutes'
+import DevelopersPage from '@/features/user/pages/DevelopersPage'
 const RootLayout = lazy(() => import('@/components/layouts/RootLayout'))
 const MainLayout = lazy(() => import('@/components/layouts/MainLayout'))
-const AppsPage = lazy(() => import('@/features/apps/pages/AppsPage'))
-const AppDetailsPage = lazy(
-  () => import('@/features/apps/pages/AppDetailsPage')
-)
-const WebsitesPage = lazy(
-  () => import('@/features/websites/pages/WebsitesPage')
-)
-const WebsiteDetailsPage = lazy(
-  () => import('@/features/websites/pages/WebsiteDetailsPage')
-)
 const HomePage = lazy(() => import('@/pages/HomePage'))
 const PageNotFound = lazy(() => import('@/components/PageNotFound'))
 
@@ -34,30 +25,8 @@ const routes: RouteObject[] = [
             element: <HomePage />,
           },
           {
-            path: 'apps',
-            children: [
-              {
-                path: '',
-                element: <AppsPage />,
-              },
-              {
-                path: ':projectId',
-                element: <AppDetailsPage />,
-              },
-            ],
-          },
-          {
-            path: 'websites',
-            children: [
-              {
-                path: '',
-                element: <WebsitesPage />,
-              },
-              {
-                path: ':projectId',
-                element: <WebsiteDetailsPage />,
-              },
-            ],
+            path: '/developers',
+            element: <DevelopersPage />,
           },
           accountRoutes,
           projectRoutes,

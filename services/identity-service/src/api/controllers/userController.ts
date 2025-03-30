@@ -9,7 +9,9 @@ import {
 } from '../utils/validation'
 
 export const getProfile = asyncHandler(async (req, _) => {
-  const user = await UserService.getUser(req.user.userId || '')
+  const user = await UserService.getUser({
+    userId: req.user.userId
+  })
 
   if (!user) {
     throw new ApiError('User not found', 404)
@@ -62,9 +64,20 @@ export const checkUsername = asyncHandler(async (req, _) => {
 export const getUserByUsername = asyncHandler(async (req, _) => {
   const { username } = req.params
 
-  const user = await User.findByUsername(username)
+  const user = await UserService.getUser({ username })
   if (!user) {
     throw new ApiError('User not found')
   }
   return new ResponseSuccess('User fetched successfully', user)
+})
+
+export const getUsers = asyncHandler(async (req, _) => {
+  const { page, limit } = req.query
+
+  const result = await UserService.getUsers(
+    Number(page) || 1,
+    Number(limit) || 10
+  )
+
+  return new ResponseSuccess('Users fetched successfully', result)
 })

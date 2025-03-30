@@ -15,7 +15,14 @@ export default class ProjectService {
     if (projectId) {
       await redisClient.del(`${projectType}:${projectId}`)
     }
-    const keys = await redisClient.keys(`${projectType}s:*`)
+    const [keys1, keys2, keys3] = await Promise.all([
+      redisClient.keys(`alls:*`),
+      redisClient.keys(`apps:*`),
+      redisClient.keys(`webs:*`)
+    ])
+
+    const keys = [...keys1, ...keys2, ...keys3]
+
     if (keys.length) {
       await redisClient.del(keys)
     }
@@ -270,6 +277,7 @@ export default class ProjectService {
             {
               $project: {
                 name: 1,
+                description: ownerId ? 1 : undefined,
                 categories: 1,
                 type: 1,
                 platforms: 1,
@@ -313,7 +321,9 @@ export default class ProjectService {
       }
     }
 
-    await redisClient.setex(cacheKey, 3600, JSON.stringify(data)) // delete record after 1hr
+    if (cacheKey) {
+      await redisClient.setex(cacheKey, 3600, JSON.stringify(data)) // delete record after 1hr
+    }
     return data
   }
 

@@ -5,6 +5,7 @@ import { SignInFormValues, SignUpFormValues } from './auth.types'
 type AuthState = {
   isAuthenticated?: boolean
   isLoading?: boolean
+  isConfirmSignOut?: boolean
   username: {
     value?: string
     isAvailable?: boolean
@@ -59,15 +60,24 @@ const authSlice = createSlice({
     },
 
     // Sign Out
+    confirmSignOut: (state) => {
+      state.isConfirmSignOut = true
+    },
+    cancelSignOut: (state) => {
+      state.isConfirmSignOut = false
+    },
     signOut: (state) => {
       state.isLoading = true
+      state.isConfirmSignOut = false
     },
     signOutSuccess: (state) => {
       state.isLoading = false
       state.isAuthenticated = false
+      state.isConfirmSignOut = false
     },
     signOutFailure: (state) => {
       state.isLoading = false
+      state.isConfirmSignOut = false
     },
 
     // Check username available
@@ -117,6 +127,8 @@ export const {
   signUpSuccess,
   signUpFailure,
 
+  confirmSignOut,
+  cancelSignOut,
   signOut,
   signOutSuccess,
   signOutFailure,
