@@ -39,8 +39,6 @@ const bannerSchema = new Schema<IBanner, BannerModel, IBannerMethods>(
   }
 )
 
-bannerSchema.index({ name: 'text' })
-
 const Banner = model<IBanner, BannerModel>('Banner', bannerSchema)
 
 export default Banner

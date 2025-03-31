@@ -56,7 +56,7 @@ const MyProjects = () => {
             No projects available!{' '}
             <Link
               to="/projects/create"
-              className="p-2 underline"
+              className="p-2 underline text-primary"
               title="Add Project"
             >
               Create Project

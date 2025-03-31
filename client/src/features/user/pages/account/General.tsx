@@ -39,6 +39,7 @@ function GeneralSettings() {
   useEffect(() => {
     if (userProfile.data) {
       formik.setValues({
+        ...formik.values,
         fullname: userProfile.data.fullname,
         title: userProfile.data.title,
         headline: userProfile.data.headline,

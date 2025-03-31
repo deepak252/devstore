@@ -23,20 +23,31 @@ export const deleteRemoteFileConsumer = async () => {
   await channel.bindQueue(queue, exchange2, bindingKey2)
   await channel.bindQueue(queue, exchange2, bindingKey3)
 
+  channel.prefetch(10)
+
   channel.consume(queue, async (msg) => {
     if (msg?.content) {
-      const content = JSON.parse(msg.content.toString())
-      logger.info(`Event recieved: ${msg.fields.routingKey}, ${msg?.content}`)
-      if (msg.fields.routingKey === bindingKey1) {
-        await RemoteFileService.deleteSingleFile(content.user.profileImage)
-      } else if (msg.fields.routingKey === bindingKey2) {
-        await RemoteFileService.deleteMultipleFiles([
-          content.project?.icon,
-          content.project?.banner,
-          ...(content.project?.images ?? [])
-        ])
+      try {
+        const content = JSON.parse(msg.content.toString())
+        logger.info(`Event recieved: ${msg.fields.routingKey}, ${msg?.content}`)
+        if (msg.fields.routingKey === bindingKey1) {
+          await RemoteFileService.deleteSingleFile(content.user.profileImage)
+        } else if (msg.fields.routingKey === bindingKey2) {
+          await RemoteFileService.deleteMultipleFiles([
+            content.project?.icon,
+            content.project?.banner,
+            ...(content.project?.images ?? [])
+          ])
+        }
+        // Acknowledge the message
+        channel.ack(msg)
+      } catch (err) {
+        logger.error(
+          `Error processing event: ${msg?.fields?.routingKey}, ${msg?.content}`,
+          err
+        )
+        channel.nack(msg, false, true) // Requeue the message
       }
-      channel?.ack(msg)
     }
   })
 

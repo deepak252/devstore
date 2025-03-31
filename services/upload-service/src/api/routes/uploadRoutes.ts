@@ -1,7 +1,6 @@
 import { Router } from 'express'
 import {
   getAllRemoteFiles,
-  uploadApplication,
   uploadMedia,
   uploadProfileImage,
   uploadProjectMedia
@@ -14,18 +13,18 @@ const router = Router()
 
 router.use(authenticateRequest)
 
-router.post(
-  '/application',
-  uploadMiddleware([
-    {
-      name: 'file',
-      maxCount: 1,
-      maxSizeKB: 10240,
-      allowedExtensions: ['.apk', '.ipa']
-    }
-  ]),
-  uploadApplication
-)
+// router.post(
+//   '/application',
+//   uploadMiddleware([
+//     {
+//       name: 'file',
+//       maxCount: 1,
+//       maxSizeKB: 10240,
+//       allowedExtensions: ['.apk', '.ipa']
+//     }
+//   ]),
+//   uploadApplication
+// )
 
 router.post(
   '/media',

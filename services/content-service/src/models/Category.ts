@@ -23,8 +23,6 @@ const categorySchema = new Schema<ICategory, CategoryModel, ICategoryMethods>(
   }
 )
 
-categorySchema.index({ name: 'text' })
-
 const Category = model<ICategory, CategoryModel>('Category', categorySchema)
 
 export default Category

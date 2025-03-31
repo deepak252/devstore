@@ -1,5 +1,5 @@
 import { getAmqpChannel } from '../config/rabbitmq'
-import BannerService from '../services/BannerService'
+import BannerService from '../services/LikeService'
 import logger from '../utils/logger'
 
 export const bannerConsumer = async () => {
@@ -19,8 +19,8 @@ export const bannerConsumer = async () => {
   await channel.bindQueue(queue, exchange1, bindingKey2)
 
   channel.consume(queue, async (msg) => {
-    if (msg?.content) {
-      try {
+    try {
+      if (msg?.content) {
         const content = JSON.parse(msg.content.toString())
         logger.info(
           `Event recieved: ${msg?.fields?.routingKey}, ${msg?.content}`
@@ -33,13 +33,12 @@ export const bannerConsumer = async () => {
         }
 
         channel?.ack(msg)
-      } catch (e: any) {
-        logger.error(
-          `Error processing event: ${msg?.fields?.routingKey}, ${msg?.content}`,
-          e
-        )
-        channel.nack(msg, false, true) // Requeue the message
       }
+    } catch (e: any) {
+      logger.error(
+        `Error processing event: ${msg?.fields?.routingKey}, ${msg?.content}`,
+        e
+      )
     }
   })
   logger.info(`Subscribed to event: ${bindingKey1}`)

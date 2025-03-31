@@ -17,8 +17,8 @@ export const userProfileConsumer = async () => {
   await channel.bindQueue(queue, exchange1, bindingKey1)
 
   channel.consume(queue, async (msg) => {
-    try {
-      if (msg?.content) {
+    if (msg?.content) {
+      try {
         const content = JSON.parse(msg.content.toString())
         logger.info(
           `Event recieved: ${msg?.fields?.routingKey}, ${msg?.content}`
@@ -31,12 +31,13 @@ export const userProfileConsumer = async () => {
         }
 
         channel?.ack(msg)
+      } catch (e: any) {
+        logger.error(
+          `Error processing event: ${msg?.fields?.routingKey}, ${msg?.content}`,
+          e
+        )
+        channel.nack(msg, false, true) // Requeue the message
       }
-    } catch (e: any) {
-      logger.error(
-        `Error processing event: ${msg?.fields?.routingKey}, ${msg?.content}`,
-        e
-      )
     }
   })
   logger.info(`Subscribed to event: ${bindingKey1}`)

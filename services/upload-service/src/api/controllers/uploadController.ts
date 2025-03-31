@@ -1,85 +1,32 @@
-import { S3Service } from '../../services/S3Service'
 import { ApiError } from '../utils/ApiError'
 import { ResponseSuccess } from '../utils/ApiResponse'
 import asyncHandler from '../utils/asyncHandler'
-import RemoteFile from '../../models/RemoteFile'
 import RemoteFileService from '../../services/RemoteFileService'
-import { S3_APPLICATION_BUCKET, S3_MEDIA_BUCKET } from '../../config/env'
-import { removeFile, removeFiles } from '../../utils/fileUtil'
+import { removeFiles } from '../../utils/fileUtil'
 import { publishEvent } from '../../events/producer'
 
 export const uploadMedia = asyncHandler(async (req, _) => {
   const { file = [] }: any = req.files || {}
-  const mediaFile = file?.[0]
+  const { userId } = req.user
+
   try {
-    if (!mediaFile) {
+    if (!file?.[0]) {
       throw new ApiError('No media file found')
     }
-    const s3Service = new S3Service(S3_MEDIA_BUCKET)
 
-    const result = await s3Service.uploadToS3(mediaFile, req.user.userId)
-
-    if (!result) {
-      throw new ApiError('Unable to upload media')
-    }
-
-    const remoteFile = new RemoteFile({
-      publicId: result?.key,
-      bucketName: S3_MEDIA_BUCKET,
-      originalName: mediaFile.originalname,
-      user: req.user.userId,
-      mimeType: mediaFile.mimetype,
-      url: result?.location
-    })
-
-    await remoteFile.save()
-
+    const remoteFile = await RemoteFileService.uploadMedia(
+      file[0],
+      userId,
+      userId,
+      'profile-image'
+    )
     return new ResponseSuccess(
       'Media uploaded successfully',
-      remoteFile.toJSON(),
+      remoteFile?.toJSON(),
       201
     )
   } finally {
-    if (mediaFile) {
-      removeFile(mediaFile.path)
-    }
-  }
-})
-
-export const uploadApplication = asyncHandler(async (req, _) => {
-  try {
-    if (!req.file) {
-      throw new ApiError('No application file found')
-    }
-
-    const s3Service = new S3Service(S3_APPLICATION_BUCKET)
-
-    const result = await s3Service.uploadToS3(req.file, req.user.userId)
-
-    if (!result) {
-      throw new ApiError('Unable to upload application file')
-    }
-
-    const remoteFile = new RemoteFile({
-      publicId: result?.key,
-      bucketName: S3_APPLICATION_BUCKET,
-      originalName: req.file.originalname,
-      user: req.user.userId,
-      mimeType: req.file.mimetype,
-      url: result?.location
-    })
-
-    await remoteFile.save()
-
-    return new ResponseSuccess(
-      'Application file uploaded successfully',
-      remoteFile.toJSON(),
-      201
-    )
-  } finally {
-    if (req.file) {
-      removeFile(req.file.path)
-    }
+    removeFiles([...file.map((e: Express.Multer.File) => e.path)])
   }
 })
 
