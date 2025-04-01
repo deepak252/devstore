@@ -50,7 +50,7 @@ const UserProjectItemView = ({
   }
 
   return (
-    <div>
+    <div draggable>
       <Link
         to={`/projects/${_id}`}
         className="relative block aspect-video overflow-hidden bg-white rounded-lg group"

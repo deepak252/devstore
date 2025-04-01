@@ -8,6 +8,7 @@ import {
 } from '@/components/tiles/UserProjectItemView'
 import { confirmDeleteProject } from '@/features/projects/projectsSlice'
 import { Link } from 'react-router-dom'
+import DraggableGrid from '@/components/DraggableGrid'
 
 const MyProjects = () => {
   const dispatch = useAppDispatch()
@@ -34,6 +35,7 @@ const MyProjects = () => {
   )
   return (
     <section id="projects" className="">
+      <DraggableGrid />
       <GridView
         heading=""
         wrapperClass="my-8 mx-4"
