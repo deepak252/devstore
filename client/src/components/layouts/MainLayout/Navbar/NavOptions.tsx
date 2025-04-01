@@ -1,7 +1,7 @@
+import { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
 import DrawerIcon from '@/assets/icons/menu.svg?react'
-import { Link, useLocation } from 'react-router-dom'
-import { useState } from 'react'
 
 const navItems = ['Projects', 'Developers', 'Blogs']
 
@@ -14,8 +14,7 @@ const NavOptions = () => {
   }
 
   return (
-    // <div className="text-neutral-600 flex-grow max-md:order-3 max-md:flex max-md:w-full max-md:justify-around">
-    <div className="text-neutral-600 flex-grow max-md:order-3 max-md:grow-0">
+    <div className="text-neutral-800 flex-grow max-md:order-3 max-md:grow-0">
       <button className="icon-button md:hidden" onClick={toggleDrawer}>
         <DrawerIcon className="size-8" />
       </button>
@@ -28,7 +27,7 @@ const NavOptions = () => {
         {navItems.map((item) => (
           <Link
             key={item}
-            className={classNames('px-3 py-2', {
+            className={classNames('px-3 py-2 font-medium', {
               'text-primary': `/${item.toLocaleLowerCase()}` === pathname,
             })}
             to={item.toLowerCase()}
