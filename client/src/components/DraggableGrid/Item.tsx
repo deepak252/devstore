@@ -13,13 +13,17 @@ const Item = forwardRef<HTMLDivElement, ItemProps>(
     return (
       <div
         ref={ref}
-        className={classNames(
-          'bg-white flex-center w-full h-24 rounded-xl cursor-grab shadow-lg',
-          {
-            'cursor-grabbing shadow-xl scale-105': isDragging,
-            'opacity-50': withOpacity,
-          }
-        )}
+        // className={classNames(
+        //   'bg-white flex-center w-full h-24 rounded-xl cursor-grab shadow-lg',
+        //   {
+        //     'cursor-grabbing shadow-xl scale-105': isDragging,
+        //     'opacity-50': withOpacity,
+        //   }
+        // )}
+        className={classNames('w-full h-24 cursor-grab', {
+          'cursor-grabbing shadow-xl scale-105': isDragging,
+          'opacity-50': withOpacity,
+        })}
         style={style}
         {...props}
       >

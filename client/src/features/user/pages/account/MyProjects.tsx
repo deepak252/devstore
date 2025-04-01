@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react'
 import GridView from '@/components/GridView'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { getUserProjects } from '../../userSlice'
-import {
+import UserProjectItemView, {
   UserProjectItemShimmer,
   UserProjectItemViewMemo,
 } from '@/components/tiles/UserProjectItemView'
@@ -33,17 +33,21 @@ const MyProjects = () => {
   )
   return (
     <section id="projects" className="">
-      <DraggableGrid>
-        {userProjects.list?.map((item) => (
-          <UserProjectItemViewMemo
-            key={item._id}
-            project={item}
-            edit={true}
-            onDeleteClick={handleProjectDelete}
-          />
-        ))}
-      </DraggableGrid>
-      <GridView
+      <DraggableGrid
+        data={userProjects.list}
+        getId={(item) => item._id}
+        renderItem={(item) => {
+          return (
+            <UserProjectItemView
+              key={item._id}
+              project={item}
+              edit={true}
+              onDeleteClick={handleProjectDelete}
+            />
+          )
+        }}
+      />
+      {/* <GridView
         heading=""
         wrapperClass="my-8 mx-4"
         itemsClass="gap-8 !grid-cols-1 sm:!grid-cols-2 md:gap-8"
@@ -58,7 +62,7 @@ const MyProjects = () => {
         ))}
         {userProjects.isLoading &&
           [...Array(6).keys()].map((id) => <UserProjectItemShimmer key={id} />)}
-      </GridView>
+      </GridView> */}
       {!userProjects.isLoading && !userProjects.list.length && (
         <div className="w-full">
           <p className="font-light text-neutral-500">

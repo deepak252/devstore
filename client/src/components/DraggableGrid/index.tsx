@@ -18,34 +18,49 @@ import {
 import SortableItem from './SortableItem'
 import Item from './Item'
 
-type DraggableGridProps = {
+type DraggableGridProps<T> = {
   cols?: number
-  children: React.ReactNode
+  data: T[]
+  getId: (item: T) => string
+  renderItem: (item: T) => React.ReactNode
 }
-const DraggableGrid = ({ cols = 2, children }: DraggableGridProps) => {
-  const [items, setItems] = useState(
-    Array.from({ length: 8 }, (_, i) => (i + 1).toString())
-  )
+
+const DraggableGrid = <T,>({
+  cols = 2,
+  data,
+  getId,
+  renderItem,
+}: DraggableGridProps<T>) => {
+  const [items, setItems] = useState(data)
   const [activeId, setActiveId] = useState<string | null>(null)
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
+
+  useEffect(() => {
+    setItems(data)
+  }, [data])
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
     setActiveId(event.active.id as string)
   }, [])
-  const handleDragEnd = useCallback((event: DragEndEvent) => {
-    const { active, over } = event
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event
 
-    if (active.id !== over?.id) {
-      setItems((items) => {
-        const oldIndex = items.indexOf(active.id as string)
-        const newIndex = items.indexOf(over!.id as string)
+      if (active.id !== over?.id) {
+        setItems((items) => {
+          // const oldIndex = items.indexOf(active.id as string)
+          // const newIndex = items.indexOf(over!.id as string)
+          const oldIndex = items.findIndex((item) => getId(item) === active.id)
+          const newIndex = items.findIndex((item) => getId(item) === over!.id)
 
-        return arrayMove(items, oldIndex, newIndex)
-      })
-    }
+          return arrayMove(items, oldIndex, newIndex)
+        })
+      }
 
-    setActiveId(null)
-  }, [])
+      setActiveId(null)
+    },
+    [getId]
+  )
   const handleDragCancel = useCallback(() => {
     setActiveId(null)
   }, [])
@@ -62,7 +77,7 @@ const DraggableGrid = ({ cols = 2, children }: DraggableGridProps) => {
       onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
     >
-      <SortableContext items={items} strategy={rectSortingStrategy}>
+      <SortableContext items={items.map(getId)} strategy={rectSortingStrategy}>
         <div
           // className="grid gap-3 max-w-xl mx-auto my-3"
           className="grid gap-3 mx-auto my-3"
@@ -70,9 +85,9 @@ const DraggableGrid = ({ cols = 2, children }: DraggableGridProps) => {
             gridTemplateColumns: `repeat(${cols}, 1fr)`,
           }}
         >
-          {items.map((id) => (
-            <SortableItem key={id} id={id}>
-              <p>Hello {id}</p>
+          {items.map((item) => (
+            <SortableItem key={getId(item)} id={getId(item)}>
+              {renderItem(item)}
             </SortableItem>
           ))}
         </div>
@@ -80,7 +95,7 @@ const DraggableGrid = ({ cols = 2, children }: DraggableGridProps) => {
       <DragOverlay adjustScale style={{ transformOrigin: '0 0' }}>
         {activeId ? (
           <Item id={activeId} isDragging>
-            <p>{activeId}</p>
+            {renderItem(items.find((item) => getId(item) === activeId)!)}
           </Item>
         ) : null}
       </DragOverlay>
