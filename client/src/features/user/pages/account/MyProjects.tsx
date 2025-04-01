@@ -25,8 +25,6 @@ const MyProjects = () => {
     fetchProjects()
   }, [fetchProjects])
 
-  useEffect(() => {}, [userId])
-
   const handleProjectDelete = useCallback(
     (projectId: string) => {
       dispatch(confirmDeleteProject({ projectId }))
@@ -35,7 +33,16 @@ const MyProjects = () => {
   )
   return (
     <section id="projects" className="">
-      <DraggableGrid />
+      <DraggableGrid>
+        {userProjects.list?.map((item) => (
+          <UserProjectItemViewMemo
+            key={item._id}
+            project={item}
+            edit={true}
+            onDeleteClick={handleProjectDelete}
+          />
+        ))}
+      </DraggableGrid>
       <GridView
         heading=""
         wrapperClass="my-8 mx-4"

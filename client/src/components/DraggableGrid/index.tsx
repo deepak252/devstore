@@ -1,4 +1,4 @@
-import { FC, useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import {
   DndContext,
   closestCenter,
@@ -15,27 +15,30 @@ import {
   SortableContext,
   rectSortingStrategy,
 } from '@dnd-kit/sortable'
-import Grid from './Grid'
 import SortableItem from './SortableItem'
 import Item from './Item'
 
-const DraggableGrid: FC = () => {
+type DraggableGridProps = {
+  cols?: number
+  children: React.ReactNode
+}
+const DraggableGrid = ({ cols = 2, children }: DraggableGridProps) => {
   const [items, setItems] = useState(
-    Array.from({ length: 20 }, (_, i) => (i + 1).toString())
+    Array.from({ length: 8 }, (_, i) => (i + 1).toString())
   )
   const [activeId, setActiveId] = useState<string | null>(null)
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
-    setActiveId(event.active.id)
+    setActiveId(event.active.id as string)
   }, [])
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event
 
     if (active.id !== over?.id) {
       setItems((items) => {
-        const oldIndex = items.indexOf(active.id)
-        const newIndex = items.indexOf(over!.id)
+        const oldIndex = items.indexOf(active.id as string)
+        const newIndex = items.indexOf(over!.id as string)
 
         return arrayMove(items, oldIndex, newIndex)
       })
@@ -47,6 +50,10 @@ const DraggableGrid: FC = () => {
     setActiveId(null)
   }, [])
 
+  useEffect(() => {
+    console.log(items)
+  }, [items])
+
   return (
     <DndContext
       sensors={sensors}
@@ -56,14 +63,26 @@ const DraggableGrid: FC = () => {
       onDragCancel={handleDragCancel}
     >
       <SortableContext items={items} strategy={rectSortingStrategy}>
-        <Grid columns={5}>
+        <div
+          // className="grid gap-3 max-w-xl mx-auto my-3"
+          className="grid gap-3 mx-auto my-3"
+          style={{
+            gridTemplateColumns: `repeat(${cols}, 1fr)`,
+          }}
+        >
           {items.map((id) => (
-            <SortableItem key={id} id={id} />
+            <SortableItem key={id} id={id}>
+              <p>Hello {id}</p>
+            </SortableItem>
           ))}
-        </Grid>
+        </div>
       </SortableContext>
-      <DragOverlay adjustScale style={{ transformOrigin: '0 0 ' }}>
-        {activeId ? <Item id={activeId} isDragging /> : null}
+      <DragOverlay adjustScale style={{ transformOrigin: '0 0' }}>
+        {activeId ? (
+          <Item id={activeId} isDragging>
+            <p>{activeId}</p>
+          </Item>
+        ) : null}
       </DragOverlay>
     </DndContext>
   )

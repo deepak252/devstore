@@ -1,9 +1,8 @@
-import { FC } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import Item, { ItemProps } from './Item'
 
-const SortableItem: FC<ItemProps> = (props) => {
+const SortableItem = (props: ItemProps) => {
   const {
     isDragging,
     attributes,
