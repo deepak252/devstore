@@ -54,7 +54,7 @@ export const getUserProjects = asyncHandler(async (req, _) => {
   const result = await ProjectService.getProjects(
     ProjectType.all,
     Number(page) || 1,
-    Number(limit) || 10,
+    Number(limit) || 100,
     userId
   )
 
@@ -135,6 +135,18 @@ export const checkProjectExists = asyncHandler(async (req, _) => {
   return new ResponseSuccess('Success', {
     exists: !!result
   })
+})
+
+export const orderUserProjects = asyncHandler(async (req, _) => {
+  const { projectId, newIndex } = req.body
+  const userId = req.user.userId
+
+  const result = await ProjectService.orderProjects(
+    userId,
+    projectId,
+    Number(newIndex)
+  )
+  return new ResponseSuccess('Success', result)
 })
 
 // export const createProject = asyncHandler(async (req, _) => {

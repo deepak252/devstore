@@ -15,6 +15,9 @@ import {
   getUsers,
   getUsersFailure,
   getUsersSuccess,
+  orderUserProjects,
+  orderUserProjectsFailure,
+  orderUserProjectsSuccess,
   updateProfile,
   updateProfileFailure,
   updateProfileSuccess,
@@ -102,6 +105,29 @@ function* getUserProjectsWorker(
   })
 }
 
+function* orderUserProjectsWorker(
+  action: PayloadAction<{
+    projectId: string
+    oldIndex: number
+    newIndex: number
+  }>
+): Generator {
+  yield* apiWorker(
+    UserService.orderUserProjects,
+    { projectId: action.payload.projectId, newIndex: action.payload.newIndex },
+    {
+      onSuccess: function* (_) {
+        yield put(orderUserProjectsSuccess(action.payload))
+      },
+      onFailure: function* (error) {
+        yield put(
+          orderUserProjectsFailure(error?.message || 'Something went wrong')
+        )
+      },
+    }
+  )
+}
+
 function* getOtherProfileWorker(
   action: PayloadAction<{ username: string }>
 ): Generator {
@@ -133,6 +159,7 @@ export default function* () {
     takeLatest(getProfile.type, getProfileWorker),
     takeLatest(updateProfile.type, updateProfileWorker),
     takeLatest(getUserProjects.type, getUserProjectsWorker),
+    takeLatest(orderUserProjects.type, orderUserProjectsWorker),
     takeLatest(getOtherProfile.type, getOtherProfileWorker),
     takeLatest(getUsers.type, getUsersWorker),
   ])

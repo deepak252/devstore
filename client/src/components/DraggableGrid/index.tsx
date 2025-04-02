@@ -23,6 +23,7 @@ type DraggableGridProps<T> = {
   data: T[]
   getId: (item: T) => string
   renderItem: (item: T) => React.ReactNode
+  onDragEnd?: (item: T, oldIndex: number, newIndex: number) => void
 }
 
 const DraggableGrid = <T,>({
@@ -30,10 +31,26 @@ const DraggableGrid = <T,>({
   data,
   getId,
   renderItem,
+  onDragEnd,
 }: DraggableGridProps<T>) => {
   const [items, setItems] = useState(data)
   const [activeId, setActiveId] = useState<string | null>(null)
-  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
+  // const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
+
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        delay: 100,
+        tolerance: 5,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 100,
+        tolerance: 10,
+      },
+    })
+  )
 
   useEffect(() => {
     setItems(data)
@@ -42,32 +59,33 @@ const DraggableGrid = <T,>({
   const handleDragStart = useCallback((event: DragStartEvent) => {
     setActiveId(event.active.id as string)
   }, [])
+
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event
-
-      if (active.id !== over?.id) {
-        setItems((items) => {
-          // const oldIndex = items.indexOf(active.id as string)
-          // const newIndex = items.indexOf(over!.id as string)
-          const oldIndex = items.findIndex((item) => getId(item) === active.id)
-          const newIndex = items.findIndex((item) => getId(item) === over!.id)
-
-          return arrayMove(items, oldIndex, newIndex)
-        })
+      if (!active || !over || active.id === over.id) {
+        setActiveId(null)
+        return
       }
+      setItems((items) => {
+        const oldIndex = items.findIndex((item) => getId(item) === active.id)
+        const newIndex = items.findIndex((item) => getId(item) === over?.id)
 
-      setActiveId(null)
+        onDragEnd?.(items[oldIndex], oldIndex, newIndex)
+        return arrayMove(items, oldIndex, newIndex)
+      })
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [getId]
   )
+
   const handleDragCancel = useCallback(() => {
     setActiveId(null)
   }, [])
 
-  useEffect(() => {
-    console.log(items)
-  }, [items])
+  // useEffect(() => {
+  //   console.log(items)
+  // }, [items])
 
   return (
     <DndContext

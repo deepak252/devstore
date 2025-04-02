@@ -1,12 +1,13 @@
 import { memo } from 'react'
+import classNames from 'classnames'
 import { Link } from 'react-router-dom'
 import Shimmer from '../Shimmer'
+import Dropdown, { DropdownOption } from '../Dropdown'
 import HeartOutlinedIcon from '@/assets/icons/heart-outlined.svg?react'
 // import HeartFilledIcon from '@/assets/icons/heart-filled.svg?react'
 import MoreVertIcon from '@/assets/icons/more-vert.svg?react'
 import ShareIcon from '@/assets/icons/share.svg?react'
 import { ProjectListItem } from '@/shared.types'
-import Dropdown, { DropdownOption } from '../Dropdown'
 
 type UserProjectItemViewProps = {
   project: ProjectListItem
@@ -50,13 +51,18 @@ const UserProjectItemView = ({
   }
 
   return (
-    <div draggable>
+    <div>
       <Link
         to={`/projects/${_id}`}
         className="relative block aspect-video overflow-hidden bg-white rounded-lg group"
       >
         <img
-          className="size-full bg-white object-cover duration-300 transition-all group-hover:scale-110"
+          className={classNames(
+            'size-full bg-white object-cover duration-300 transition-all',
+            {
+              edit: 'group-hover:scale-110',
+            }
+          )}
           src={banner?.url || icon?.url}
           alt={name}
         />

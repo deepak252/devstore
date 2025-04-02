@@ -9,7 +9,9 @@ type UserState = {
     isLoading?: boolean
     isUpdating?: boolean
   }
-  projects: PaginatedList<ProjectListItem>
+  projects: PaginatedList<ProjectListItem> & {
+    isOrdering?: boolean
+  }
   users: PaginatedList<User>
   otherProfile: {
     data?: User
@@ -31,6 +33,7 @@ const initialState: UserState = {
     totalPages: 0,
     totalResults: 0,
     isLoading: false,
+    isOrdering: false,
   },
   users: {
     list: [],
@@ -78,6 +81,36 @@ const userSlice = createSlice({
     },
     getUserProjectsFailure: (state, action) => {
       state.projects.isLoading = false
+      state.toastData = {
+        type: 'failure',
+        message: action.payload,
+      }
+    },
+
+    orderUserProjects: (
+      state,
+      _: PayloadAction<{
+        projectId: string
+        oldIndex: number
+        newIndex: number
+      }>
+    ) => {
+      state.projects.isOrdering = true
+    },
+    orderUserProjectsSuccess: (
+      state,
+      action: PayloadAction<{
+        projectId: string
+        oldIndex: number
+        newIndex: number
+      }>
+    ) => {
+      const { projectId, oldIndex, newIndex } = action.payload || {}
+      state.projects.isOrdering = false
+      // state.projects.list = projects
+    },
+    orderUserProjectsFailure: (state, action) => {
+      state.projects.isOrdering = false
       state.toastData = {
         type: 'failure',
         message: action.payload,
@@ -175,6 +208,10 @@ export const {
   getUserProjects,
   getUserProjectsSuccess,
   getUserProjectsFailure,
+
+  orderUserProjects,
+  orderUserProjectsSuccess,
+  orderUserProjectsFailure,
 
   getUsers,
   getUsersSuccess,

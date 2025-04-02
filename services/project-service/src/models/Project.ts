@@ -26,6 +26,11 @@ const projectSchema = new Schema<IProject, ProjectModel, IProjectMethods>(
       default: false
     },
     description: String,
+    position: {
+      type: Number,
+      required: true,
+      default: 0
+    },
     categories: { type: [String], default: [] },
     icon: {
       type: Schema.Types.ObjectId,

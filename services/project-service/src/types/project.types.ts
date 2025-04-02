@@ -9,6 +9,7 @@ export interface IProject {
   name: string
   owner: Schema.Types.ObjectId
   isPrivate: boolean
+  position: number
   description?: string
   categories?: []
   icon?: string

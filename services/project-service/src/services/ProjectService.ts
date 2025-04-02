@@ -33,6 +33,18 @@ export default class ProjectService {
       ...values,
       owner: userId
     })
+
+    await Project.updateMany(
+      {
+        _id: { $ne: project._id },
+        owner: userId,
+        position: {
+          $gte: 0
+        }
+      },
+      { $inc: { position: 1 } }
+    )
+
     // await this.invalidateProjectCache()
 
     return project
@@ -127,6 +139,7 @@ export default class ProjectService {
         $project: {
           name: 1,
           categories: 1,
+          position: 1,
           platforms: 1,
           description: 1,
           demoUrl: 1,
@@ -271,13 +284,15 @@ export default class ProjectService {
         $facet: {
           metadata: [{ $count: 'totalItems' }],
           data: [
-            { $sort: { createdAt: -1 } },
+            // { $sort: { createdAt: -1 } },
+            { $sort: { position: 1 } },
             { $skip: skip },
             { $limit: limit },
             {
               $project: {
                 name: 1,
                 description: ownerId ? 1 : undefined,
+                position: 1,
                 categories: 1,
                 type: 1,
                 platforms: 1,
@@ -332,6 +347,16 @@ export default class ProjectService {
       _id: projectId,
       owner: userId
     })
+    await Project.updateMany(
+      {
+        owner: userId,
+        position: {
+          $gte: project?.position
+        }
+      },
+      { $inc: { position: -1 } }
+    )
+
     await publishEvent(
       'project.deleted',
       JSON.stringify({
@@ -354,6 +379,8 @@ export default class ProjectService {
     if (!project) {
       throw new Error('Project not found')
     }
+    delete values.position
+
     Object.assign(project, values)
     const { error } = validateProject(project)
     if (error) {
@@ -370,6 +397,47 @@ export default class ProjectService {
       projectId
     )
 
+    return project
+  }
+
+  static orderProjects = async (
+    userId: string,
+    projectId: string,
+    newIndex: number
+  ) => {
+    const project = await Project.findOne({ _id: projectId, owner: userId })
+    if (!project) {
+      throw new Error('Project not found')
+    }
+    const currIndex = project.position
+    if (newIndex === currIndex) {
+      return
+    }
+    project.position = newIndex
+    if (newIndex > currIndex) {
+      await Project.updateMany(
+        {
+          owner: userId,
+          position: {
+            $gt: currIndex,
+            $lte: newIndex
+          }
+        },
+        { $inc: { position: -1 } }
+      )
+    } else {
+      await Project.updateMany(
+        {
+          owner: userId,
+          position: {
+            $gte: newIndex,
+            $lt: currIndex
+          }
+        },
+        { $inc: { position: 1 } }
+      )
+    }
+    await project.save()
     return project
   }
 }

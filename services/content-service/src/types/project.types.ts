@@ -7,12 +7,12 @@ export interface IProject {
   name: string
   owner: Schema.Types.ObjectId
   isPrivate: boolean
+  position: number
   description?: string
   icon?: string
   images?: string[]
   video?: string
   banner?: string
-
   demoUrl?: string
   sourceCodeUrl?: string
 

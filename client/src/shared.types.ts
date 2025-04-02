@@ -25,6 +25,7 @@ export type Owner = {
 export type ProjectListItem = {
   _id: string
   name: string
+  position: number
   description?: string
   icon?: RemoteFile
   banner?: RemoteFile
@@ -162,6 +163,7 @@ export type ProjectDetails = {
   _id: string
   platforms: Platform[]
   name: string
+  position: number
   isPrivate: boolean
   description?: string
   categories?: string[]

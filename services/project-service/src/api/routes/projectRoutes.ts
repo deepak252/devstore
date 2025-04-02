@@ -7,6 +7,7 @@ import {
   getProjectDetails,
   getProjects,
   getUserProjects,
+  orderUserProjects,
   updateProject
 } from '../controllers/projectController'
 import { optionalAuth, requireAuth } from '../middlewares/auth'
@@ -22,6 +23,7 @@ router.put('/:projectId', requireAuth, updateProject)
 router.get('/:projectId', optionalAuth, getProjectDetails)
 router.delete('/:projectId', requireAuth, deleteProject)
 router.post('/exists', checkProjectExists)
+router.post('/order', requireAuth, orderUserProjects)
 
 export default router
 

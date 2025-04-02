@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import { forwardRef, HTMLAttributes } from 'react'
+import DragIcon from '@/assets/icons/drag.svg?react'
 
 export type ItemProps = HTMLAttributes<HTMLDivElement> & {
   id: string
@@ -13,21 +14,17 @@ const Item = forwardRef<HTMLDivElement, ItemProps>(
     return (
       <div
         ref={ref}
-        // className={classNames(
-        //   'bg-white flex-center w-full h-24 rounded-xl cursor-grab shadow-lg',
-        //   {
-        //     'cursor-grabbing shadow-xl scale-105': isDragging,
-        //     'opacity-50': withOpacity,
-        //   }
-        // )}
-        className={classNames('w-full h-24 cursor-grab', {
-          'cursor-grabbing shadow-xl scale-105': isDragging,
+        className={classNames('relative w-full', {
+          'scale-105': isDragging,
           'opacity-50': withOpacity,
         })}
         style={style}
         {...props}
       >
         {children}
+        <button className="absolute top-2 left-2 py-2 px-1 bg-white hover:bg-gray-100 rounded">
+          <DragIcon className="fill-neutral-700 size-4" />
+        </button>
       </div>
     )
   }
