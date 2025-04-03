@@ -122,7 +122,9 @@ function ProjectDetailsPage() {
 
       <div className="mt-12">
         <h6 className="mb-4">Description</h6>
-        <p className="text-neutral-600 text-15">{projectData.description}</p>
+        <p className="text-neutral-600 text-15 whitespace-pre-line">
+          {projectData.description}
+        </p>
       </div>
       {/* <Preview webUrl={''} /> */}
       {!!projectData.categories?.length && (

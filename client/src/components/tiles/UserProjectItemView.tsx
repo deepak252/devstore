@@ -112,7 +112,9 @@ const UserProjectItemView = ({
       <div className="mt-2">
         <p className="text-neutral-900">{name}</p>
         {!edit && (
-          <p className="text-sm text-neutral-600 font-light">{description}</p>
+          <p className="text-sm text-neutral-600 font-light line-clamp-2">
+            {description}
+          </p>
         )}
       </div>
       {/* <div className="flex justify-between items-center my-2">
