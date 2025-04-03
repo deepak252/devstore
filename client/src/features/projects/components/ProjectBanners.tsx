@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react'
 import CustomCarousel from '@/components/CustomCarousel'
 import { useAppSelector, useNavigateWithState } from '@/hooks'
 
-const ProjectCarousel = () => {
+const ProjectBanners = () => {
   const banner = useAppSelector((state) => state.projects.banner)
   const navigate = useNavigateWithState()
   const carouselItems = useMemo(() => {
@@ -33,9 +33,10 @@ const ProjectCarousel = () => {
         items={carouselItems}
         onItemClick={handleBannerClick}
         isLoading={banner.isLoading}
+        itemClassName="shadow-md m-4"
       />
     </div>
   )
 }
 
-export default ProjectCarousel
+export default ProjectBanners

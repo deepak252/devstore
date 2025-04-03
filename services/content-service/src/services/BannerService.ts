@@ -26,7 +26,7 @@ export default class BannerService {
     if (!active || !bannerImg) {
       if (banner) {
         banner.active = false
-        banner.redirectUrl = this.generateRedirectUrl(platforms, projectId)
+        banner.redirectUrl = this.generateRedirectUrl(projectId)
         banner.platforms = platforms
         await banner.save()
       }
@@ -37,14 +37,14 @@ export default class BannerService {
       banner = await Banner.create({
         project: projectId,
         img: bannerImg,
-        redirectUrl: this.generateRedirectUrl(platforms, projectId),
+        redirectUrl: this.generateRedirectUrl(projectId),
         platforms,
         active: true
       })
     } else {
       banner.img = bannerImg as any
       banner.active = true
-      banner.redirectUrl = this.generateRedirectUrl(platforms, projectId)
+      banner.redirectUrl = this.generateRedirectUrl(projectId)
       banner.platforms = platforms
       await banner.save()
     }
@@ -115,12 +115,9 @@ export default class BannerService {
     return banner
   }
 
-  static generateRedirectUrl = (platforms: Platform[], projectId: string) => {
-    if (platforms.length && projectId) {
-      if (platforms.includes(Platform.website)) {
-        return `/websites/${projectId}`
-      }
-      return `/apps/${projectId}`
+  static generateRedirectUrl = (projectId: string) => {
+    if (projectId) {
+      return `/projects/${projectId}`
     }
     return ''
   }

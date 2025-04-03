@@ -9,6 +9,9 @@ const ProjectDetailsPage = lazy(
 const CreateProjectPage = lazy(
   () => import('@/features/projects/pages/CreateProjectPage')
 )
+const EditProjectRoute = lazy(
+  () => import('@/features/projects/pages/EditProjectPage')
+)
 
 const projectRoutes: RouteObject = {
   path: '/projects',
@@ -21,6 +24,10 @@ const projectRoutes: RouteObject = {
     {
       path: 'create',
       element: <CreateProjectPage />,
+    },
+    {
+      path: 'edit/:projectId',
+      element: <EditProjectRoute />,
     },
     {
       path: ':projectId',

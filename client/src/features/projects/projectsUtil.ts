@@ -1,4 +1,8 @@
-import { ProjectFormError, ProjectFormValues } from '@/shared.types'
+import {
+  ProjectDetails,
+  ProjectFormError,
+  ProjectFormValues,
+} from '@/shared.types'
 import { validateUrl } from '@/utils/validators'
 
 export const validateProjectForm = (values: ProjectFormValues) => {
@@ -12,7 +16,7 @@ export const validateProjectForm = (values: ProjectFormValues) => {
   if (!values.platforms?.length) {
     errors.platforms = 'Select platform'
   }
-  if (!values.icon?.trim() && !values.attachmentIcon) {
+  if (!values.icon && !values.attachmentIcon) {
     errors.attachmentIcon = 'Upload project icon'
   }
   if (sourceCodeUrlError) {
@@ -23,4 +27,21 @@ export const validateProjectForm = (values: ProjectFormValues) => {
   }
 
   return errors
+}
+
+export const generateProjectFormValues = (
+  project: ProjectDetails
+): ProjectFormValues => {
+  return {
+    name: project.name,
+    description: project.description,
+    isPrivate: project.isPrivate,
+    platforms: project.platforms.toDropdownOptions(),
+    categories: project.categories?.toDropdownOptions(),
+    demoUrl: project.demoUrl,
+    sourceCodeUrl: project.sourceCodeUrl,
+    icon: project.icon,
+    banner: project.banner,
+    images: project.images,
+  }
 }

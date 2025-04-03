@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 import ProjectItems from '../components/ProjectItems'
-import ProjectCarousel from '../components/ProjectCarousel'
+import ProjectBanners from '../components/ProjectBanners'
 import SearchInputField from '@/components/SearchInputField'
 import AddIcon from '@/assets/icons/add.svg?react'
 import { useAppDispatch } from '@/hooks'
@@ -38,7 +38,7 @@ function ProjectsPage() {
           <AddIcon className="size-8 fill-white" />
         </Link>
       </div>
-      <ProjectCarousel />
+      <ProjectBanners />
       <div className="flex gap-3 mx-6 mb-4 pt-6">
         <div className="chip active">All</div>
         <div className="chip">Apps</div>

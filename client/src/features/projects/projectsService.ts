@@ -19,6 +19,10 @@ export default class ProjectsService {
     return await postRequest(CREATE_PROJECT_API, { data })
   }
 
+  static updateProject = async (data: SaveProjectPayload) => {
+    return await postRequest(CREATE_PROJECT_API, { data })
+  }
+
   static getProjectDetails = async (projectId: string) => {
     return await getRequest(`${PROJECTS_API}/${projectId}`)
   }

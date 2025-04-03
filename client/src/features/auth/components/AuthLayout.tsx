@@ -1,18 +1,18 @@
 import { useEffect } from 'react'
-import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 // import Loader from '@/components/Loader'
 import AppLogo from '@/components/AppLogo'
 import BGAuth from '@/assets/images/bg-auth.svg?react'
 import { resetAuthState } from '@/features/auth/authSlice'
-import { useAppDispatch, useAuth } from '@/hooks'
+import { useAppDispatch, useAuth, useNavigateWithState } from '@/hooks'
 
 function AuthLayout() {
-  const navigate = useNavigate()
+  const navigate = useNavigateWithState()
   const location = useLocation()
   const dispatch = useAppDispatch()
   const isSignedIn = useAuth()
 
-  const from = (location.state?.pathname as string) || '/'
+  const from = (location.state?.from?.pathname as string) || '/'
 
   useEffect(() => {
     if (isSignedIn) {

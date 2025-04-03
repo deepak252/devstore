@@ -6,6 +6,8 @@ import Dropdown, { DropdownOption } from '../Dropdown'
 import HeartOutlinedIcon from '@/assets/icons/heart-outlined.svg?react'
 // import HeartFilledIcon from '@/assets/icons/heart-filled.svg?react'
 import MoreVertIcon from '@/assets/icons/more-vert.svg?react'
+import EditIcon from '@/assets/icons/edit.svg?react'
+import DeleteIcon from '@/assets/icons/delete.svg?react'
 import ShareIcon from '@/assets/icons/share.svg?react'
 import { ProjectListItem } from '@/shared.types'
 
@@ -16,14 +18,16 @@ type UserProjectItemViewProps = {
   onEditClick?: (projectId: string) => void
 }
 
-const menuOptions = [
+const menuOptions: DropdownOption[] = [
   {
     label: 'Edit',
     value: 'edit',
+    icon: <EditIcon className="size-4 me-2" />,
   },
   {
     label: 'Delete',
     value: 'delete',
+    icon: <DeleteIcon className="size-4 me-2" />,
   },
 ]
 
@@ -94,7 +98,8 @@ const UserProjectItemView = ({
               <Dropdown
                 options={menuOptions}
                 onChange={handleOptionSelect}
-                contentClass="min-w-40 shadow-sm rounded-md"
+                contentClass="min-w-40 shadow-sm rounded-md p-0"
+                itemClass="rounded-md hover:bg-neutral-200 hover:text-neutral-900"
               >
                 <button
                   className="icon-button"

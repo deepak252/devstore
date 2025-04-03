@@ -128,8 +128,10 @@ const projectsSlice = createSlice({
       state.projectForm.isLoading = true
     },
     createProjectSuccess: (state) => {
-      state.projectForm = initialState.projectForm
-      state.projectForm.isSuccessful = true
+      state.projectForm = {
+        ...initialState.projectForm,
+        isSuccessful: true,
+      }
       state.toastData = {
         type: 'success',
         message: 'Your project is being processed. It will appear soon.',
@@ -146,6 +148,30 @@ const projectsSlice = createSlice({
       state.projectForm.isLoading = false
       console.log('createProjectCancelled')
     },
+
+    // Edit Project
+    editProject: (state, _: PayloadAction<ProjectFormValues>) => {
+      state.projectForm.isLoading = true
+    },
+    editProjectSuccess: (state) => {
+      state.projectForm = {
+        ...initialState.projectForm,
+        isSuccessful: true,
+      }
+      state.toastData = {
+        type: 'success',
+        message:
+          'Your changes are being saved. The post will be updated shortly.',
+      }
+    },
+    editProjectFailure: (state, action) => {
+      state.projectForm.isLoading = false
+      state.toastData = {
+        type: 'failure',
+        message: action.payload || 'Something went wrong',
+      }
+    },
+
     resetProjectForm: (state) => {
       state.projectForm = initialState.projectForm
     },
@@ -260,6 +286,11 @@ export const {
   createProjectSuccess,
   createProjectFailure,
   createProjectCancelled,
+
+  editProject,
+  editProjectSuccess,
+  editProjectFailure,
+
   resetProjectForm,
 
   uploadProjectMedia,

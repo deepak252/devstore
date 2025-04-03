@@ -6,7 +6,6 @@ import {
 } from '../utils/validation'
 import asyncHandler from '../utils/asyncHandler'
 import ProjectService from '../../services/ProjectService'
-import Project from '../../models/Project'
 import { ProjectType } from '../../constants/enums'
 
 export const createProject = asyncHandler(async (req, _) => {
@@ -75,42 +74,25 @@ export const updateProject = asyncHandler(async (req, _) => {
     throw new ApiError(error.details[0].message)
   }
   const projectId = req.params.projectId
-  const {
-    type,
-    name,
-    isPrivate,
-    description,
-    // icon,
-    // video,
-    // banner,
-    // images,
-    demoUrl,
-    sourceCodeUrl
-  } = req.body
+  const userId = req.user.userId
+  // const {
+  //   type,
+  //   name,
+  //   isPrivate,
+  //   description,
+  //   // icon,
+  //   // video,
+  //   // banner,
+  //   // images,
+  //   demoUrl,
+  //   sourceCodeUrl
+  // } = req.body
 
-  const updatedProject = await Project.findOneAndUpdate(
-    {
-      _id: projectId,
-      owner: req.user.userId
-    },
-    {
-      type,
-      name,
-      isPrivate,
-      description,
-      // icon,
-      // video,
-      // banner,
-      // images,
-      demoUrl,
-      sourceCodeUrl
-    },
-    { new: true }
+  const updatedProject = await ProjectService.updateProject(
+    projectId,
+    userId,
+    req.body
   )
-
-  if (!updatedProject) {
-    throw new ApiError('Project not found', 404)
-  }
 
   return new ResponseSuccess(
     'Project updated successfully',

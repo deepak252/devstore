@@ -88,9 +88,12 @@ export type ProjectFormValues = {
   categories?: DropdownOption[]
   sourceCodeUrl?: string
   demoUrl?: string
-  icon?: string
-  images?: string[]
-  banner?: string
+  // icon?: string
+  // images?: string[]
+  // banner?: string
+  icon?: RemoteFile
+  banner?: RemoteFile
+  images?: RemoteFile[]
   attachmentIcon?: File
   attachmentImages?: {
     id: string

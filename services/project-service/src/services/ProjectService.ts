@@ -144,6 +144,7 @@ export default class ProjectService {
           description: 1,
           demoUrl: 1,
           sourceCodeUrl: 1,
+          isPrivate: 1,
           owner: {
             _id: 1,
             username: 1,
@@ -399,6 +400,40 @@ export default class ProjectService {
 
     return project
   }
+
+  // static updateUser = async (userId: string, data: Partial<IUser>) => {
+  //   const { error } = validateUpdateProfile(data)
+  //   if (error) {
+  //     throw new Error(error.details[0].message)
+  //   }
+  //   const user = await User.findById(userId)
+  //   if (!user) {
+  //     throw new Error('User not found')
+  //   }
+
+  //   const prevProfileImage = user.profileImage
+  //   const { fullname, title, headline, about, profileImage } = data
+
+  //   if (fullname !== undefined) user.fullname = fullname
+  //   if (title !== undefined) user.title = title
+  //   if (headline !== undefined) user.headline = headline
+  //   if (about !== undefined) user.about = about
+  //   if (profileImage !== undefined) user.profileImage = profileImage
+
+  //   await user.save()
+  //   if (prevProfileImage && profileImage) {
+  //     publishEvent(
+  //       'user.image.deleted',
+  //       JSON.stringify({
+  //         user: {
+  //           profileImage: prevProfileImage
+  //         }
+  //       })
+  //     )
+  //   }
+  //   await UserService.invalidateUserCache(userId)
+  //   return await this.getUser({ userId })
+  // }
 
   static orderProjects = async (
     userId: string,

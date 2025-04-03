@@ -9,6 +9,7 @@ import {
   deleteProject,
   deleteProjectFailure,
   deleteProjectSuccess,
+  editProject,
   getHomeProjects,
   getHomeProjectsFailure,
   getHomeProjectsSuccess,
@@ -48,6 +49,45 @@ function* getProjectsWorker(
 }
 
 function* createProjectWorker(
+  action: PayloadAction<ProjectFormValues>
+): Generator {
+  const {
+    attachmentIcon,
+    attachmentImages,
+    attachmentBanner,
+    categories,
+    platforms,
+    ...rest
+  } = action.payload
+  yield* apiWorker(
+    ProjectsService.createProject,
+    {
+      ...rest,
+      categories: categories?.flatDropdownOptions('label'),
+      platforms: platforms?.flatDropdownOptions('value') as Platform[],
+    },
+    {
+      onSuccess: function* (response) {
+        if (attachmentIcon || attachmentImages?.length || attachmentBanner) {
+          yield uploadMediaWorker({
+            projectId: response.data?.data?._id,
+            attachmentIcon,
+            attachmentImages: attachmentImages?.map(({ file }) => file),
+            attachmentBanner,
+          })
+        }
+        yield put(createProjectSuccess(response.data))
+      },
+      onFailure: function* (error) {
+        yield put(
+          createProjectFailure(error?.message || 'Something went wrong')
+        )
+      },
+    }
+  )
+}
+
+function* editProjectWorker(
   action: PayloadAction<ProjectFormValues>
 ): Generator {
   const {
@@ -183,6 +223,7 @@ export default function* () {
   yield all([
     takeLatest(getProjects.type, getProjectsWorker),
     takeLatest(createProject.type, createProjectWorker),
+    takeLatest(editProject.type, editProjectWorker),
     takeLatest(getProjectBanners.type, getProjectBannersWorker),
     takeLatest(getProjectDetails.type, getProjectDetailsWorker),
     takeLatest(getHomeProjects.type, getHomeProjectsWorker),

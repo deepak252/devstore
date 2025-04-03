@@ -6,11 +6,12 @@ import UserProjectItemView, {
   UserProjectItemShimmer,
 } from '@/components/tiles/UserProjectItemView'
 import { confirmDeleteProject } from '@/features/projects/projectsSlice'
-import { useAppDispatch, useAppSelector } from '@/hooks'
+import { useAppDispatch, useAppSelector, useNavigateWithState } from '@/hooks'
 import { getUserProjects, orderUserProjects } from '../../userSlice'
 
 const MyProjects = () => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigateWithState()
   const userId = useAppSelector((state) => state.user.profile.data?._id)
   const userProjects = useAppSelector((state) => state.user.projects)
 
@@ -24,11 +25,18 @@ const MyProjects = () => {
     fetchProjects()
   }, [fetchProjects])
 
-  const handleProjectDelete = useCallback(
+  const handleDeleteProject = useCallback(
     (projectId: string) => {
       dispatch(confirmDeleteProject({ projectId }))
     },
     [dispatch]
+  )
+
+  const handleEditProject = useCallback(
+    (projectId: string) => {
+      navigate(`/projects/edit/${projectId}`)
+    },
+    [navigate]
   )
 
   const handleProjectsOrderChange = useCallback(
@@ -48,7 +56,8 @@ const MyProjects = () => {
               key={item._id}
               project={item}
               edit={true}
-              onDeleteClick={handleProjectDelete}
+              onDeleteClick={handleDeleteProject}
+              onEditClick={handleEditProject}
             />
           )
         }}
