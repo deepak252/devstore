@@ -1,3 +1,4 @@
+import ProtectedRoute from '@/components/ProtectedRoute'
 import { lazy } from 'react'
 import { RouteObject } from 'react-router-dom'
 const ProjectsPage = lazy(
@@ -23,11 +24,19 @@ const projectRoutes: RouteObject = {
     },
     {
       path: 'create',
-      element: <CreateProjectPage />,
+      element: (
+        <ProtectedRoute>
+          <CreateProjectPage />
+        </ProtectedRoute>
+      ),
     },
     {
       path: 'edit/:projectId',
-      element: <EditProjectRoute />,
+      element: (
+        <ProtectedRoute>
+          <EditProjectRoute />
+        </ProtectedRoute>
+      ),
     },
     {
       path: ':projectId',

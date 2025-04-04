@@ -16,12 +16,15 @@ const ProjectBanners = () => {
     return []
   }, [banner])
 
-  const handleBannerClick = useCallback((_: string, redirectUrl?: string) => {
-    if (redirectUrl) {
-      navigate(redirectUrl)
-    }
+  const handleBannerClick = useCallback(
+    ({ redirectUrl }: { redirectUrl?: string }) => {
+      if (redirectUrl) {
+        navigate(redirectUrl)
+      }
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    []
+  )
 
   if (!banner.isLoading && !banner.list.length) {
     return <></>
@@ -33,7 +36,7 @@ const ProjectBanners = () => {
         items={carouselItems}
         onItemClick={handleBannerClick}
         isLoading={banner.isLoading}
-        itemClassName="shadow-md m-4"
+        itemClassName="shadow-md m-4 cursor-pointer"
       />
     </div>
   )

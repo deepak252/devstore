@@ -21,7 +21,7 @@ type CustomCarouselProps = {
   dragFree?: boolean
   isLoading?: boolean
   itemClassName?: string
-  onItemClick?: (id: string, redirectUrl?: string) => void
+  onItemClick?: (item: CarouselItem) => void
 }
 export default function CustomCarousel({
   items = [],
@@ -104,9 +104,9 @@ export default function CustomCarousel({
                   />
                 </div>
               ))
-            : items.map(({ id, imgUrl, redirectUrl }) => (
+            : items.map((item) => (
                 <div
-                  key={id}
+                  key={item.id}
                   className="px-3"
                   style={{ flex: `0 0 ${itemWidth || flexWidth}%` }} // Dynamic width
                 >
@@ -117,10 +117,10 @@ export default function CustomCarousel({
                     )}
                   >
                     <img
-                      src={imgUrl}
+                      src={item.imgUrl}
                       className="absolute-center"
                       onClick={() => {
-                        onItemClick?.(id, redirectUrl)
+                        onItemClick?.(item)
                       }}
                     />
                   </div>

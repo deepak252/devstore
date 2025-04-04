@@ -31,7 +31,7 @@ const AppLogo = ({
         {showText && (
           <span
             className={classNames(
-              'text-secondary text-[28px] font-josefin font-bold pt-[6px] pl-2',
+              'text-neutral-900 text-[28px] font-josefin font-bold pt-[6px] pl-2',
               textClassName
             )}
           >

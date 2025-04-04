@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import PageNotFound from '@/components/PageNotFound'
 import CustomCarousel from '@/components/CustomCarousel'
@@ -10,6 +10,7 @@ import CodeIcon from '@/assets/icons/code.svg?react'
 import RedirectIcon from '@/assets/icons/redirect.svg?react'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { getProjectDetails } from '../projectsSlice'
+import ModalWrapper from '@/components/ModalWrapper'
 
 function ProjectDetailsPage() {
   const dispatch = useAppDispatch()
@@ -17,6 +18,7 @@ function ProjectDetailsPage() {
   const projectDetails = useAppSelector(
     (state) => state.projects.projectDetails
   )
+  const [selectedImg, setSelectedImg] = useState('')
   const projectData = projectDetails.data
 
   const projectImages = useMemo(() => {
@@ -113,10 +115,13 @@ function ProjectDetailsPage() {
         <CustomCarousel
           items={projectImages}
           itemWidth={30}
-          itemClassName="min-w-72 h-96 sm:h-96 md:h-96"
+          itemClassName="cursor-pointer min-w-72 h-96 sm:h-96 md:h-96"
           autoPlay={false}
           loop={false}
           dragFree={true}
+          onItemClick={(item) => {
+            setSelectedImg(item.imgUrl)
+          }}
         />
       </div>
 
@@ -138,6 +143,19 @@ function ProjectDetailsPage() {
             ))}
           </div>
         </div>
+      )}
+      {selectedImg && (
+        <ModalWrapper
+          isOpen
+          showCloseIcon
+          closeOnEsc
+          closeOnOutsideClick
+          onClose={() => setSelectedImg('')}
+        >
+          <div className="px-4 max-w-7xl max-h-screen">
+            <img src={selectedImg} className="max-h-[calc(100vh-100px)]" />
+          </div>
+        </ModalWrapper>
       )}
     </div>
   )
