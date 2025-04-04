@@ -2,14 +2,15 @@ import { Request, Response, NextFunction } from 'express'
 import multer from 'multer'
 import fs from 'fs'
 import path from 'path'
+import { v4 as uuidv4 } from 'uuid'
 import { removeFile } from '../../utils/fileUtil'
 import { ApiError } from '../utils/ApiError'
 import logger from '../../utils/logger'
 
 const destPath = 'uploads'
 
-const getFileName = (file: Express.Multer.File, userId: string) => {
-  return `${file.mimetype.split('/')[0]}_${userId}_${new Date()
+const getFileName = (file: Express.Multer.File) => {
+  return `${file.mimetype.split('/')[0]}_${uuidv4()}_${new Date()
     .toISOString()
     .replace(/[-T:.Z]/g, '_')
     .substring(0, 23)}${path.extname(file.originalname)}`
@@ -26,7 +27,7 @@ const storage = multer.diskStorage({
     cb(null, dirPath)
   },
   filename: function (req, file, cb) {
-    const filename = getFileName(file, req.user.userId)
+    const filename = getFileName(file)
     cb(null, filename)
     //Ref: https://github.com/expressjs/multer/issues/259#issuecomment-691748926
     req.on('aborted', () => {

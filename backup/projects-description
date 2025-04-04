@@ -2,6 +2,12 @@ Ecommerce Website -
 
 A fully functional e-commerce website using HTML, CSS, and JavaScript, providing a seamless online shopping experience. The platform features product listings, a shopping cart, and a secure checkout process.
 
-Key Features: - Responsive Design: Ensured a mobile-friendly layout using CSS Flexbox and Grid. - Dynamic UI: Implemented JavaScript for interactive elements like image sliders, dropdowns, and modals. - Shopping Cart: Built an add-to-cart functionality with local storage for persistent user data. - Product Filtering & Search: Enabled users to filter products by category, price, and ratings. - Form Validation: Integrated client-side validation for user authentication and checkout forms. - Optimized Performance: Minimized loading time using optimized images and asynchronous JavaScript.
+Key Features: 
+    - Responsive Design: Ensured a mobile-friendly layout using CSS Flexbox and Grid. 
+    - Dynamic UI: Implemented JavaScript for interactive elements like image sliders, dropdowns, and modals. 
+    - Shopping Cart: Built an add-to-cart functionality with local storage for persistent user data. 
+    - Product Filtering & Search: Enabled users to filter products by category, price, and ratings. 
+    - Form Validation: Integrated client-side validation for user authentication and checkout forms. 
+    - Optimized Performance: Minimized loading time using optimized images and asynchronous JavaScript.
 
 Technologies Used: HTML, CSS, JavaScript (ES6), Local Storage, DOM Manipulation
