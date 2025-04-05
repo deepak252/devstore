@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { validateProject } from '../api/utils/validation'
+import { validateProject, validateUpdateProject } from '../api/utils/validation'
 import { redisClient } from '../config/redis'
 import { Platform, ProjectType } from '../constants/enums'
 import { publishEvent } from '../events/producer'
@@ -374,22 +374,77 @@ export default class ProjectService {
   static updateProject = async (
     projectId: string,
     userId: string,
-    values: Partial<IProject>
+    data: Partial<
+      IProject & {
+        deletedIcon?: string
+        deletedBanner?: string
+        deletedImages?: string[]
+      }
+    >
   ) => {
+    const { error } = validateUpdateProject(data)
+    if (error) {
+      throw new Error(error.details[0].message)
+    }
     const project = await Project.findOne({ _id: projectId, owner: userId })
     if (!project) {
       throw new Error('Project not found')
     }
-    delete values.position
 
-    Object.assign(project, values)
-    const { error } = validateProject(project)
-    if (error) {
+    const {
+      name,
+      description,
+      isPrivate,
+      platforms,
+      categories,
+      demoUrl,
+      sourceCodeUrl,
+      icon,
+      banner,
+      images,
+      deletedIcon,
+      deletedBanner,
+      deletedImages
+    } = data
+
+    if (name !== undefined) project.name = name
+    if (description !== undefined) project.description = description
+    if (isPrivate !== undefined) project.isPrivate = isPrivate
+    if (platforms !== undefined) project.platforms = platforms
+    if (categories !== undefined) project.categories = categories
+    if (demoUrl !== undefined) project.demoUrl = demoUrl
+    if (sourceCodeUrl !== undefined) project.sourceCodeUrl = sourceCodeUrl
+    if (deletedIcon || icon) {
+      project.icon = icon
+    }
+    if (deletedBanner || banner) {
+      project.banner = banner
+    }
+    if (deletedImages?.length || images?.length) {
+      const imagesSet = new Set([...(project.images ?? []), ...(images ?? [])])
+      deletedImages?.forEach((img) => {
+        imagesSet.delete(img)
+      })
+      project.images = Array.from(imagesSet)
+    }
+
+    // Object.assign(project, values)
+    if (validateProject(project).error) {
       project.active = false
     } else {
       project.active = true
-      publishEvent('project.updated', JSON.stringify({ project }))
     }
+    publishEvent(
+      'project.updated',
+      JSON.stringify({
+        project: {
+          ...project.toJSON(),
+          deletedIcon,
+          deletedBanner,
+          deletedImages
+        }
+      })
+    )
 
     await project?.save()
 
@@ -400,40 +455,6 @@ export default class ProjectService {
 
     return project
   }
-
-  // static updateUser = async (userId: string, data: Partial<IUser>) => {
-  //   const { error } = validateUpdateProfile(data)
-  //   if (error) {
-  //     throw new Error(error.details[0].message)
-  //   }
-  //   const user = await User.findById(userId)
-  //   if (!user) {
-  //     throw new Error('User not found')
-  //   }
-
-  //   const prevProfileImage = user.profileImage
-  //   const { fullname, title, headline, about, profileImage } = data
-
-  //   if (fullname !== undefined) user.fullname = fullname
-  //   if (title !== undefined) user.title = title
-  //   if (headline !== undefined) user.headline = headline
-  //   if (about !== undefined) user.about = about
-  //   if (profileImage !== undefined) user.profileImage = profileImage
-
-  //   await user.save()
-  //   if (prevProfileImage && profileImage) {
-  //     publishEvent(
-  //       'user.image.deleted',
-  //       JSON.stringify({
-  //         user: {
-  //           profileImage: prevProfileImage
-  //         }
-  //       })
-  //     )
-  //   }
-  //   await UserService.invalidateUserCache(userId)
-  //   return await this.getUser({ userId })
-  // }
 
   static orderProjects = async (
     userId: string,

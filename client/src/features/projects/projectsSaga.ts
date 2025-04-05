@@ -10,6 +10,8 @@ import {
   deleteProjectFailure,
   deleteProjectSuccess,
   editProject,
+  editProjectFailure,
+  editProjectSuccess,
   getHomeProjects,
   getHomeProjectsFailure,
   getHomeProjectsSuccess,
@@ -72,8 +74,8 @@ function* createProjectWorker(
           yield uploadMediaWorker({
             projectId: response.data?.data?._id,
             attachmentIcon,
-            attachmentImages: attachmentImages?.map(({ file }) => file),
             attachmentBanner,
+            attachmentImages: attachmentImages?.map(({ file }) => file),
           })
         }
         yield put(createProjectSuccess(response.data))
@@ -88,7 +90,7 @@ function* createProjectWorker(
 }
 
 function* editProjectWorker(
-  action: PayloadAction<ProjectFormValues>
+  action: PayloadAction<Partial<ProjectFormValues>>
 ): Generator {
   const {
     attachmentIcon,
@@ -99,7 +101,7 @@ function* editProjectWorker(
     ...rest
   } = action.payload
   yield* apiWorker(
-    ProjectsService.createProject,
+    ProjectsService.updateProject,
     {
       ...rest,
       categories: categories?.flatDropdownOptions('label'),
@@ -111,16 +113,14 @@ function* editProjectWorker(
           yield uploadMediaWorker({
             projectId: response.data?.data?._id,
             attachmentIcon,
-            attachmentImages: attachmentImages?.map(({ file }) => file),
             attachmentBanner,
+            attachmentImages: attachmentImages?.map(({ file }) => file),
           })
         }
-        yield put(createProjectSuccess(response.data))
+        yield put(editProjectSuccess(response.data))
       },
       onFailure: function* (error) {
-        yield put(
-          createProjectFailure(error?.message || 'Something went wrong')
-        )
+        yield put(editProjectFailure(error?.message || 'Something went wrong'))
       },
     }
   )
@@ -138,8 +138,10 @@ function* uploadMediaWorker({
 
   if (attachmentIcon) formData.append('attachmentIcon', attachmentIcon)
   if (attachmentBanner) formData.append('attachmentBanner', attachmentBanner)
-  for (const atchImg of attachmentImages) {
-    formData.append('attachmentImages', atchImg)
+  if (attachmentImages) {
+    for (const atchImg of attachmentImages) {
+      formData.append('attachmentImages', atchImg)
+    }
   }
 
   yield* uploadTask(

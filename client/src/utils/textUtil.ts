@@ -1,7 +1,6 @@
 declare global {
   interface String {
     removeTrailingSlashes(): string | undefined | null
-    getVideoJSType(): string | undefined | null
     formatNumStr(): string
   }
 
@@ -16,14 +15,6 @@ declare global {
  */
 String.prototype.removeTrailingSlashes = function () {
   return this?.replace(/\/+$/, '')
-}
-
-String.prototype.getVideoJSType = function () {
-  const ext = this.split('.').pop()
-  if (ext === 'mp4') {
-    return 'video/mp4'
-  }
-  return 'application/x-mpegURL'
 }
 
 // Function to handle number formatting

@@ -13,7 +13,7 @@ export const deleteRemoteFileConsumer = async () => {
   const exchange2 = 'project.events'
   const bindingKey1 = 'user.image.deleted'
   const bindingKey2 = 'project.deleted'
-  const bindingKey3 = 'project.media.deleted'
+  const bindingKey3 = 'project.updated'
 
   await channel.assertExchange(exchange1, 'topic', { durable: false })
   await channel.assertExchange(exchange2, 'topic', { durable: false })
@@ -25,31 +25,46 @@ export const deleteRemoteFileConsumer = async () => {
 
   channel.prefetch(10)
 
-  channel.consume(queue, async (msg) => {
-    if (msg?.content) {
-      try {
-        const content = JSON.parse(msg.content.toString())
-        logger.info(`Event recieved: ${msg.fields.routingKey}, ${msg?.content}`)
-        if (msg.fields.routingKey === bindingKey1) {
-          await RemoteFileService.deleteSingleFile(content.user.profileImage)
-        } else if (msg.fields.routingKey === bindingKey2) {
-          await RemoteFileService.deleteMultipleFiles([
-            content.project?.icon,
-            content.project?.banner,
-            ...(content.project?.images ?? [])
-          ])
+  channel.consume(
+    queue,
+    async (msg) => {
+      if (msg?.content) {
+        try {
+          const content = JSON.parse(msg.content.toString())
+          logger.info(
+            `Event recieved: ${msg.fields.routingKey}, ${msg?.content}`
+          )
+          if (msg.fields.routingKey === bindingKey1) {
+            await RemoteFileService.deleteSingleFile(content.user.profileImage)
+          } else if (msg.fields.routingKey === bindingKey2) {
+            await RemoteFileService.deleteMultipleFiles([
+              content.project?.icon,
+              content.project?.banner,
+              ...(content.project?.images ?? [])
+            ])
+          } else if (msg.fields.routingKey === bindingKey3) {
+            await RemoteFileService.deleteMultipleFiles([
+              content.project?.deletedIcon,
+              content.project?.deletedBanner,
+              ...(content.project?.deletedImages ?? [])
+            ])
+          }
+          // Acknowledge the message
+          channel.ack(msg)
+        } catch (err) {
+          logger.error(
+            `Error processing event: ${msg?.fields?.routingKey}, ${msg?.content}`,
+            err
+          )
+          //TODO: Handle failure
+          channel.nack(msg, false, false)
         }
-        // Acknowledge the message
-        channel.ack(msg)
-      } catch (err) {
-        logger.error(
-          `Error processing event: ${msg?.fields?.routingKey}, ${msg?.content}`,
-          err
-        )
-        channel.nack(msg, false, true) // Requeue the message
       }
+    },
+    {
+      noAck: false
     }
-  })
+  )
 
   logger.info(`Subscribed to event: ${bindingKey1}`)
   logger.info(`Subscribed to event: ${bindingKey2}`)

@@ -150,7 +150,7 @@ const projectsSlice = createSlice({
     },
 
     // Edit Project
-    editProject: (state, _: PayloadAction<ProjectFormValues>) => {
+    editProject: (state, _: PayloadAction<Partial<ProjectFormValues>>) => {
       state.projectForm.isLoading = true
     },
     editProjectSuccess: (state) => {

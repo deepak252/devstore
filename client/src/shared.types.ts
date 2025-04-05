@@ -81,6 +81,7 @@ export type Banner = {
 // }
 
 export type ProjectFormValues = {
+  _id?: string
   name: string
   description?: string
   isPrivate: boolean
@@ -94,12 +95,17 @@ export type ProjectFormValues = {
   icon?: RemoteFile
   banner?: RemoteFile
   images?: RemoteFile[]
-  attachmentIcon?: File
-  attachmentImages?: {
-    id: string
-    file: File
-  }[]
-  attachmentBanner?: File
+  deletedIcon?: string
+  deletedBanner?: string
+  deletedImages?: string[]
+  attachmentIcon?: File | null
+  attachmentImages?:
+    | {
+        id: string
+        file: File
+      }[]
+    | null
+  attachmentBanner?: File | null
   // icon?: Attachment
   // images?: Attachment[]
   // featureImage?: Attachment
@@ -122,6 +128,7 @@ export type ProjectFormError = {
 }
 
 export type SaveProjectPayload = {
+  _id?: string
   name: string
   platforms: Platform[]
   isPrivate: boolean
@@ -132,9 +139,9 @@ export type SaveProjectPayload = {
 }
 
 export type UploadProjectMediaPayload = {
-  attachmentIcon?: File
-  attachmentImages?: File[]
-  attachmentBanner?: File
+  attachmentIcon?: File | null
+  attachmentImages?: File[] | null
+  attachmentBanner?: File | null
 }
 // export type ProjectFormValues = {
 //   name: string

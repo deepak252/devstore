@@ -4,7 +4,12 @@ import {
   HOME_PROJECTS_API,
   PROJECTS_API,
 } from '@/constants'
-import { deleteRequest, getRequest, postRequest } from '@/services/api'
+import {
+  deleteRequest,
+  getRequest,
+  postRequest,
+  putRequest,
+} from '@/services/api'
 import { SaveProjectPayload } from '@/shared.types'
 import { ProjectSearchFilter } from './projects.types'
 
@@ -19,8 +24,8 @@ export default class ProjectsService {
     return await postRequest(CREATE_PROJECT_API, { data })
   }
 
-  static updateProject = async (data: SaveProjectPayload) => {
-    return await postRequest(CREATE_PROJECT_API, { data })
+  static updateProject = async (data: Partial<SaveProjectPayload>) => {
+    return await putRequest(`${PROJECTS_API}/${data._id}`, { data })
   }
 
   static getProjectDetails = async (projectId: string) => {

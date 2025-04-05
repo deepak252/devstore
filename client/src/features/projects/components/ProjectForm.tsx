@@ -7,12 +7,13 @@ import FileInput from '@/components/FileInput'
 import Attachment from '@/components/Attachment'
 import { generateProjectFormValues, validateProjectForm } from '../projectsUtil'
 import { useAppDispatch, useAppSelector, useFormikErrors } from '@/hooks'
-import { createProject } from '../projectsSlice'
+import { createProject, editProject } from '../projectsSlice'
 import {
   ProjectDetails,
   ProjectFormError,
   ProjectFormValues,
 } from '@/shared.types'
+import { getChangedFields } from '@/utils/formUtil'
 
 const MAX_IMAGES_COUNT = 5
 
@@ -52,14 +53,31 @@ const ProjectForm = ({ project }: { project?: ProjectDetails | null }) => {
     },
     validate: validateProjectForm,
     onSubmit: (values) => {
-      dispatch(createProject(values))
+      if (!project) {
+        dispatch(createProject(values))
+      } else {
+        const initiaValues = generateProjectFormValues(project)
+        const changedFields = getChangedFields(initiaValues, values)
+        dispatch(
+          editProject({
+            ...changedFields,
+            _id: project._id,
+          })
+        )
+      }
     },
   })
+  const changedFields = useMemo(() => {
+    if (!project) return {}
+
+    return getChangedFields(generateProjectFormValues(project), formik.values)
+  }, [project, formik.values])
+
+  const errors = useFormikErrors<ProjectFormValues, ProjectFormError>(formik)
 
   const totalImages =
     (formik.values.images?.length || 0) +
     (formik.values.attachmentImages?.length || 0)
-  const errors = useFormikErrors<ProjectFormValues, ProjectFormError>(formik)
 
   useEffect(() => {
     if (project) {
@@ -188,10 +206,13 @@ const ProjectForm = ({ project }: { project?: ProjectDetails | null }) => {
                 url={formik.values.icon?.url}
                 wrapperClassName="!size-32"
                 onRemove={() => {
+                  formik.setFieldTouched('attachmentIcon')
                   if (formik.values.attachmentIcon) {
-                    formik.setFieldValue('attachmentIcon', undefined)
+                    formik.setFieldValue('attachmentIcon', null)
                   } else {
-                    formik.setFieldValue('icon', undefined)
+                    formik.setFieldValue('icon', null)
+                    formik.setFieldValue('attachmentIcon', null)
+                    formik.setFieldValue('deletedIcon', project?.icon?._id)
                   }
                 }}
               />
@@ -202,6 +223,7 @@ const ProjectForm = ({ project }: { project?: ProjectDetails | null }) => {
                 maxFileSizeKB={512}
                 multiple={false}
                 onSelectFiles={([file]) => {
+                  formik.setFieldTouched('attachmentIcon')
                   formik.setFieldValue('attachmentIcon', file)
                 }}
               />
@@ -219,10 +241,12 @@ const ProjectForm = ({ project }: { project?: ProjectDetails | null }) => {
                 url={formik.values.banner?.url}
                 wrapperClassName="!size-32"
                 onRemove={() => {
+                  formik.setFieldTouched('attachmentBanner')
                   if (formik.values.attachmentBanner) {
                     formik.setFieldValue('attachmentBanner', undefined)
                   } else {
                     formik.setFieldValue('banner', undefined)
+                    formik.setFieldValue('deletedBanner', project?.banner?._id)
                   }
                 }}
               />
@@ -233,6 +257,7 @@ const ProjectForm = ({ project }: { project?: ProjectDetails | null }) => {
                 maxFileSizeKB={1024}
                 multiple={false}
                 onSelectFiles={([file]) => {
+                  formik.setFieldTouched('attachmentBanner')
                   formik.setFieldValue('attachmentBanner', file)
                 }}
               />
@@ -261,10 +286,16 @@ const ProjectForm = ({ project }: { project?: ProjectDetails | null }) => {
                   url={img.url}
                   wrapperClassName="!size-32"
                   onRemove={() => {
+                    formik.setFieldTouched('attachmentImages')
                     const updatedImages = formik.values.images?.filter(
                       (e) => e != img
                     )
+                    const currDeletedImages = formik.values.deletedImages ?? []
                     formik.setFieldValue('images', updatedImages)
+                    formik.setFieldValue('deletedImages', [
+                      ...currDeletedImages,
+                      img._id,
+                    ])
                   }}
                 />
               ))}
@@ -274,6 +305,7 @@ const ProjectForm = ({ project }: { project?: ProjectDetails | null }) => {
                   file={file}
                   wrapperClassName="!size-32"
                   onRemove={() => {
+                    formik.setFieldTouched('attachmentImages')
                     const updatedImages =
                       formik.values.attachmentImages?.filter((e) => e.id != id)
                     formik.setFieldValue('attachmentImages', updatedImages)
@@ -291,6 +323,7 @@ const ProjectForm = ({ project }: { project?: ProjectDetails | null }) => {
             type="submit"
             className="btn-filled"
             onClick={() => formik.handleSubmit()}
+            disabled={!!project && !Object.keys(changedFields).length}
           >
             Submit
           </button>

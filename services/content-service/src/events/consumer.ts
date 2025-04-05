@@ -18,30 +18,37 @@ export const bannerConsumer = async () => {
   await channel.bindQueue(queue, exchange1, bindingKey1)
   await channel.bindQueue(queue, exchange1, bindingKey2)
 
-  channel.consume(queue, async (msg) => {
-    if (msg?.content) {
-      try {
-        const content = JSON.parse(msg.content.toString())
-        logger.info(
-          `Event recieved: ${msg?.fields?.routingKey}, ${msg?.content}`
-        )
+  channel.consume(
+    queue,
+    async (msg) => {
+      if (msg?.content) {
+        try {
+          const content = JSON.parse(msg.content.toString())
+          logger.info(
+            `Event recieved: ${msg?.fields?.routingKey}, ${msg?.content}`
+          )
 
-        if (msg.fields.routingKey === bindingKey1) {
-          await BannerService.createOrUpdateProjectBanner(content?.project)
-        } else if (msg.fields.routingKey === bindingKey2) {
-          await BannerService.deleteBanner(content?.project?._id)
+          if (msg.fields.routingKey === bindingKey1) {
+            await BannerService.createOrUpdateProjectBanner(content?.project)
+          } else if (msg.fields.routingKey === bindingKey2) {
+            await BannerService.deleteBanner(content?.project?._id)
+          }
+
+          channel?.ack(msg)
+        } catch (e: any) {
+          logger.error(
+            `Error processing event: ${msg?.fields?.routingKey}, ${msg?.content}`,
+            e
+          )
+          //TODO: Handle failure
+          channel.nack(msg, false, false)
         }
-
-        channel?.ack(msg)
-      } catch (e: any) {
-        logger.error(
-          `Error processing event: ${msg?.fields?.routingKey}, ${msg?.content}`,
-          e
-        )
-        channel.nack(msg, false, true) // Requeue the message
       }
+    },
+    {
+      noAck: false
     }
-  })
+  )
   logger.info(`Subscribed to event: ${bindingKey1}`)
   logger.info(`Subscribed to event: ${bindingKey2}`)
 }

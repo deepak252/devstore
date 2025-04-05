@@ -30,6 +30,10 @@ const routes: RouteObject[] = [
           },
           accountRoutes,
           projectRoutes,
+          {
+            path: '*',
+            element: <PageNotFound />,
+          },
         ],
       },
       authRoutes,

@@ -81,7 +81,7 @@ const Navbar = () => {
   }, [isSignedIn])
 
   return (
-    <nav className="fixed top-0 z-navbar flex items-center font-light bg-white shadow p-2 w-full max-md:flex-wrap">
+    <nav className="fixed top-0 z-navbar flex items-center font-light bg-white shadow p-3 w-full max-md:flex-wrap">
       <AppLogo className="px-4 max-md:order-1 max-md:flex-grow" />
       <NavOptions />
       <div className="flex items-center px-2 max-md:order-2">

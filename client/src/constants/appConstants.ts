@@ -18,6 +18,13 @@ export const ATTACHMENT_TYPE = Object.freeze({
   DOCUMENT: 'document',
 })
 
+export const platformMapping = Object.freeze({
+  android: 'Android',
+  ios: 'iOS',
+  website: 'Website',
+  all: 'All',
+})
+
 // export const TOAST_TYPE = Object.freeze({
 //   SUCCESS: 'success',
 //   ERROR: 'error',
