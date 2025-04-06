@@ -101,6 +101,13 @@ export const validateLogin = (values: {
   return schema.validate(values)
 }
 
+export const validateEmailVerification = (values: { email?: string }) => {
+  const schema = Joi.object({
+    email: emailSchema.required()
+  })
+  return schema.validate(values)
+}
+
 export const validateUpdateProfile = ({
   fullname,
   title,

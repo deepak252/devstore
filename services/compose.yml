@@ -15,6 +15,7 @@ services:
       - PROJECT_SERVICE_URL=http://project-service:3002
       - UPLOAD_SERVICE_URL=http://upload-service:3003
       - CONTENT_SERVICE_URL=http://content-service:3004
+      - NOTIFICATION_SERVICE_URL=http://notification-service:3005
     depends_on:
       - redis
 
@@ -86,6 +87,25 @@ services:
       - /app/node_modules # Ignore node_modules
     env_file:
       - ./content-service/.env
+    environment:
+      - REDIS_HOST=redis
+      - RABBITMQ_URL=amqp://rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  notification-service:
+    build: ./notification-service
+    ports:
+      - 3005:3005
+      - 9225:9225
+    volumes:
+      - ./notification-service:/app # Sync code with container
+      - /app/node_modules # Ignore node_modules
+    env_file:
+      - ./notification-service/.env
     environment:
       - REDIS_HOST=redis
       - RABBITMQ_URL=amqp://rabbitmq

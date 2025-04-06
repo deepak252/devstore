@@ -16,6 +16,8 @@ export const userProfileConsumer = async () => {
 
   await channel.bindQueue(queue, exchange1, bindingKey1)
 
+  await channel.prefetch(100)
+
   channel.consume(
     queue,
     async (msg) => {

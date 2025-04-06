@@ -3,6 +3,7 @@ import { IUser, IUserMethods } from '../types/user.types'
 import {
   comparePassword,
   generateAccessToken,
+  generateEmailVerificationToken,
   generatePasswordHash,
   generateRefreshToken
 } from '../utils/authUtil'
@@ -69,6 +70,10 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
     refreshToken: {
       type: String
     },
+    isEmailVerified: {
+      type: Boolean,
+      default: false
+    },
     createdAt: {
       type: Date,
       default: Date.now
@@ -122,6 +127,12 @@ userSchema.methods.generateAccessToken = function () {
 userSchema.methods.generateRefreshToken = function () {
   return generateRefreshToken({
     userId: this._id.toString()
+  })
+}
+
+userSchema.methods.generateEmailVerificationToken = function () {
+  return generateEmailVerificationToken({
+    email: this.email.toString()
   })
 }
 

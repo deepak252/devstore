@@ -23,7 +23,7 @@ export const deleteRemoteFileConsumer = async () => {
   await channel.bindQueue(queue, exchange2, bindingKey2)
   await channel.bindQueue(queue, exchange2, bindingKey3)
 
-  channel.prefetch(10)
+  await channel.prefetch(10)
 
   channel.consume(
     queue,

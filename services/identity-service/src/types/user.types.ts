@@ -10,6 +10,7 @@ export interface IUser {
   title?: string
   headline?: string
   about?: string
+  isEmailVerified?: boolean
   createdAt: Date
   updatedAt: Date
   refreshToken?: string
@@ -19,4 +20,5 @@ export interface IUserMethods {
   comparePassword(password: string): Promise<boolean>
   generateAccessToken(): string
   generateRefreshToken(): string
+  generateEmailVerificationToken(): string
 }

@@ -1,22 +1,22 @@
 import { getAmqpChannel } from '../config/rabbitmq'
-import ProjectService from '../services/ProjectService'
+import EmailService from '../services/EmailService'
 import logger from '../utils/logger'
 
-export const updateProjectConsumer = async () => {
+export const verifyEmailConsumer = async () => {
   const channel = getAmqpChannel()
   if (!channel) {
     return
   }
-  const exchange = 'upload.events'
-  const queue = 'project.queue'
-  const bindingKey = 'project.media.uploaded'
+  const queue = 'notification.queue'
+  const exchange1 = 'user.events'
+  const bindingKey1 = 'user.verifyemail'
 
-  await channel.assertExchange(exchange, 'topic', { durable: false })
+  await channel.assertExchange(exchange1, 'topic', { durable: false })
   await channel.assertQueue(queue, { durable: false })
 
-  await channel.bindQueue(queue, exchange, bindingKey)
+  await channel.bindQueue(queue, exchange1, bindingKey1)
 
-  await channel.prefetch(100)
+  await channel.prefetch(50)
 
   channel.consume(
     queue,
@@ -24,9 +24,14 @@ export const updateProjectConsumer = async () => {
       if (msg?.content) {
         try {
           const content = JSON.parse(msg.content.toString())
-          const { projectId, userId, media } = content
-          logger.info(`Event recieved: ${bindingKey}, ${msg?.content}`)
-          await ProjectService.updateProject(projectId, userId, media)
+          logger.info(
+            `Event recieved: ${msg?.fields?.routingKey}, ${msg?.content}`
+          )
+
+          if (msg.fields.routingKey === bindingKey1) {
+            await EmailService.sendVerificationEmail(content)
+          }
+
           channel?.ack(msg)
         } catch (e: any) {
           logger.error(
@@ -42,5 +47,5 @@ export const updateProjectConsumer = async () => {
       noAck: false
     }
   )
-  logger.info(`Subscribed to event: ${bindingKey}`)
+  logger.info(`Subscribed to event: ${bindingKey1}`)
 }

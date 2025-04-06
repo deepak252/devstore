@@ -18,6 +18,8 @@ export const bannerConsumer = async () => {
   await channel.bindQueue(queue, exchange1, bindingKey1)
   await channel.bindQueue(queue, exchange1, bindingKey2)
 
+  await channel.prefetch(100)
+
   channel.consume(
     queue,
     async (msg) => {

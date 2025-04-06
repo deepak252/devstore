@@ -113,6 +113,11 @@ export default class UserService {
 
     const result = await User.aggregate([
       {
+        $match: {
+          isEmailVerified: true
+        }
+      },
+      {
         $lookup: {
           from: 'remotefiles',
           localField: 'profileImage',
