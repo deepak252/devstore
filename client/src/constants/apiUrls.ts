@@ -2,6 +2,8 @@ export const SIGN_UP_API = 'auth/sign-up'
 export const SIGN_IN_API = 'auth/sign-in'
 export const SIGN_OUT_API = 'auth/sign-out'
 export const USERNAME_CHECK_API = 'user/check-username'
+export const VERIFY_EMAIL_API = 'auth/verify-email'
+export const SEND_EMAIL_VERIFICATION_API = 'auth/resend-verification'
 
 export const USER_API = 'user'
 export const USER_PROFILE_API = 'user/profile'

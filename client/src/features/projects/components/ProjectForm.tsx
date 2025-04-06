@@ -322,7 +322,6 @@ const ProjectForm = ({ project }: { project?: ProjectDetails | null }) => {
           <button
             type="submit"
             className="btn-filled"
-            onClick={() => formik.handleSubmit()}
             disabled={!!project && !Object.keys(changedFields).length}
           >
             Submit

@@ -4,23 +4,37 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import AppLogo from '@/components/AppLogo'
 import BGAuth from '@/assets/images/bg-auth.svg?react'
 import { resetAuthState } from '@/features/auth/authSlice'
-import { useAppDispatch, useAuth, useNavigateWithState } from '@/hooks'
+import {
+  useAppDispatch,
+  useAppSelector,
+  useAuth,
+  useNavigateWithState,
+} from '@/hooks'
 
 function AuthLayout() {
   const navigate = useNavigateWithState()
   const location = useLocation()
   const dispatch = useAppDispatch()
   const isSignedIn = useAuth()
+  const isEmailVerificationSent = useAppSelector(
+    (state) => state.auth.isEmailVerificationSent
+  )
 
   const from = (location.state?.from?.pathname as string) || '/'
 
   useEffect(() => {
     if (isSignedIn) {
-      navigate(from, { replace: true })
+      if (from.startsWith('/auth')) {
+        navigate('/', { replace: true })
+      } else {
+        navigate(from, { replace: true })
+      }
+      dispatch(resetAuthState())
+    } else if (isEmailVerificationSent) {
+      navigate('/auth/verify-email')
       dispatch(resetAuthState())
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [from, isSignedIn])
+  }, [navigate, dispatch, from, isSignedIn, isEmailVerificationSent])
 
   return (
     <>

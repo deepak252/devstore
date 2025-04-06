@@ -137,6 +137,7 @@ function GeneralSettings() {
         </FormInputWrapper>
         <div className="flex justify-end">
           <button
+            type="submit"
             className="btn-filled mt-8 rounded-xl"
             disabled={!Object.keys(changedFields).length}
           >

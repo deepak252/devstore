@@ -6,6 +6,7 @@ type AuthState = {
   isAuthenticated?: boolean
   isLoading?: boolean
   isConfirmSignOut?: boolean
+  isEmailVerificationSent?: boolean
   username: {
     value?: string
     isAvailable?: boolean
@@ -57,6 +58,36 @@ const authSlice = createSlice({
         type: 'failure',
         message: action.payload,
       }
+    },
+
+    // emailVerify: (state) => {
+    //   state.isLoading = false
+    //   state.isEmailVerificationPending = true
+    // },
+    // Verify email
+    verifyEmail: (state, _: PayloadAction<{ token: string }>) => {
+      state.isLoading = true
+    },
+    verifyEmailSuccess: (state) => {
+      state.isLoading = false
+      state.isAuthenticated = true
+    },
+    verifyEmailFailure: (state) => {
+      state.isLoading = false
+    },
+
+    // Resend email verification link
+    sendEmailVerification: (state, _: PayloadAction<{ email: string }>) => {
+      state.isLoading = true
+      state.isEmailVerificationSent = true
+    },
+    sendEmailVerificationSuccess: (state) => {
+      state.isLoading = false
+      state.isEmailVerificationSent = true
+    },
+    sendEmailVerificationFailure: (state) => {
+      state.isLoading = false
+      state.isEmailVerificationSent = true
     },
 
     // Sign Out
@@ -126,6 +157,16 @@ export const {
   signUp,
   signUpSuccess,
   signUpFailure,
+
+  // emailVerify,
+
+  verifyEmail,
+  verifyEmailSuccess,
+  verifyEmailFailure,
+
+  sendEmailVerification,
+  sendEmailVerificationSuccess,
+  sendEmailVerificationFailure,
 
   confirmSignOut,
   cancelSignOut,

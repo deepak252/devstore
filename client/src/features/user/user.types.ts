@@ -9,6 +9,7 @@ export type User = {
   headline?: string
   about?: string
   profileImage?: RemoteFile
+  isEmailVerified?: boolean
   createdAt: string
   updatedAt: string
 }

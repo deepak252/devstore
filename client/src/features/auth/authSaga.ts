@@ -3,6 +3,9 @@ import {
   checkUsername,
   checkUsernameFailure,
   checkUsernameSuccess,
+  sendEmailVerification,
+  sendEmailVerificationFailure,
+  sendEmailVerificationSuccess,
   signIn,
   signInFailure,
   signInSuccess,
@@ -11,13 +14,19 @@ import {
   signOutSuccess,
   signUp,
   signUpFailure,
-  signUpSuccess,
+  verifyEmail,
+  verifyEmailFailure,
+  verifyEmailSuccess,
 } from './authSlice'
 import AuthService from './authService'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { SignInFormValues, SignUpFormValues } from './auth.types'
 import { apiWorker } from '@/services/api'
-import { removeUserFromStorage, saveAccessToken } from '@/utils/storage'
+import {
+  removeUserFromStorage,
+  saveAccessToken,
+  saveUserToStorage,
+} from '@/utils/storage'
 
 function* signInWorker(action: PayloadAction<SignInFormValues>): Generator {
   const { usernameOrEmail, password } = action.payload
@@ -26,8 +35,15 @@ function* signInWorker(action: PayloadAction<SignInFormValues>): Generator {
     { usernameOrEmail, password },
     {
       onSuccess: function* (response) {
-        saveAccessToken(response.data?.data?.accessToken)
-        yield put(signInSuccess(response.data))
+        // saveUserToStorage(response.data?.data?.user)
+        if (response.data?.data?.accessToken) {
+          saveAccessToken(response.data?.data?.accessToken)
+          saveUserToStorage(response.data?.data?.user)
+          yield put(signInSuccess(response.data))
+        } else {
+          saveUserToStorage(response.data?.data) // {email}
+          yield put(sendEmailVerificationSuccess())
+        }
       },
       onFailure: function* (error) {
         yield put(signInFailure(error?.message || 'Something went wrong'))
@@ -43,8 +59,10 @@ function* signUpWorker(action: PayloadAction<SignUpFormValues>): Generator {
     { username, email, password },
     {
       onSuccess: function* (response) {
-        saveAccessToken(response.data?.data?.accessToken)
-        yield put(signUpSuccess(response.data))
+        saveUserToStorage(response.data?.data) // {email}
+        yield put(sendEmailVerificationSuccess())
+        // saveAccessToken(response.data?.data?.accessToken)
+        // yield put(signUpSuccess(response.data))
       },
       onFailure: function* (error) {
         yield put(signUpFailure(error?.message || 'Something went wrong'))
@@ -86,11 +104,44 @@ function* checkUsernameWorker(
   )
 }
 
+function* verifyEmailWorker(
+  action: PayloadAction<{ token: string }>
+): Generator {
+  yield* apiWorker(AuthService.verifyEmail, action.payload.token, {
+    onSuccess: function* (response) {
+      saveAccessToken(response.data?.data?.accessToken)
+      saveUserToStorage(response.data?.data?.user)
+      yield put(verifyEmailSuccess(response.data))
+    },
+    onFailure: function* (error) {
+      yield put(verifyEmailFailure(error?.message || 'Something went wrong'))
+    },
+  })
+}
+
+function* sendEmailVerificationWorker(
+  action: PayloadAction<{ email: string }>
+): Generator {
+  yield* apiWorker(AuthService.sendEmailVerification, action.payload, {
+    onSuccess: function* (response) {
+      saveUserToStorage(response.data?.data) // {email}
+      yield put(sendEmailVerificationSuccess(response.data))
+    },
+    onFailure: function* (error) {
+      yield put(
+        sendEmailVerificationFailure(error?.message || 'Something went wrong')
+      )
+    },
+  })
+}
+
 export default function* () {
   yield all([
     takeLatest(signIn.type, signInWorker),
     takeLatest(signUp.type, signUpWorker),
     takeLatest(signOut.type, sigOutWorker),
     takeLatest(checkUsername.type, checkUsernameWorker),
+    takeLatest(verifyEmail.type, verifyEmailWorker),
+    takeLatest(sendEmailVerification.type, sendEmailVerificationWorker),
   ])
 }

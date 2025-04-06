@@ -6,6 +6,9 @@ const SignUpPage = lazy(() => import('@/features/auth/pages/SignUpPage'))
 const ForgotPasswordPage = lazy(
   () => import('@/features/auth/pages/ForgotPasswordPage')
 )
+const EmailVerificationPage = lazy(
+  () => import('@/features/auth/pages/EmailVerificationPage')
+)
 
 const authRoutes: RouteObject = {
   path: '/auth',
@@ -26,6 +29,10 @@ const authRoutes: RouteObject = {
     {
       path: 'forgot-password',
       element: <ForgotPasswordPage />,
+    },
+    {
+      path: 'verify-email',
+      element: <EmailVerificationPage />,
     },
   ],
 }
