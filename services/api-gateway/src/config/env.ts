@@ -12,6 +12,7 @@ export const {
   PROJECT_SERVICE_URL = 'http://localhost:3002',
   UPLOAD_SERVICE_URL = 'http://localhost:3003',
   CONTENT_SERVICE_URL = 'http://localhost:3004',
+  NOTIFICATION_SERVICE_URL = 'http://localhost:3005',
   ACCESS_TOKEN_SECRET = 'STOREDEVACESSSECRETJWT12349876',
   KEEP_ALIVE_WORKER_URL = ''
 } = process.env

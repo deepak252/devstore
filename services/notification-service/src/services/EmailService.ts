@@ -26,7 +26,7 @@ export default class EmailService {
       }
       const verifyLink = `${CLIENT_URL}/auth/verify-email?token=${token}`
       const result = await transporter.sendMail({
-        from: SMTP_EMAIL_USER,
+        from: `"Devstore" <${SMTP_EMAIL_USER}>`,
         to: email,
         subject: 'Verify your email',
         html: emailVerificationTemplate(verifyLink)

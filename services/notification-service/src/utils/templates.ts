@@ -12,6 +12,7 @@ export const emailVerificationTemplate = (redirectLink: string) => {
     box-sizing: border-box;
   "
 >
+  <h4 style="margin-top: 0">Devstore</h4>
   <div style="text-align: center">
     <img
       src="https://firebasestorage.googleapis.com/v0/b/dev-store-1865e.appspot.com/o/assets%2Fimages%2Flogo.png?alt=media&token=994b53da-615c-417c-86ec-b58cf4642a9f"
