@@ -16,12 +16,12 @@ function EmailVerificationPage() {
   const token = searchParams.get('token')
 
   useEffect(() => {
-    if (!user) {
-      navigate('/auth/sign-in')
+    if (token) {
+      dispatch(verifyEmail({ token }))
     } else if (isSignedIn) {
       navigate(from)
-    } else if (token) {
-      dispatch(verifyEmail({ token }))
+    } else if (!user) {
+      navigate('/auth/sign-in')
     }
   }, [navigate, dispatch, from, isSignedIn, user, token])
 

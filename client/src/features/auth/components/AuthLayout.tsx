@@ -29,11 +29,10 @@ function AuthLayout() {
       } else {
         navigate(from, { replace: true })
       }
-      dispatch(resetAuthState())
     } else if (isEmailVerificationSent) {
       navigate('/auth/verify-email')
-      dispatch(resetAuthState())
     }
+    dispatch(resetAuthState())
   }, [navigate, dispatch, from, isSignedIn, isEmailVerificationSent])
 
   return (
