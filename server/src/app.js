@@ -14,7 +14,7 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.json());
-app.get('/', (req, res) => res.json(new ApiResponse('Welcome to Dev Store')));
+app.get('/', (req, res) => res.json(new ApiResponse('Welcome to DevStore')));
 app.use('/api', routes);
 
 export default app;

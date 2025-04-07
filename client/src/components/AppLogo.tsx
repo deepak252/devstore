@@ -35,7 +35,7 @@ const AppLogo = ({
               textClassName
             )}
           >
-            Dev Store
+            DevStore
           </span>
         )}
       </Link>
