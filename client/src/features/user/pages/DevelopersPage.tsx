@@ -42,9 +42,7 @@ function DevelopersPage() {
       {users.isLoading &&
         [...Array(6).keys()].map((id) => <DeveloperItemShimmer key={id} />)}
       {!users.isLoading && !users.list.length && (
-        <div className="font-light text-neutral-500">
-          No projects available!
-        </div>
+        <div className="font-light text-neutral-500">No developers found!</div>
       )}
     </GridView>
   )

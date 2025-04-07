@@ -167,7 +167,7 @@ const ProjectForm = ({ project }: { project?: ProjectDetails | null }) => {
               showMenuIcon
               multiselect
               targetClass="textfield py-0"
-              contentClass="left-0 right-auto mt-2"
+              contentClass="left-0 right-auto mt-2 max-h-80"
             />
           </FormInputWrapper>
           <FormInputWrapper title="Demo URL" error={errors.demoUrl}>
@@ -314,19 +314,19 @@ const ProjectForm = ({ project }: { project?: ProjectDetails | null }) => {
               ))}
             </div>
           </FormInputWrapper>
-        </form>
-        <div className="flex justify-end mt-8">
-          {/* <button className="btn-outlined mx-3" onClick={onClose}>
+          <div className="flex justify-end mt-8">
+            {/* <button className="btn-outlined mx-3" onClick={onClose}>
             Cancel
           </button> */}
-          <button
-            type="submit"
-            className="btn-filled"
-            disabled={!!project && !Object.keys(changedFields).length}
-          >
-            Submit
-          </button>
-        </div>
+            <button
+              type="submit"
+              className="btn-filled"
+              disabled={!!project && !Object.keys(changedFields).length}
+            >
+              Submit
+            </button>
+          </div>
+        </form>
       </div>
     </>
   )

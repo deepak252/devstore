@@ -106,7 +106,7 @@
   }
 
   .dropdown {
-    @apply absolute end-0 z-40  min-w-52 bg-white p-2 mt-0 border border-gray-400 shadow-3xl rounded-2xl custom-scrollbar;
+    @apply absolute end-0 z-40  min-w-52 bg-white p-2 mt-0 border border-gray-400 shadow-3xl rounded-2xl custom-scrollbar overflow-y-auto;
   }
   .dropdown-item {
     @apply flex items-center text-sm text-neutral-600 font-normal rounded-lg p-2 overflow-hidden bg-white cursor-pointer disable-select hover:bg-primary/10 border border-white;
