@@ -22,7 +22,7 @@ const UserProjects = ({ userId }: { userId: string }) => {
   useEffect(() => {}, [userId])
   return (
     <section id="projects" className="mt-12">
-      <h3 className="mb-10">Projects</h3>
+      <h3 className="mb-10 max-md:text-2xl">Projects</h3>
       <GridView
         heading=""
         wrapperClass="my-8 mx-4"

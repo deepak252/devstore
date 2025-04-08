@@ -11,7 +11,7 @@ const Introduction = ({ user }: { user: User }) => {
         className="!size-32"
         alt="profile_pic"
       />
-      <h1 className="mt-2">
+      <h1 className="mt-2 max-md:text-4xl">
         Hello, <br /> I&apos;m {user.fullname || user.username}.
       </h1>
       <p className="text-2xl leading-9 text-neutral-600 font-light">
