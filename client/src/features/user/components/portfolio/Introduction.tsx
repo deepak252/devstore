@@ -14,7 +14,7 @@ const Introduction = ({ user }: { user: User }) => {
       <h1 className="mt-2 max-md:text-4xl">
         Hello, <br /> I&apos;m {user.fullname || user.username}.
       </h1>
-      <p className="text-2xl leading-9 text-neutral-600 font-light">
+      <p className="text-2xl leading-9 text-neutral-600 font-light max-md:text-xl">
         {user.title} <br /> {user.headline}
       </p>
       <div className="flex items-center gap-4 py-8 max-sm:flex-col">

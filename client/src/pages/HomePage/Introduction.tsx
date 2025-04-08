@@ -21,9 +21,11 @@ const Introduction = () => {
     <div className="">
       <div className="flex items-center max-lg:block">
         <div className="text-center m-6">
-          <h1 className="text-gray-900 m-2 max-lg:text-4xl">
-            Centralized Hub for <br /> App, Website, and Game Distribution
-          </h1>
+          <h2 className="text-gray-900 m-2 max-lg:text-4xl">
+            {/* Centralized Hub for <br /> App, Website, and Game Distribution */}
+            Craft. Code. Share.
+            <br /> A Central Place for Developer Projects and Content
+          </h2>
           <p className="text-2xl text-neutral-600 font-light leading-normal m-1 max-lg:text-lg">
             DevStore brings your creations to the world, all in one place. Join
             and revolutionize the way you share and distribute your digital

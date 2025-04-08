@@ -12,7 +12,7 @@ const AboutMe = ({ about }: { about?: string }) => {
             className="rounded-xl size-64 object-cover max-md:mx-auto max-md:w-full"
           />
         </div>
-        <p className="text-lg text-neutral-700">{about}</p>
+        <p className="text-neutral-700 md:text-lg">{about}</p>
       </div>
     </section>
   )

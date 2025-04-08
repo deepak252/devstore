@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useFormik } from 'formik'
 import FormInputWrapper from '@/components/FormInputWrapper'
-import GoogleIcon from '@/assets/icons/google.svg?react'
-import GithubIcon from '@/assets/icons/github.svg?react'
+// import GoogleIcon from '@/assets/icons/google.svg?react'
+// import GithubIcon from '@/assets/icons/github.svg?react'
 import VisibilityOnIcon from '@/assets/icons/visibility-on.svg?react'
 import VisibilityOffIcon from '@/assets/icons/visibility-off.svg?react'
 import { signIn } from '../authSlice'
@@ -31,8 +31,8 @@ function SignInPage() {
 
   return (
     <>
-      <h4 className="text-gray-750">Welcome...</h4>
-      <button className="btn-outlined flex-center w-full my-5 border-gray">
+      <h4 className="text-gray-750 mb-8">Welcome back</h4>
+      {/* <button className="btn-outlined flex-center w-full my-5 border-gray">
         <GoogleIcon className="size-6 mx-3" />
         <span className="text-gray-750 text-15 font-medium">
           Continue with Google
@@ -46,7 +46,7 @@ function SignInPage() {
       </button>
       <div className="relative w-full my-9 border-t border-gray-400">
         <span className="absolute-center text-gray px-3 bg-white">OR</span>
-      </div>
+      </div> */}
       <form onSubmit={formik.handleSubmit}>
         <FormInputWrapper
           title="Username or Email"

@@ -41,7 +41,7 @@ function AuthLayout() {
         {/* Auth Navbar */}
         <div className="flex items-center sticky top-0 w-full px-3 py-4">
           <AppLogo className="ms-2" textClassName="text-white" />
-          <div className="flex items-center justify-end w-full">
+          <div className="flex items-center justify-end w-full max-sm:hidden">
             <NavLink
               to="/auth/sign-in"
               className="btn-outlined mx-2 text-white active:bg-[#E0E0FF22]"

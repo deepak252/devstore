@@ -11,3 +11,18 @@ Key Features:
     - Optimized Performance: Minimized loading time using optimized images and asynchronous JavaScript.
 
 Technologies Used: HTML, CSS, JavaScript (ES6), Local Storage, DOM Manipulation
+
+Bus Tracking Application:
+
+The Bus Tracking application is a comprehensive solution designed to enhance the efficiency and convenience of bus transportation services. The app provides real-time bus tracking, real time updates on map, and timely information to users, ensuring a seamless and reliable travel experience. It leverages advanced technologies, such as Node.js, Android Kotlin and Jetpack Compose, MongoDB, and Socket.IO, to deliver a robust and user-friendly application.
+
+
+Pet Adopt Find
+
+A user-friendly mobile application that streamlines the pet adoption process, making it simple for users to discover and adopt pets. The app features a built-in chat system for effective communication between potential adopters and pet owners. In the unfortunate event of a pet going missing, owners can post vital information, such as pictures and detailed descriptions, to aid the community in locating and reuniting with the lost pet. Additionally, the app incorporates a notification system, alerting nearby users to assist in the search and reunification efforts.
+
+
+
+Food Delivery
+
+A full-featured cross-platform food delivery application built using Flutter and Firebase. Implemented core functionalities including user authentication, restaurant listings, menu browsing, cart management, and real-time order tracking. Integrated Firebase Firestore for dynamic data storage, Firebase Authentication for secure login/sign-up, and Firebase Cloud Messaging for real-time push notifications. Designed a clean and responsive UI to ensure a smooth user experience across both Android and iOS platforms.

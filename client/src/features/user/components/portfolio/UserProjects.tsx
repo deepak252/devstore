@@ -25,7 +25,7 @@ const UserProjects = ({ userId }: { userId: string }) => {
       <h3 className="mb-10 max-md:text-2xl">Projects</h3>
       <GridView
         heading=""
-        wrapperClass="my-8 mx-4"
+        wrapperClass="my-8"
         itemsClass="gap-8 !grid-cols-1 sm:!grid-cols-2 lg:!grid-cols-3 md:gap-10"
       >
         {userProjects.list?.map((item) => (

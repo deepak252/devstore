@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <div className="bg-neutral-900 py-7 px-3 font-light">
       <div className="flex items-start flex-wrap justify-around mt-5 mb-10">
-        <div className=" max-md:w-full text-center mb-4">
+        <div className=" max-md:w-full mb-4">
           <AppLogo className="px-4" textClassName="text-white" />
         </div>
         <div className="flex flex-col text-white">
